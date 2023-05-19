@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+
+**pycache**/
+_.py[cod]
+_$py.class
+
+# Project-generated files
+
+resources/
+.temp/
+
+# IDE-generated files
+
+.vscode/
+.metals/
+
+script.json
+
+# project results
+results/
+result.json
+
+# logs
+*.log
