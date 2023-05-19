@@ -1,6 +1,8 @@
-from pathlib import Path
+from aggregator.shared.singleton import SingletonMeta
 
 
-class Config():
+class Config(metaclass=SingletonMeta):
     def __init__(self) -> None:
-        self._results_dir = Path("results")
+        self.results_dir: str = "results"
+        self.contracts_zip_url: str = "https://drive.google.com/file/d/1y43UDNO-5kRaxsvbTseuIkwYYa33K6_e/view?usp=share_link"
+        self.contracts_folder: str = ".temp"

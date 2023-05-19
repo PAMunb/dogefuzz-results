@@ -9,6 +9,7 @@ packages = [{include = "aggregator"}]
 [tool.poetry.dependencies]
 python = "^3.8"
 fire = "^0.5.0"
+gdown = "^4.7.1"
 
 
 [build-system]
