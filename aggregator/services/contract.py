@@ -4,6 +4,7 @@ import os
 from aggregator.config import Config
 from aggregator.shared.exceptions import ContractsNotFoundException
 from aggregator.shared.singleton import SingletonMeta
+from aggregator.shared.util import map_vulnerability_to_dogefuzz_standard
 
 NAME_COLUMN = 0
 VULNERABILITIES_COLUMN = 1
@@ -32,7 +33,7 @@ class ContractService(metaclass=SingletonMeta):
             for row in reader:
                 contract = {
                     "name": row[NAME_COLUMN],
-                    "vulnerabilities": row[VULNERABILITIES_COLUMN].split(";"),
+                    "vulnerabilities": [x for x in [map_vulnerability_to_dogefuzz_standard(x) for x in row[VULNERABILITIES_COLUMN].split(";")] if x is not None],
                     "link": row[LINK_COLUMN],
                 }
                 contracts.append(contract)

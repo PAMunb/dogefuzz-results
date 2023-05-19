@@ -21,6 +21,9 @@ class DriveService(metaclass=SingletonMeta):
         """
         downloads contract from google drive
         """
+        if os.path.exists(self._config.contracts_folder):
+            return
+
         contracts_folder = self._config.contracts_folder
         if not os.path.exists(contracts_folder):
             os.makedirs(contracts_folder)
