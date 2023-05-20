@@ -21,13 +21,13 @@ class ContractService(metaclass=SingletonMeta):
     def list_contracts_from_contract_list(self) -> list:
         """lists the contracts from the contracts.csv file
         """
-        if not os.path.exists(self._config.contracts_folder):
+        contracts_folder = os.path.join(self._config.temp_folder, self._config.inputs_folder)
+        if not os.path.exists(contracts_folder):
             raise ContractsNotFoundException(
                 "the contracts were not downloaded yet. Please use the command download_contracts first")
 
         contracts = []
-        contracts_csv = os.path.join(
-            self._config.contracts_folder, "contracts.csv")
+        contracts_csv = os.path.join(contracts_folder, "contracts.csv")
         with open(contracts_csv, 'r', encoding="utf-8") as file:
             reader = csv.reader(file)
             for row in reader:
