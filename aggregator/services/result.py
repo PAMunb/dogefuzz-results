@@ -58,7 +58,82 @@ class ResultService(metaclass=SingletonMeta):
 
         return coverage_by_contract_name
 
+    def get_hits_by_strategy(self, strategy: str):
+        """
+        returns the critical instructions by strategy name
+        """
+        results_folder = os.path.join(self._config.temp_folder, self._config.results_dir)
+        strategy_result_folder = os.path.join(results_folder, f"{strategy}_fuzzing")
 
+        hits_by_contract_name = {}
+        executions_by_contract_name = {}
+        for path in os.listdir(strategy_result_folder):
+            with open(os.path.join(strategy_result_folder, path), 'r') as file:
+                content = file.read()
+                results = json.loads(content)
+                for contract_name in results.keys():
+                    if contract_name not in hits_by_contract_name:
+                        hits_by_contract_name[contract_name] = 0
+                    if contract_name not in executions_by_contract_name:
+                        executions_by_contract_name[contract_name] = 0
 
+                    executions = results[contract_name][strategy]
+                    for execution in executions:
+                        if execution["status"] == "success":
+                            hits_by_contract_name[contract_name] += execution["execution"]["criticalInstructionsHits"]
+                            executions_by_contract_name[contract_name] += 1
 
+        for contract_name in hits_by_contract_name.keys():
+            if executions_by_contract_name[contract_name] == 0:
+                hits_by_contract_name[contract_name] = -1
+                continue
+            hits_by_contract_name[contract_name] = hits_by_contract_name[contract_name] / executions_by_contract_name[contract_name]
+
+        return hits_by_contract_name
+
+    def get_detection_rate_by_strategy(self, strategy: str, contracts: list, vulnerabilities: list, include_new_detections: bool = True) -> map:
+        """
+        return the vulnerability detection rate by strategy name
+        """
+        results_folder = os.path.join(self._config.temp_folder, self._config.results_dir)
+        strategy_result_folder = os.path.join(results_folder, f"{strategy}_fuzzing")
+
+        pre_categorized_vulnerabilities = {}
+        for vulnerability in vulnerabilities:
+            pre_categorized_vulnerabilities[vulnerability] = 0
+
+        detection_rate = {}
+        for vulnerability in vulnerabilities:
+            detection_rate[vulnerability] = 0
+
+        for path in os.listdir(strategy_result_folder):
+            with open(os.path.join(strategy_result_folder, path), 'r') as file:
+                content = file.read()
+                results = json.loads(content)
+
+                for contract in contracts:
+                    for vulnerability in contract["vulnerabilities"]:
+                        pre_categorized_vulnerabilities[vulnerability] += 1
+
+                for contract_name in results.keys():
+                    executions = results[contract_name][strategy]
+                    for execution in executions:
+                        if execution["status"] == "success":
+                            for vulnerability in vulnerabilities:
+                                if include_new_detections:
+                                    if vulnerability in execution["execution"]["detectedWeaknesses"]:
+                                        detection_rate[vulnerability] += 1
+                                else:
+                                    contract = None
+                                    for c in contracts:
+                                        if c["name"] == contract_name:
+                                            contract = c
+                                            break
+                                    if vulnerability in execution["execution"]["detectedWeaknesses"] and vulnerability in contract["vulnerabilities"]:
+                                        detection_rate[vulnerability] += 1
+
+        for vulnerability in detection_rate.keys():
+            detection_rate[vulnerability] = detection_rate[vulnerability] / pre_categorized_vulnerabilities[vulnerability]
+
+        return detection_rate
 
