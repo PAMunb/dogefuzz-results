@@ -25,7 +25,7 @@ class OutputService(metaclass=SingletonMeta):
         with open(output_file_path, "wt", encoding="utf-8") as f:
             self._write_coverage_result(f)
             self._write_critial_instructions_hits(f)
-            self._write_vulnerabilities(contracts, f, True)
+            self._write_vulnerabilities(contracts, f, False)
 
     def _write_coverage_result(self, file):
         self._write_line(file, 'COVERAGE RESULTS')
