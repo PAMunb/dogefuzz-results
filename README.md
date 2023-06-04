@@ -6,7 +6,6 @@ This project using Python 3.10 and [Poetry](https://python-poetry.org/) to manag
 
 To run the report generator, execute the following commands:
 ```
-cp script.json.template script.json
-poetry run benchmark generate <experiment_folder>
+poetry run aggregator generate_report <experiment_folder>
 ```
 It will look for a `experiment_folder` folder inside `/results` folder.
