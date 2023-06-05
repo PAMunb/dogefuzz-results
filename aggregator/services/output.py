@@ -30,124 +30,87 @@ class OutputService(metaclass=SingletonMeta):
             self._write_vulnerabilities(contracts, f, False)
 
     def _write_max_coverage_result(self, file):
-        self._write_line(file, 'MAX COVERAGE RESULTS')
-        coverage_for_blackbox = self._result_service.get_max_coverage_by_strategy(
+        (max_coverage_per_contract_for_blackbox, average_coverage_for_blackbox) = self._result_service.get_max_coverage_by_strategy(
             BLACKBOX_FUZZING)
-        coverage_for_greybox = self._result_service.get_max_coverage_by_strategy(
+        (max_coverage_per_contract_for_greybox, average_coverage_for_greybox) = self._result_service.get_max_coverage_by_strategy(
             GREYBOX_FUZZING)
-        coverage_for_directed_greybox = self._result_service.get_max_coverage_by_strategy(
+        (max_coverage_per_contract_for_directed_greybox, average_coverage_for_directed_greybox) = self._result_service.get_max_coverage_by_strategy(
             DIRECTED_GREYBOX_FUZZING)
-        self._write_line(file, '-' * 108)
-        self._write_line(file, "| {0:35} | {1:20} | {2:20} | {3:20} |".format(
-            "contract_name", "blackbox", "greybox", "directed_greybox"))
-        self._write_line(file, '-' * 108)
 
-        greybox_diff_total = 0
-        directed_greybox_diff_total = 0
-        for contract_name in coverage_for_blackbox.keys():
-            percentage_blackbox = "{0:.2f}%".format(
-                coverage_for_blackbox[contract_name] * 100) if coverage_for_blackbox[contract_name] != -1 else "N/A"
+        self._write_header(file, 'MAX COVERAGE RESULTS')
 
-            greybox_diff = coverage_for_greybox[contract_name] - \
-                coverage_for_blackbox[contract_name]
-            greybox_diff_total += greybox_diff
-            percentage_greybox = "{0:.2f}% ({1}{2:.2f}%)".format(
-                coverage_for_greybox[contract_name] * 100, "+" if greybox_diff > 0 else "", greybox_diff * 100) if coverage_for_greybox[contract_name] != -1 else "N/A"
+        for contract_name in max_coverage_per_contract_for_blackbox:
+            blackbox = max_coverage_per_contract_for_blackbox[contract_name]
+            greybox = max_coverage_per_contract_for_greybox[contract_name]
+            directed_greybox = max_coverage_per_contract_for_directed_greybox[
+                contract_name]
 
-            directed_greybox_diff = coverage_for_directed_greybox[contract_name] - \
-                coverage_for_blackbox[contract_name]
-            directed_greybox_diff_total += directed_greybox_diff
-            percentage_directed_greybox = "{0:.2f}% ({1}{2:.2f}%)".format(
-                coverage_for_directed_greybox[contract_name] * 100, "+" if directed_greybox_diff > 0 else "", directed_greybox_diff * 100) if coverage_for_directed_greybox[contract_name] != -1 else "N/A"
+            percentage_blackbox = self._convert_to_percentage_str(blackbox)
+            percentage_greybox = self._convert_to_percentage_diff_str(
+                greybox, blackbox)
+            percentage_directed_greybox = self._convert_to_percentage_diff_str(
+                directed_greybox, blackbox)
 
-            self._write_line(file, "| {0:35} | {1:20} | {2:20} | {3:20} |".format(
-                contract_name, percentage_blackbox, percentage_greybox, percentage_directed_greybox))
+            self._write_line(
+                file, f"| {contract_name:35} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
 
-        self._write_line(file, '-' * 108)
-        self._write_line(file, "| {0:35} | {1:20} | {2:20} | {3:20} |".format("AVERAGE", "", "{0}{1:.2f}%".format("+" if greybox_diff_total > 0 else "", (greybox_diff_total) * 100 / len(
-            coverage_for_blackbox.keys())), "{0}{1:.2f}%".format("+" if directed_greybox_diff_total > 0 else "", (directed_greybox_diff_total) * 100 / len(coverage_for_blackbox.keys()))))
-        self._write_line(file, '-' * 108)
+        self._write_average_footer(file, average_coverage_for_blackbox,
+                                   average_coverage_for_greybox, average_coverage_for_directed_greybox)
 
     def _write_average_coverage_result(self, file):
-        self._write_line(file, 'AVERAGE COVERAGE RESULTS')
-        coverage_for_blackbox = self._result_service.get_average_coverage_by_strategy(
+        (average_coverage_per_contract_for_blackbox, average_converage_for_blackbox) = self._result_service.get_average_coverage_by_strategy(
             BLACKBOX_FUZZING)
-        coverage_for_greybox = self._result_service.get_average_coverage_by_strategy(
+        (average_coverage_per_contract_for_greybox, average_coverage_for_greybox) = self._result_service.get_average_coverage_by_strategy(
             GREYBOX_FUZZING)
-        coverage_for_directed_greybox = self._result_service.get_average_coverage_by_strategy(
+        (average_coverage_per_contract_for_directed_greybox, average_coverage_for_directed_greybox) = self._result_service.get_average_coverage_by_strategy(
             DIRECTED_GREYBOX_FUZZING)
-        self._write_line(file, '-' * 108)
-        self._write_line(file, "| {0:35} | {1:20} | {2:20} | {3:20} |".format(
-            "contract_name", "blackbox", "greybox", "directed_greybox"))
-        self._write_line(file, '-' * 108)
 
-        greybox_diff_total = 0
-        directed_greybox_diff_total = 0
-        for contract_name in coverage_for_blackbox.keys():
-            percentage_blackbox = "{0:.2f}%".format(
-                coverage_for_blackbox[contract_name] * 100) if coverage_for_blackbox[contract_name] != -1 else "N/A"
+        self._write_header(file, 'AVERAGE COVERAGE RESULTS')
 
-            greybox_diff = coverage_for_greybox[contract_name] - \
-                coverage_for_blackbox[contract_name]
-            greybox_diff_total += greybox_diff
-            percentage_greybox = "{0:.2f}% ({1}{2:.2f}%)".format(
-                coverage_for_greybox[contract_name] * 100, "+" if greybox_diff > 0 else "", greybox_diff * 100) if coverage_for_greybox[contract_name] != -1 else "N/A"
+        for contract_name in average_coverage_per_contract_for_blackbox:
+            blackbox = average_coverage_per_contract_for_blackbox[contract_name]
+            greybox = average_coverage_per_contract_for_greybox[contract_name]
+            directed_greybox = average_coverage_per_contract_for_directed_greybox[
+                contract_name]
 
-            directed_greybox_diff = coverage_for_directed_greybox[contract_name] - \
-                coverage_for_blackbox[contract_name]
-            directed_greybox_diff_total += directed_greybox_diff
-            percentage_directed_greybox = "{0:.2f}% ({1}{2:.2f}%)".format(
-                coverage_for_directed_greybox[contract_name] * 100, "+" if directed_greybox_diff > 0 else "", directed_greybox_diff * 100) if coverage_for_directed_greybox[contract_name] != -1 else "N/A"
+            percentage_blackbox = self._convert_to_percentage_str(blackbox)
+            percentage_greybox = self._convert_to_percentage_diff_str(
+                greybox, blackbox)
+            percentage_directed_greybox = self._convert_to_percentage_diff_str(
+                directed_greybox, blackbox)
 
-            self._write_line(file, "| {0:35} | {1:20} | {2:20} | {3:20} |".format(
-                contract_name, percentage_blackbox, percentage_greybox, percentage_directed_greybox))
+            self._write_line(
+                file, f"| {contract_name:35} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
 
-        self._write_line(file, '-' * 108)
-        self._write_line(file, "| {0:35} | {1:20} | {2:20} | {3:20} |".format("AVERAGE", "", "{0}{1:.2f}%".format("+" if greybox_diff_total > 0 else "", (greybox_diff_total) * 100 / len(
-            coverage_for_blackbox.keys())), "{0}{1:.2f}%".format("+" if directed_greybox_diff_total > 0 else "", (directed_greybox_diff_total) * 100 / len(coverage_for_blackbox.keys()))))
-        self._write_line(file, '-' * 108)
+        self._write_average_footer(file, average_converage_for_blackbox,
+                                   average_coverage_for_greybox, average_coverage_for_directed_greybox)
 
     def _write_critial_instructions_hits(self, file):
-        self._write_line(file, '\nCRITICAL INSTRUCTIONS HITS RESULTS')
-        hits_for_blackbox = self._result_service.get_hits_by_strategy(
+        (hits_per_contract_for_blackbox, average_hits_for_blackbox) = self._result_service.get_hits_by_strategy(
             BLACKBOX_FUZZING)
-        hits_for_greybox = self._result_service.get_hits_by_strategy(
+        (hits_per_contract_for_greybox, average_hits_for_greybox) = self._result_service.get_hits_by_strategy(
             GREYBOX_FUZZING)
-        hits_for_directed_greybox = self._result_service.get_hits_by_strategy(
+        (hits_per_contract_for_directed_greybox, average_hits_for_directed_greybox) = self._result_service.get_hits_by_strategy(
             DIRECTED_GREYBOX_FUZZING)
-        self._write_line(file, '-' * 108)
-        self._write_line(file, "| {0:35} | {1:20} | {2:20} | {3:20} |".format(
-            "contract_name", "blackbox", "greybox", "directed_greybox"))
-        self._write_line(file, '-' * 108)
 
-        greybox_diff_total = 0
-        directed_greybox_diff_total = 0
-        for contract_name in hits_for_blackbox.keys():
-            percentage_blackbox = "{0:.0f}".format(
-                hits_for_blackbox[contract_name]) if hits_for_blackbox[contract_name] != -1 else "N/A"
+        self._write_header(file, 'CRITICAL INSTRUCTIONS HITS RESULTS')
 
-            greybox_diff = ((hits_for_greybox[contract_name] - hits_for_blackbox[contract_name]) /
-                            hits_for_blackbox[contract_name]) if hits_for_blackbox[contract_name] != 0 else hits_for_greybox[contract_name]
-            greybox_diff_total += greybox_diff
-            percentage_greybox = "{0:.0f} ({1}{2:.2f}%)".format(
-                hits_for_greybox[contract_name], "+" if greybox_diff > 0 else "", greybox_diff * 100) if hits_for_greybox[contract_name] != -1 else "N/A"
+        for contract_name in hits_per_contract_for_blackbox:
+            blackbox = hits_per_contract_for_blackbox[contract_name]
+            greybox = hits_per_contract_for_greybox[contract_name]
+            directed_greybox = hits_per_contract_for_directed_greybox[contract_name]
 
-            directed_greybox_diff = ((hits_for_directed_greybox[contract_name] - hits_for_blackbox[contract_name]) /
-                                     hits_for_blackbox[contract_name]) if hits_for_blackbox[contract_name] != 0 else hits_for_directed_greybox[contract_name]
-            directed_greybox_diff_total += directed_greybox_diff
-            percentage_directed_greybox = "{0:.0f} ({1}{2:.2f}%)".format(
-                hits_for_directed_greybox[contract_name], "+" if directed_greybox_diff > 0 else "", directed_greybox_diff * 100) if hits_for_directed_greybox[contract_name] != -1 else "N/A"
+            hits_for_blackbox = self._convert_to_str(blackbox)
+            hits_for_greybox = self._convert_to_diff_str(greybox, blackbox)
+            hits_for_directed_greybox = self._convert_to_diff_str(
+                directed_greybox, blackbox)
 
-            self._write_line(file, "| {0:35} | {1:20} | {2:20} | {3:20} |".format(
-                contract_name, percentage_blackbox, percentage_greybox, percentage_directed_greybox))
-
-        self._write_line(file, '-' * 108)
-        self._write_line(file, "| {0:35} | {1:20} | {2:20} | {3:20} |".format("AVERAGE", "", "{0}{1:.2f}%".format("+" if greybox_diff_total > 0 else "", greybox_diff_total * 100 / len(
-            hits_for_blackbox.keys())), "{0}{1:.2f}%".format("+" if directed_greybox_diff_total > 0 else "", directed_greybox_diff_total * 100 / len(hits_for_blackbox.keys()))))
-        self._write_line(file, '-' * 108)
+            self._write_line(
+                file, f"| {contract_name:35} | {hits_for_blackbox:20} | {hits_for_greybox:20} | {hits_for_directed_greybox:20} |")
+        self._write_average_number_footer(file, average_hits_for_blackbox,
+                                          average_hits_for_greybox, average_hits_for_directed_greybox)
 
     def _write_vulnerabilities(self, contracts: list, file, include_new_detections: bool = True):
-        self._write_line(file, '\nVULNERABILITIES RESULTS')
         vulnerability_types = [
             "delegate",
             "exception-disorder",
@@ -163,35 +126,92 @@ class OutputService(metaclass=SingletonMeta):
         detection_rate_for_directed_greybox = self._result_service.get_detection_rate_by_strategy(
             DIRECTED_GREYBOX_FUZZING, contracts, vulnerability_types, include_new_detections)
 
-        self._write_line(file, '-' * 108)
-        self._write_line(file, "| {0:35} | {1:20} | {2:20} | {3:20} |".format(
-            "contract_name", "blackbox", "greybox", "directed_greybox"))
-        self._write_line(file, '-' * 108)
+        self._write_header(file, 'VULNERABILITIES RESULTS')
 
-        greybox_diff_total = 0
-        directed_greybox_diff_total = 0
+        average_detection_rate_for_blackbox = 0
+        average_detection_rate_for_greybox = 0
+        average_detection_rate_for_directed_greybox = 0
         for vulnerability in vulnerability_types:
-            percentage_blackbox = "{0:.2f}%".format(
-                detection_rate_for_blackbox[vulnerability] * 100) if detection_rate_for_blackbox[vulnerability] != -1 else "N/A"
+            blackbox = detection_rate_for_blackbox[vulnerability]
+            greybox = detection_rate_for_greybox[vulnerability]
+            directed_greybox = detection_rate_for_directed_greybox[vulnerability]
 
-            greybox_diff = ((detection_rate_for_greybox[vulnerability] - detection_rate_for_blackbox[vulnerability]) /
-                            detection_rate_for_blackbox[vulnerability]) if detection_rate_for_blackbox[vulnerability] != 0 else detection_rate_for_greybox[vulnerability]
-            greybox_diff_total += greybox_diff
-            percentage_greybox = "{0:.2f}% ({1}{2:.2f}%)".format(
-                detection_rate_for_greybox[vulnerability] * 100,  '+' if greybox_diff > 0 else '', greybox_diff * 100) if detection_rate_for_greybox[vulnerability] != -1 else "N/A"
+            percentage_blackbox = self._convert_to_percentage_str(blackbox)
+            percentage_greybox = self._convert_to_percentage_diff_str(
+                greybox, blackbox)
+            percentage_directed_greybox = self._convert_to_percentage_diff_str(
+                directed_greybox, blackbox)
 
-            directed_greybox_diff = ((detection_rate_for_directed_greybox[vulnerability] - detection_rate_for_blackbox[vulnerability]) /
-                                     detection_rate_for_blackbox[vulnerability]) if detection_rate_for_blackbox[vulnerability] != 0 else detection_rate_for_directed_greybox[vulnerability]
-            directed_greybox_diff_total += directed_greybox_diff
-            percentage_directed_greybox = "{0:.2f}% ({1}{2:.2f}%)".format(
-                detection_rate_for_directed_greybox[vulnerability] * 100, '+' if directed_greybox_diff > 0 else '', directed_greybox_diff * 100) if detection_rate_for_directed_greybox[vulnerability] != -1 else "N/A"
+            average_detection_rate_for_blackbox += blackbox
+            average_detection_rate_for_greybox += greybox
+            average_detection_rate_for_directed_greybox += directed_greybox
 
-            self._write_line(file, "| {0:35} | {1:20} | {2:20} | {3:20} |".format(
-                vulnerability, percentage_blackbox, percentage_greybox, percentage_directed_greybox))
+            self._write_line(
+                file, f"| {vulnerability:35} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
 
-        self._write_line(file, '-' * 108)
-        self._write_line(file, "| {0:35} | {1:20} | {2:20} | {3:20} |".format("AVERAGE", "", "+{0:.2f}%".format(greybox_diff_total * 100 / len(
-            detection_rate_for_blackbox.keys())), "+{0:.2f}%".format(directed_greybox_diff_total * 100 / len(detection_rate_for_blackbox.keys()))))
+        average_blackbox = average_detection_rate_for_blackbox / \
+            len(vulnerability_types)
+        average_greybox = average_detection_rate_for_greybox / \
+            len(vulnerability_types)
+        average_directed_greybox = average_detection_rate_for_directed_greybox / \
+            len(vulnerability_types)
+
+        self._write_average_footer(
+            file, average_blackbox, average_greybox, average_directed_greybox)
+
+    def _write_header(self, file, title: str):
+        self._write_line(file, "\n")
+        self._write_line(file, title)
+        self._write_dashed_line(file)
+        self._write_line(
+            file, f"| {'contract_name':35} | {'blackbox':20} | {'greybox':20} | {'directed_greybox':20} |")
+        self._write_dashed_line(file)
+
+    def _write_average_footer(self, file, average_blackbox, average_greybox, average_directed_greybox):
+        percentage_blackbox = self._convert_to_percentage_str(average_blackbox)
+        percentage_greybox = self._convert_to_percentage_diff_str(
+            average_greybox, average_blackbox)
+        percentage_directed_greybox = self._convert_to_percentage_diff_str(
+            average_directed_greybox, average_blackbox)
+
+        self._write_dashed_line(file)
+        self._write_line(
+            file, f"| {'AVERAGE':35} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
+        self._write_dashed_line(file)
+
+    def _write_average_number_footer(self, file, average_blackbox, average_greybox, average_directed_greybox):
+        number_blackbox = self._convert_to_str(average_blackbox)
+        number_greybox = self._convert_to_diff_str(
+            average_greybox, average_blackbox)
+        number_directed_greybox = self._convert_to_diff_str(
+            average_directed_greybox, average_blackbox)
+
+        self._write_dashed_line(file)
+        self._write_line(
+            file, f"| {'AVERAGE':35} | {number_blackbox:20} | {number_greybox:20} | {number_directed_greybox:20} |")
+        self._write_dashed_line(file)
+
+    def _convert_to_str(self, value) -> str:
+        return f"{value:.2f}" if value != -1 else "N/A"
+
+    def _convert_to_percentage_str(self, value) -> str:
+        return f"{value * 100:.2f}%" if value != -1 else "N/A"
+
+    def _convert_to_diff_str(self, value, base_value) -> str:
+        if base_value == 0:
+            diff = 1 if value != 0 else 0
+        else:
+            diff = (value - base_value) / base_value
+        return f"{value:.2f} ({'+' if diff > 0 else ''}{diff * 100:.2f}%)" if value != -1 else "N/A"
+
+    def _convert_to_percentage_diff_str(self, value, base_value) -> str:
+        if base_value == 0:
+            diff = 1 if value != 0 else 0
+        else:
+            diff = (value - base_value) / base_value
+        return f"{value * 100:.2f}% ({'+' if diff > 0 else ''}{diff * 100:.2f}%)" if value != -1 else "N/A"
+
+    def _write_dashed_line(self, file):
         self._write_line(file, '-' * 108)
 
     def _write_line(self, file, line: str):

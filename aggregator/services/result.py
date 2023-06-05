@@ -55,14 +55,18 @@ class ResultService(metaclass=SingletonMeta):
                                 execution["execution"]["totalInstructions"]
                             executions_by_contract_name[contract_name] += 1
 
-        for contract_name in coverage_by_contract_name.keys():
+        average_coverage = 0
+        successful_executions = 0
+        for contract_name in coverage_by_contract_name:
             if executions_by_contract_name[contract_name] == 0:
                 coverage_by_contract_name[contract_name] = -1
                 continue
             coverage_by_contract_name[contract_name] = coverage_by_contract_name[contract_name] / \
                 executions_by_contract_name[contract_name]
+            average_coverage += coverage_by_contract_name[contract_name]
+            successful_executions += 1
 
-        return coverage_by_contract_name
+        return (coverage_by_contract_name, average_coverage / successful_executions)
 
     def get_average_coverage_by_strategy(self, strategy: str):
         """
@@ -92,14 +96,18 @@ class ResultService(metaclass=SingletonMeta):
                                 execution["execution"]["totalInstructions"]
                             executions_by_contract_name[contract_name] += 1
 
-        for contract_name in coverage_by_contract_name.keys():
+        average_coverage = 0
+        successful_executions = 0
+        for contract_name in coverage_by_contract_name:
             if executions_by_contract_name[contract_name] == 0:
                 coverage_by_contract_name[contract_name] = -1
                 continue
             coverage_by_contract_name[contract_name] = coverage_by_contract_name[contract_name] / \
                 executions_by_contract_name[contract_name]
+            average_coverage += coverage_by_contract_name[contract_name]
+            successful_executions += 1
 
-        return coverage_by_contract_name
+        return (coverage_by_contract_name, average_coverage / successful_executions)
 
     def get_hits_by_strategy(self, strategy: str):
         """
@@ -128,14 +136,18 @@ class ResultService(metaclass=SingletonMeta):
                             hits_by_contract_name[contract_name] += execution["execution"]["criticalInstructionsHits"]
                             executions_by_contract_name[contract_name] += 1
 
+        average_hits = 0
+        successful_executions = 0
         for contract_name in hits_by_contract_name.keys():
             if executions_by_contract_name[contract_name] == 0:
                 hits_by_contract_name[contract_name] = -1
                 continue
             hits_by_contract_name[contract_name] = hits_by_contract_name[contract_name] / \
                 executions_by_contract_name[contract_name]
+            average_hits += hits_by_contract_name[contract_name]
+            successful_executions += 1
 
-        return hits_by_contract_name
+        return (hits_by_contract_name, average_hits / successful_executions)
 
     def get_detection_rate_by_strategy(self, strategy: str, contracts: list, vulnerabilities: list, include_new_detections: bool = True) -> map:
         """
