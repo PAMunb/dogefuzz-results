@@ -651,7 +651,7 @@ CRITICAL INSTRUCTIONS HITS RESULTS
 | WyvernDAOProxy.sol                  | 84.00                | 80.00 (-4.76%)       | 60.00 (-28.57%)      |
 | BigRisk.sol                         | 144.00               | 182.00 (+26.39%)     | 155.00 (+7.64%)      |
 | Caller.sol                          | 18.00                | 30.00 (+66.67%)      | 7.00 (-61.11%)       |
-| ChargCoinContract.sol               | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
+| ChargCoinContract.sol               | 0.00                 | 0.00 (0.00%)         | N/A                  |
 | CreditDepositBank.sol               | 118.00               | 142.00 (+20.34%)     | 135.00 (+14.41%)     |
 | CrowdSalePreICO.sol                 | 57.00                | 36.00 (-36.84%)      | 58.00 (+1.75%)       |
 | DepositBank.sol                     | 156.00               | 170.00 (+8.97%)      | 126.00 (-19.23%)     |
@@ -844,7 +844,7 @@ CRITICAL INSTRUCTIONS HITS RESULTS
 | BeatOrgTokenMainSale.sol            | 51.00                | 46.00 (-9.80%)       | 48.00 (-5.88%)       |
 | BetterAuction.sol                   | 48.00                | 46.00 (-4.17%)       | 49.00 (+2.08%)       |
 | BillPokerPreICO.sol                 | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
-| Billiontix.sol                      | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
+| Billiontix.sol                      | N/A                  | N/A                  | N/A                  |
 | BitGallery.sol                      | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
 | BitkomSale.sol                      | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
 | BizPyramid.sol                      | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
@@ -877,7 +877,7 @@ CRITICAL INSTRUCTIONS HITS RESULTS
 | ECHO.sol                            | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
 | ECT2Crowdsale2.sol                  | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
 | ElecSaleSmartContract.sol           | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
-| ElectionsMarketSavingsBank.sol      | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
+| ElectionsMarketSavingsBank.sol      | N/A                  | N/A                  | N/A                  |
 | EosPizzaSliceDonationraiser.sol     | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
 | EternalWealth.sol                   | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
 | EthBird.sol                         | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
@@ -909,8 +909,8 @@ CRITICAL INSTRUCTIONS HITS RESULTS
 | Loan.sol                            | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
 | LudumToken.sol                      | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
 | LympoICO.sol                        | 14.00                | 11.00 (-21.43%)      | 13.00 (-7.14%)       |
-| MallcoinCrowdSale.sol               | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
-| MarchMadness.sol                    | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
+| MallcoinCrowdSale.sol               | N/A                  | N/A                  | N/A                  |
+| MarchMadness.sol                    | N/A                  | N/A                  | N/A                  |
 | MidnightCoin.sol                    | 11.00                | 13.00 (+18.18%)      | 13.00 (+18.18%)      |
 | NYX.sol                             | 69.00                | 54.00 (-21.74%)      | 61.00 (-11.59%)      |
 | NYXAccount.sol                      | 70.00                | 57.00 (-18.57%)      | 56.00 (-20.00%)      |
@@ -929,19 +929,19 @@ CRITICAL INSTRUCTIONS HITS RESULTS
 | SimpleAuction.sol                   | 168.00               | 195.00 (+16.07%)     | 173.00 (+2.98%)      |
 | SnovCrowdsale.sol                   | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
 | SpaceICOToken.sol                   | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
-| SpanCoin.sol                        | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
+| SpanCoin.sol                        | N/A                  | N/A                  | N/A                  |
 | TUStoken.sol                        | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
 | TimeCapsuleEvent.sol                | 48.00                | 39.00 (-18.75%)      | 41.00 (-14.58%)      |
 | TopKing.sol                         | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
 | TrumpFullTermToken.sol              | 17.00                | 17.00 (0.00%)        | 19.00 (+11.76%)      |
 | TulipMania.sol                      | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
-| VZTPresale.sol                      | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
+| VZTPresale.sol                      | N/A                  | N/A                  | N/A                  |
 | WaterCrowdsale.sol                  | 68.00                | 58.00 (-14.71%)      | 62.00 (-8.82%)       |
 | Who.sol                             | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
 | XgoldCrowdsale.sol                  | 27.00                | 27.00 (0.00%)        | 40.00 (+48.15%)      |
 | XmasCoinCrowdsale.sol               | 0.00                 | 0.00 (0.00%)         | 0.00 (0.00%)         |
 ------------------------------------------------------------------------------------------------------------
-| AVERAGE                             | 26.31                | 26.32 (+0.02%)       | 25.68 (-2.43%)       |
+| AVERAGE                             | 26.84                | 26.85 (+0.02%)       | 26.28 (-2.09%)       |
 ------------------------------------------------------------------------------------------------------------
 
 
