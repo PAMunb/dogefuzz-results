@@ -34,6 +34,8 @@ class OutputService(metaclass=SingletonMeta):
             os.remove(output_file_path)
 
         with open(output_file_path, "wt", encoding="utf-8") as f:
+            self._write_line(f, 'AVERAGE RESULTS')
+            self._write_transaction_count(f, contracts)
             self._write_max_coverage_result(f, contracts)
             self._write_average_coverage_result(f, contracts)
             self._write_critial_instructions_hits(f, contracts)
@@ -51,6 +53,7 @@ class OutputService(metaclass=SingletonMeta):
                     if vulnerability == vulnerability_type:
                         filtered_contracts.append(contract)
             with open(file_path, "wt", encoding="utf-8") as f:
+                self._write_line(f, f'{vulnerability_type.upper()} RESULTS')
                 self._write_max_coverage_result(f, filtered_contracts)
                 self._write_average_coverage_result(f, filtered_contracts)
                 self._write_critial_instructions_hits(f, filtered_contracts)
@@ -243,6 +246,33 @@ class OutputService(metaclass=SingletonMeta):
             )
         else:
             self._write_dashed_line(file)
+
+    def _write_transaction_count(self, file, contracts: list):
+        transaction_count_for_blackbox = self._result_service.get_transaction_count_by_strategy(
+            BLACKBOX_FUZZING,
+            contracts,
+        )
+        transaction_count_for_greybox = self._result_service.get_transaction_count_by_strategy(
+            GREYBOX_FUZZING,
+            contracts,
+        )
+        transaction_count_for_directed_greybox = self._result_service.get_transaction_count_by_strategy(
+            DIRECTED_GREYBOX_FUZZING,
+            contracts,
+        )
+
+        self._write_header(file, 'TRANSACTION COUNT RESULTS')
+
+        blackbox = self._convert_to_str(transaction_count_for_blackbox)
+        greybox = self._convert_to_diff_str(
+            transaction_count_for_greybox, transaction_count_for_blackbox)
+        directed_greybox = self._convert_to_diff_str(
+            transaction_count_for_directed_greybox, transaction_count_for_blackbox)
+
+        self._write_line(
+            file, f"| {'transaction_count':35} | {blackbox:20} | {greybox:20} | {directed_greybox:20} |")
+
+        self._write_dashed_line(file)
 
     def _write_header(self, file, title: str):
         self._write_line(file, "\n")
