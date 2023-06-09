@@ -20,6 +20,12 @@ class OutputService(metaclass=SingletonMeta):
         results_folder = os.path.join(
             self._config.results_folder, results_folder_name)
 
+        critical_instructions = [
+            "CALL",
+            "SELFDESCTRUCT",
+            "CALLCODE",
+            "DELEGATECALL",
+        ]
         vulnerability_types = [
             "delegate",
             "exception-disorder",
@@ -38,7 +44,9 @@ class OutputService(metaclass=SingletonMeta):
             self._write_transaction_count(f, contracts)
             self._write_max_coverage_result(f, contracts)
             self._write_average_coverage_result(f, contracts)
-            self._write_critial_instructions_hits(f, contracts)
+            # self._write_critial_instructions_hits(f, contracts)executions_by_contract_name[contract_name]
+            self._write_critial_instructions_detailed_hits(
+                f, contracts, critical_instructions)
             self._write_vulnerabilities(
                 f, contracts, vulnerability_types, False)
 
@@ -56,7 +64,9 @@ class OutputService(metaclass=SingletonMeta):
                 self._write_line(f, f'{vulnerability_type.upper()} RESULTS')
                 self._write_max_coverage_result(f, filtered_contracts)
                 self._write_average_coverage_result(f, filtered_contracts)
-                self._write_critial_instructions_hits(f, filtered_contracts)
+                # self._write_critial_instructions_hits(f, filtered_contracts)
+                self._write_critial_instructions_detailed_hits(
+                    f, filtered_contracts, critical_instructions)
                 self._write_vulnerabilities(
                     f, filtered_contracts, [vulnerability_type], False)
 
@@ -174,6 +184,48 @@ class OutputService(metaclass=SingletonMeta):
 
             self._write_line(
                 file, f"| {contract_name:35} | {hits_for_blackbox:20} | {hits_for_greybox:20} | {hits_for_directed_greybox:20} |")
+        self._write_average_number_footer(
+            file,
+            average_hits_for_blackbox,
+            average_hits_for_greybox,
+            average_hits_for_directed_greybox,
+        )
+
+    def _write_critial_instructions_detailed_hits(self, file, contracts: list, critical_instructions: list):
+        (hits_per_instruction_for_blackbox, average_hits_for_blackbox) = self._result_service.get_hits_by_instructions_and_strategy(
+            BLACKBOX_FUZZING,
+            contracts,
+            critical_instructions,
+        )
+        (hits_per_instruction_for_greybox, average_hits_for_greybox) = self._result_service.get_hits_by_instructions_and_strategy(
+            GREYBOX_FUZZING,
+            contracts,
+            critical_instructions,
+        )
+        (hits_per_instruction_for_directed_greybox, average_hits_for_directed_greybox) = self._result_service.get_hits_by_instructions_and_strategy(
+            DIRECTED_GREYBOX_FUZZING,
+            contracts,
+            critical_instructions,
+        )
+
+        self._write_header(file, 'DETAILED CRITICAL INSTRUCTIONS HITS RESULTS')
+
+        for critical_instruction in critical_instructions:
+            blackbox = hits_per_instruction_for_blackbox[
+                critical_instruction] if critical_instruction in hits_per_instruction_for_blackbox else -1
+            greybox = hits_per_instruction_for_greybox[
+                critical_instruction] if critical_instruction in hits_per_instruction_for_greybox else -1
+            directed_greybox = hits_per_instruction_for_directed_greybox[
+                critical_instruction] if critical_instruction in hits_per_instruction_for_directed_greybox else -1
+
+            hits_for_blackbox = self._convert_to_str(blackbox)
+            hits_for_greybox = self._convert_to_diff_str(greybox, blackbox)
+            hits_for_directed_greybox = self._convert_to_diff_str(
+                directed_greybox, blackbox)
+
+            self._write_line(
+                file, f"| {critical_instruction:35} | {hits_for_blackbox:20} | {hits_for_greybox:20} | {hits_for_directed_greybox:20} |")
+
         self._write_average_number_footer(
             file,
             average_hits_for_blackbox,

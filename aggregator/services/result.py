@@ -162,6 +162,39 @@ class ResultService(metaclass=SingletonMeta):
             return -1
         return float(average_transaction_count) / float(execution_count)
 
+    def get_hits_by_instructions_and_strategy(
+        self,
+        strategy: str,
+        contracts: list,
+        critical_instructions: list,
+    ) -> map:
+        """return the number of hits by instruction and strategy name
+        """
+        executions_by_contract_name = self._read_results_file(strategy)
+
+        hits = {}
+        for critical_instruction in critical_instructions:
+            hits[critical_instruction] = 0
+
+        for contract in contracts:
+            contract_name = contract["name"]
+            executions = executions_by_contract_name[contract_name]
+            for execution in executions:
+                for critical_instruction in critical_instructions:
+                    instructions = execution["execution"]["instructions"]
+                    critical_instruction_pcs = []
+                    for instruction_pc in instructions:
+                        if instructions[instruction_pc] == critical_instruction:
+                            critical_instruction_pcs.append(instruction_pc)
+
+                    heat_map = execution["execution"]["instructionHitsHeatMap"]
+                    for program_counter in critical_instruction_pcs:
+                        hits[critical_instruction] += heat_map[program_counter]
+
+        if len(hits) == 0:
+            return (hits, -1)
+        return (hits, sum(hits.values()) / len(hits))
+
     def _init_pre_categorized_vulnerabilities(self, contracts: list, vulnerabilities: list):
         pre_categorized_vulnerabilities = {}
         for vulnerability in vulnerabilities:
