@@ -19,8 +19,10 @@ class InputService(metaclass=SingletonMeta):
         """
         extracts inputs from resources folder
         """
-        inputs_folder = path.join(self._config.temp_folder, self._config.inputs_folder)
-        inputs_zip_path = path.join(self._config.resources_folder, self._config.inputs_zip_filename)
+        inputs_folder = path.join(
+            self._config.temp_folder, self._config.inputs_folder)
+        inputs_zip_path = path.join(
+            self._config.resources_folder, self._config.inputs_zip_filename)
 
         if path.exists(inputs_folder):
             return

@@ -1,0 +1,3627 @@
+[
+    {
+        "name": "CryptoPoosToken.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 0,
+        "numberOfBranches": 0,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "FipsNotary.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 90,
+        "numberOfBranches": 103,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "NFTHouseGame.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 0,
+        "numberOfBranches": 0,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "CTNTokenSale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 162,
+        "numberOfBranches": 159,
+        "numberOfCriticalInstructions": {
+            "CALL": 13,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "RichestTakeAll.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 16,
+        "numberOfBranches": 14,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "MultiEventsHistory.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/address/0x24384c4626eb895c99ea4225af309ad22a75be2f",
+        "numberOfBlocks": 49,
+        "numberOfBranches": 47,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "DELEGATECALL": 1,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "AsaCoin.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 70,
+        "numberOfBranches": 76,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "DEC15Contract.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 51,
+        "numberOfBranches": 50,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "SpecialWallet.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 88,
+        "numberOfBranches": 88,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "DecentralandBuyer.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 69,
+        "numberOfBranches": 67,
+        "numberOfCriticalInstructions": {
+            "CALL": 7
+        }
+    },
+    {
+        "name": "MarketPrice.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 64,
+        "numberOfBranches": 62,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "ClaimableCrowdsale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 133,
+        "numberOfBranches": 130,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "WaterCrowdsale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 68,
+        "numberOfBranches": 66,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "SafeConditionalHFTransfer.sol",
+        "weaknesses": [
+            "exception_disorder;gassless_send"
+        ],
+        "link": "",
+        "numberOfBlocks": 18,
+        "numberOfBranches": 16,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "XmasCoinCrowdsale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 178,
+        "numberOfBranches": 174,
+        "numberOfCriticalInstructions": {
+            "CALL": 8,
+            "SELFDESTRUCT": 2
+        }
+    },
+    {
+        "name": "KeberuntunganAcak.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 62,
+        "numberOfBranches": 59,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "SaintArnouldToken.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 67,
+        "numberOfBranches": 64,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "Coinflip.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 103,
+        "numberOfBranches": 100,
+        "numberOfCriticalInstructions": {
+            "CALL": 6,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "LitmusCrowdsale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 122,
+        "numberOfBranches": 119,
+        "numberOfCriticalInstructions": {
+            "CALL": 5,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "MidnightCoin.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 99,
+        "numberOfBranches": 101,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "DepositBank.sol",
+        "weaknesses": [
+            "exception_disorder;timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 81,
+        "numberOfBranches": 77,
+        "numberOfCriticalInstructions": {
+            "CALL": 6
+        }
+    },
+    {
+        "name": "viewMessagePayable.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 42,
+        "numberOfBranches": 46,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "AmbrosusSale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 259,
+        "numberOfBranches": 255,
+        "numberOfCriticalInstructions": {
+            "CALL": 11
+        }
+    },
+    {
+        "name": "DSProxy.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/address/0xa81cfa2c7e31cfae91bac723c8b70e6d31940bc0",
+        "numberOfBlocks": 73,
+        "numberOfBranches": 74,
+        "numberOfCriticalInstructions": {
+            "CALL": 4,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "CTV.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 282,
+        "numberOfBranches": 282,
+        "numberOfCriticalInstructions": {
+            "CALL": 7
+        }
+    },
+    {
+        "name": "ElecSaleSmartContract.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 216,
+        "numberOfBranches": 212,
+        "numberOfCriticalInstructions": {
+            "CALL": 11
+        }
+    },
+    {
+        "name": "IungoPresale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 63,
+        "numberOfBranches": 61,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "InkPublicPresale.sol",
+        "weaknesses": [
+            "reentrancy"
+        ],
+        "link": "",
+        "numberOfBlocks": 167,
+        "numberOfBranches": 163,
+        "numberOfCriticalInstructions": {
+            "CALL": 6
+        }
+    },
+    {
+        "name": "Honey.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 22,
+        "numberOfBranches": 20,
+        "numberOfCriticalInstructions": {
+            "CALL": 4,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "DaoCasinoToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 66,
+        "numberOfBranches": 64,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "MoyTokenStorage.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 77,
+        "numberOfBranches": 82,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "EtchReward.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 113,
+        "numberOfBranches": 111,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "ProxyCreationAndExecute.sol",
+        "weaknesses": [
+            "reentrancy"
+        ],
+        "link": "",
+        "numberOfBlocks": 164,
+        "numberOfBranches": 161,
+        "numberOfCriticalInstructions": {
+            "CALL": 39
+        }
+    },
+    {
+        "name": "EosPizzaSliceDonationraiser.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 172,
+        "numberOfBranches": 175,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "JoysoCrowdsale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 62,
+        "numberOfBranches": 60,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "Caller.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 7,
+        "numberOfBranches": 5,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "LeanFund.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 78,
+        "numberOfBranches": 74,
+        "numberOfCriticalInstructions": {
+            "CALL": 3,
+            "SELFDESTRUCT": 2
+        }
+    },
+    {
+        "name": "Remittance.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 35,
+        "numberOfBranches": 33,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "ChristmasClub.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 31,
+        "numberOfBranches": 27,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "GGPCToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 105,
+        "numberOfBranches": 109,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "HFConditionalTransfer.sol",
+        "weaknesses": [
+            "gassless_send"
+        ],
+        "link": "",
+        "numberOfBlocks": 12,
+        "numberOfBranches": 10,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "Profit1000.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 132,
+        "numberOfBranches": 129,
+        "numberOfCriticalInstructions": {
+            "CALL": 3,
+            "CALLCODE": 1,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "BlockFoodPreSale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 133,
+        "numberOfBranches": 131,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "RaiseFundsForACause.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 92,
+        "numberOfBranches": 95,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "Fermat.sol",
+        "weaknesses": [
+            "gassless_send"
+        ],
+        "link": "https://etherscan.io/address/0xdfab9f43f279bd8bd87026b84105c5d1543ae99e",
+        "numberOfBlocks": 45,
+        "numberOfBranches": 43,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "BananaToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 85,
+        "numberOfBranches": 92,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "TheNextBlock.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 78,
+        "numberOfBranches": 74,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "Payee.sol",
+        "weaknesses": [
+            "reentrancy"
+        ],
+        "link": "",
+        "numberOfBlocks": 40,
+        "numberOfBranches": 37,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "CandyClaim.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 87,
+        "numberOfBranches": 85,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "CandySale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 59,
+        "numberOfBranches": 57,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "CryptoCarsRent.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 191,
+        "numberOfBranches": 189,
+        "numberOfCriticalInstructions": {
+            "CALL": 6,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "BRToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 70,
+        "numberOfBranches": 76,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "REALotteryWheel.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 18,
+        "numberOfBranches": 16,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "CALLCODE": 1,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "Xtime.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 39,
+        "numberOfBranches": 37,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "eth666.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 58,
+        "numberOfBranches": 54,
+        "numberOfCriticalInstructions": {
+            "CALL": 5,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "Hotc.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 63,
+        "numberOfBranches": 66,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "SGCC.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 89,
+        "numberOfBranches": 93,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "KiddyToys.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "https://etherscan.io/address/0x6d500e4B6565C3c25a6EDD51839d52269e3d293f",
+        "numberOfBlocks": 134,
+        "numberOfBranches": 132,
+        "numberOfCriticalInstructions": {
+            "CALL": 4,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "TwentyDollars.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 40,
+        "numberOfBranches": 38,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "IQNCrowdsale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 69,
+        "numberOfBranches": 67,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "Apuestas2018.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 90,
+        "numberOfBranches": 88,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "ETHLightToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 69,
+        "numberOfBranches": 71,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "CryptoChamps.sol",
+        "weaknesses": [
+            "gassless_send"
+        ],
+        "link": "",
+        "numberOfBlocks": 125,
+        "numberOfBranches": 131,
+        "numberOfCriticalInstructions": {
+            "CALL": 7
+        }
+    },
+    {
+        "name": "LINKFund.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 44,
+        "numberOfBranches": 42,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "AtomicSwap.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 37,
+        "numberOfBranches": 35,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "ChangeableRateCrowdsale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 140,
+        "numberOfBranches": 137,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "Lescovex.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 141,
+        "numberOfBranches": 145,
+        "numberOfCriticalInstructions": {
+            "CALL": 4,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "NYXAccount.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 76,
+        "numberOfBranches": 76,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "DEC15v1Contract.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 49,
+        "numberOfBranches": 47,
+        "numberOfCriticalInstructions": {
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "Who.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 169,
+        "numberOfBranches": 182,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "Soleau.sol",
+        "weaknesses": [
+            "exception_disorder;gassless_send"
+        ],
+        "link": "",
+        "numberOfBlocks": 37,
+        "numberOfBranches": 35,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "TokenBank.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 36,
+        "numberOfBranches": 34,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "OurRoulette.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "https://etherscan.io/address/0x30b0d22416075184b8111c0e033fe6f33e6b7996",
+        "numberOfBlocks": 204,
+        "numberOfBranches": 201,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "CashPokerProICO.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 154,
+        "numberOfBranches": 159,
+        "numberOfCriticalInstructions": {
+            "CALL": 6
+        }
+    },
+    {
+        "name": "EthBird.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 34,
+        "numberOfBranches": 32,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "UserWallet.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/address/0x8f7295f03e572d15f183dc6b7a4f21124c73f3f6",
+        "numberOfBlocks": 12,
+        "numberOfBranches": 10,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "Reward.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 32,
+        "numberOfBranches": 30,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "TestRegistry.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 8,
+        "numberOfBranches": 6,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "SCCsale.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 95,
+        "numberOfBranches": 99,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "TheOneToken.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 65,
+        "numberOfBranches": 71,
+        "numberOfCriticalInstructions": {
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "ChrisCoin.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 132,
+        "numberOfBranches": 138,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "Gelios.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 172,
+        "numberOfBranches": 173,
+        "numberOfCriticalInstructions": {
+            "CALL": 4,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "Parsec.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/token/0x9caa3424cb91900ef7ac41a7b04a246304c02d3a",
+        "numberOfBlocks": 22,
+        "numberOfBranches": 20,
+        "numberOfCriticalInstructions": {
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "whoDepositV3.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 7,
+        "numberOfBranches": 5,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "NumberBoard.sol",
+        "weaknesses": [
+            "gassless_send"
+        ],
+        "link": "https://etherscan.io/address/0x9249133819102b2ed31680468c8c67F6Fe9E7505",
+        "numberOfBlocks": 98,
+        "numberOfBranches": 96,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "DeveryFUND.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 84,
+        "numberOfBranches": 84,
+        "numberOfCriticalInstructions": {
+            "CALL": 6
+        }
+    },
+    {
+        "name": "HolyCoin.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 105,
+        "numberOfBranches": 108,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "WyvernDAOProxy.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/address/wyverndaoproxy.eth",
+        "numberOfBlocks": 31,
+        "numberOfBranches": 29,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "PrivateBank.sol",
+        "weaknesses": [
+            "reentrancy"
+        ],
+        "link": "",
+        "numberOfBlocks": 21,
+        "numberOfBranches": 19,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "BitkomSale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 139,
+        "numberOfBranches": 139,
+        "numberOfCriticalInstructions": {
+            "CALL": 7,
+            "CALLCODE": 2
+        }
+    },
+    {
+        "name": "CryptoGoldStandardCoin.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 123,
+        "numberOfBranches": 126,
+        "numberOfCriticalInstructions": {
+            "CALL": 3,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "BizPyramid.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 112,
+        "numberOfBranches": 109,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "CALLCODE": 1,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "CccTokenIco.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 167,
+        "numberOfBranches": 170,
+        "numberOfCriticalInstructions": {
+            "CALL": 13,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "RaisingToken.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 53,
+        "numberOfBranches": 51,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "Luck.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 16,
+        "numberOfBranches": 14,
+        "numberOfCriticalInstructions": {
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "Private_Bank.sol",
+        "weaknesses": [
+            "reentrancy"
+        ],
+        "link": "",
+        "numberOfBlocks": 21,
+        "numberOfBranches": 19,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "HodlContract.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 31,
+        "numberOfBranches": 29,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "MultiSigStub.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/address/0x78fb1c9c203d1f3d0ea421a7bdaf61ae6d9b5a52",
+        "numberOfBlocks": 104,
+        "numberOfBranches": 104,
+        "numberOfCriticalInstructions": {
+            "DELEGATECALL": 2
+        }
+    },
+    {
+        "name": "LOVEFoundation.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 0,
+        "numberOfBranches": 0,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "PARKToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 93,
+        "numberOfBranches": 95,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "CompetitionStore.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 175,
+        "numberOfBranches": 172,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "Matthew.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 24,
+        "numberOfBranches": 22,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "DELEGATECALL": 1,
+            "SELFDESTRUCT": 2
+        }
+    },
+    {
+        "name": "PowerCoin.sol",
+        "weaknesses": [
+            "reentrancy"
+        ],
+        "link": "",
+        "numberOfBlocks": 70,
+        "numberOfBranches": 73,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "EthereumHole.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 0,
+        "numberOfBranches": 0,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "ListingsERC20.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 83,
+        "numberOfBranches": 80,
+        "numberOfCriticalInstructions": {
+            "CALL": 8
+        }
+    },
+    {
+        "name": "CvcProxy.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/address/0xA3dB33ccFE990Fdf89Ff311754391b5c3AF4Ef04",
+        "numberOfBlocks": 31,
+        "numberOfBranches": 29,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "BRANDCOIN.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 184,
+        "numberOfBranches": 180,
+        "numberOfCriticalInstructions": {
+            "CALL": 11,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "TUStoken.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 0,
+        "numberOfBranches": 0,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "SaveData.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 27,
+        "numberOfBranches": 25,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "IPchainStandardToken.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 73,
+        "numberOfBranches": 78,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "HashRushICO.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 160,
+        "numberOfBranches": 171,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "VeganCoin.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 61,
+        "numberOfBranches": 65,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "viewMessage.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 41,
+        "numberOfBranches": 45,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "FidgETHSpinner.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 78,
+        "numberOfBranches": 83,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "LympoICO.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 138,
+        "numberOfBranches": 146,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "BigRisk.sol",
+        "weaknesses": [
+            "exception_disorder;gassless_send"
+        ],
+        "link": "",
+        "numberOfBlocks": 37,
+        "numberOfBranches": 33,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "Bitway.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 57,
+        "numberOfBranches": 55,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "AMBROSUSFund.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 47,
+        "numberOfBranches": 44,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "ECT2Crowdsale2.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 72,
+        "numberOfBranches": 70,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "CBToken.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/token/0x8aaefb9d925b3a39595c26290a9d115f9c46dfab",
+        "numberOfBlocks": 205,
+        "numberOfBranches": 211,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "CALLCODE": 1,
+            "DELEGATECALL": 6
+        }
+    },
+    {
+        "name": "SingularityTest20.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 47,
+        "numberOfBranches": 46,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "TrustBet.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 59,
+        "numberOfBranches": 56,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "XG4KCrowdFunding.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 20,
+        "numberOfBranches": 18,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "Cajutel.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 0,
+        "numberOfBranches": 0,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "FabricTokenFundraiser.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 178,
+        "numberOfBranches": 181,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "PreTGE.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 406,
+        "numberOfBranches": 413,
+        "numberOfCriticalInstructions": {
+            "CALL": 9
+        }
+    },
+    {
+        "name": "Store.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 28,
+        "numberOfBranches": 30,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "BetBuyer.sol",
+        "weaknesses": [
+            "gassless_send"
+        ],
+        "link": "https://etherscan.io/address/0x089431f295b58c17c0b1754be2e15d706e990151",
+        "numberOfBlocks": 61,
+        "numberOfBranches": 59,
+        "numberOfCriticalInstructions": {
+            "CALL": 7
+        }
+    },
+    {
+        "name": "BrandContest.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 114,
+        "numberOfBranches": 114,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "WolkToken.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "https://etherscan.io/token/0x8a6aa2091c68287d4c37e486e89850fd0e79633f",
+        "numberOfBlocks": 149,
+        "numberOfBranches": 147,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "ChronosCore.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 154,
+        "numberOfBranches": 151,
+        "numberOfCriticalInstructions": {
+            "CALL": 7,
+            "DELEGATECALL": 1,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "proforma.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 57,
+        "numberOfBranches": 55,
+        "numberOfCriticalInstructions": {
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "PreIcoCrowdsale.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 81,
+        "numberOfBranches": 78,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "SpanCoin.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 0,
+        "numberOfBranches": 0,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "TopKing.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 16,
+        "numberOfBranches": 14,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "Bombs.sol",
+        "weaknesses": [
+            "numberdependency;timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 44,
+        "numberOfBranches": 42,
+        "numberOfCriticalInstructions": {
+            "CALL": 9
+        }
+    },
+    {
+        "name": "HODLerParadise.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 0,
+        "numberOfBranches": 0,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "IQNSecondPreICO.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 47,
+        "numberOfBranches": 43,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "Ethsplit.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 14,
+        "numberOfBranches": 12,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "LiteConnectToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 91,
+        "numberOfBranches": 94,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "AddressLotteryV2.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 29,
+        "numberOfBranches": 27,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "RiskSharingToken.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/address/0xa17d1bf14802e0eec8f84b3b8b638a9402d60e9e",
+        "numberOfBlocks": 125,
+        "numberOfBranches": 124,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "DELEGATECALL": 8
+        }
+    },
+    {
+        "name": "WhaleGiveaway1.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 25,
+        "numberOfBranches": 23,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "SoapBox.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 37,
+        "numberOfBranches": 35,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "TestQuery.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 10,
+        "numberOfBranches": 8,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "testeot.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 94,
+        "numberOfBranches": 98,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "CSSPresale.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 115,
+        "numberOfBranches": 136,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "EmojisanAuctionHouse.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 96,
+        "numberOfBranches": 94,
+        "numberOfCriticalInstructions": {
+            "CALL": 12
+        }
+    },
+    {
+        "name": "Bounty0xPresale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 64,
+        "numberOfBranches": 62,
+        "numberOfCriticalInstructions": {
+            "CALL": 4,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "ChargCoinContract.sol",
+        "weaknesses": [
+            "exception_disorder;timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 191,
+        "numberOfBranches": 198,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "RaffleStrangeLoop.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 58,
+        "numberOfBranches": 56,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "AnyContract.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 33,
+        "numberOfBranches": 31,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "Etheramid.sol",
+        "weaknesses": [
+            "gassless_send"
+        ],
+        "link": "",
+        "numberOfBlocks": 110,
+        "numberOfBranches": 105,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "P2PFuturesTrading.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 60,
+        "numberOfBranches": 59,
+        "numberOfCriticalInstructions": {
+            "CALL": 7
+        }
+    },
+    {
+        "name": "BeatOrgTokenMainSale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 35,
+        "numberOfBranches": 33,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "EthTermDeposits.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 22,
+        "numberOfBranches": 20,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "Freeze.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 49,
+        "numberOfBranches": 47,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "MultiplicatorX4.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 20,
+        "numberOfBranches": 18,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "Bank_With_Interest.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 62,
+        "numberOfBranches": 59,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "SELFDESTRUCT": 2
+        }
+    },
+    {
+        "name": "Dil.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 101,
+        "numberOfBranches": 105,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "ElectionsMarketSavingsBank.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "https://etherscan.io/address/0x03cf94938696812a3615a98cdfcf82598ef30158",
+        "numberOfBlocks": 0,
+        "numberOfBranches": 0,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "LaolaiManage.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 34,
+        "numberOfBranches": 31,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "AngelCentralBank.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 344,
+        "numberOfBranches": 341,
+        "numberOfCriticalInstructions": {
+            "CALL": 17
+        }
+    },
+    {
+        "name": "LudumToken.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 101,
+        "numberOfBranches": 96,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "AvPresale.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 137,
+        "numberOfBranches": 151,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "BetterAuction.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 84,
+        "numberOfBranches": 84,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "TransferMoney.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 13,
+        "numberOfBranches": 11,
+        "numberOfCriticalInstructions": {
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "BJLToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 88,
+        "numberOfBranches": 92,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "BurnableOpenPaymentFactory.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 19,
+        "numberOfBranches": 16,
+        "numberOfCriticalInstructions": {
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "BLOCKCHAIN_DEPOSIT_BETA.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 21,
+        "numberOfBranches": 19,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "Countdown.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 25,
+        "numberOfBranches": 23,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "Pie.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 22,
+        "numberOfBranches": 20,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "LZLCoin.sol",
+        "weaknesses": [
+            "reentrancy"
+        ],
+        "link": "",
+        "numberOfBlocks": 69,
+        "numberOfBranches": 73,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "QuasacoinTokenCrowdsale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 96,
+        "numberOfBranches": 93,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "SpaceICOToken.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 96,
+        "numberOfBranches": 101,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "TulipMania.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 223,
+        "numberOfBranches": 218,
+        "numberOfCriticalInstructions": {
+            "CALL": 5,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "RandoCoin.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 120,
+        "numberOfBranches": 123,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "PreAdsMobileToken.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 141,
+        "numberOfBranches": 144,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "IntermediateVault.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 20,
+        "numberOfBranches": 18,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "PotPotato.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 81,
+        "numberOfBranches": 81,
+        "numberOfCriticalInstructions": {
+            "CALL": 5,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "RENTCoin.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 105,
+        "numberOfBranches": 103,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "APPToken.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 103,
+        "numberOfBranches": 107,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "msgdata.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 15,
+        "numberOfBranches": 13,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "DropletCrowdSale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 138,
+        "numberOfBranches": 133,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "JobeumPresale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 207,
+        "numberOfBranches": 204,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "ObizcoinCrowdsale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 210,
+        "numberOfBranches": 207,
+        "numberOfCriticalInstructions": {
+            "CALL": 8
+        }
+    },
+    {
+        "name": "CertifiedDocuments.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 120,
+        "numberOfBranches": 119,
+        "numberOfCriticalInstructions": {
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "ConfToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 116,
+        "numberOfBranches": 119,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "TIP.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 49,
+        "numberOfBranches": 47,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "CALLCODE": 2
+        }
+    },
+    {
+        "name": "Best_Bank_with_Interest.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 52,
+        "numberOfBranches": 51,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "HodlBox.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 30,
+        "numberOfBranches": 28,
+        "numberOfCriticalInstructions": {
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "AcjCrowdsale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 179,
+        "numberOfBranches": 179,
+        "numberOfCriticalInstructions": {
+            "CALL": 6
+        }
+    },
+    {
+        "name": "ForecasterReward.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 68,
+        "numberOfBranches": 65,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "B0xProxy.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://ropsten.etherscan.io/address/0x32dd9802b83aec762a38e0d3738549bfe5660b30",
+        "numberOfBlocks": 97,
+        "numberOfBranches": 95,
+        "numberOfCriticalInstructions": {
+            "DELEGATECALL": 2
+        }
+    },
+    {
+        "name": "ERC721_token.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 45,
+        "numberOfBranches": 43,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "EthMash.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 79,
+        "numberOfBranches": 86,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "SatoshiDice.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "https://etherscan.io/address/0x55283a2f07be1b95e1e417af7efaab6750fedd0d",
+        "numberOfBlocks": 32,
+        "numberOfBranches": 30,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "CrowdsalePre.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 150,
+        "numberOfBranches": 149,
+        "numberOfCriticalInstructions": {
+            "CALL": 9,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "BetCenter.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 84,
+        "numberOfBranches": 82,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "CrowdsaleTokens.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "https://etherscan.io/address/0x876359dcb1745073909cc810311ec3f119e8d5e8",
+        "numberOfBlocks": 50,
+        "numberOfBranches": 49,
+        "numberOfCriticalInstructions": {
+            "CALL": 3,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "NatCoinCrowdsale.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 179,
+        "numberOfBranches": 172,
+        "numberOfCriticalInstructions": {
+            "CALL": 6
+        }
+    },
+    {
+        "name": "TimeCapsuleEvent.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 30,
+        "numberOfBranches": 28,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "PrayerCoin.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 98,
+        "numberOfBranches": 104,
+        "numberOfCriticalInstructions": {
+            "CALL": 3,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "CrowdSaleTRH.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 58,
+        "numberOfBranches": 56,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "DEEX.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 217,
+        "numberOfBranches": 220,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "Dividend.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 41,
+        "numberOfBranches": 39,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "HodlerInvestmentClub.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 25,
+        "numberOfBranches": 24,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "Loan.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 64,
+        "numberOfBranches": 63,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "XgoldCrowdsale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 182,
+        "numberOfBranches": 180,
+        "numberOfCriticalInstructions": {
+            "CALL": 4,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "ArtBlockToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 87,
+        "numberOfBranches": 92,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "BillPokerPreICO.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 150,
+        "numberOfBranches": 155,
+        "numberOfCriticalInstructions": {
+            "CALL": 6
+        }
+    },
+    {
+        "name": "EternalWealth.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 24,
+        "numberOfBranches": 22,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "OZRealestatesToken.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 212,
+        "numberOfBranches": 217,
+        "numberOfCriticalInstructions": {
+            "CALL": 4,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "MoacToken.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 186,
+        "numberOfBranches": 190,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "DYLC_ERC20Token.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 0,
+        "numberOfBranches": 0,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "MallcoinCrowdSale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 210,
+        "numberOfBranches": 206,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "KnowledgeProxy.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/token/0x217375af2de10c73f94408c3258a956df106ba98",
+        "numberOfBlocks": 39,
+        "numberOfBranches": 37,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "DELEGATECALL": 2
+        }
+    },
+    {
+        "name": "InvitherB.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 46,
+        "numberOfBranches": 42,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "Billiontix.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "https://etherscan.io/token/0x096D7Ce60278E623C0B5763A0D04Fde844d2C537",
+        "numberOfBlocks": 601,
+        "numberOfBranches": 626,
+        "numberOfCriticalInstructions": {
+            "CALL": 10,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "SimpleAuction.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 36,
+        "numberOfBranches": 34,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "BIAToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 97,
+        "numberOfBranches": 100,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "message.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 37,
+        "numberOfBranches": 35,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "TranferInTwoPart.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 7,
+        "numberOfBranches": 5,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "viewMessageNumPayable.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 54,
+        "numberOfBranches": 59,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "EthronTokenPonzi.sol",
+        "weaknesses": [
+            "gassless_send"
+        ],
+        "link": "https://etherscan.io/token/0xc608f567bcf51b0d84edef669b9d7d47440b7bb7",
+        "numberOfBlocks": 96,
+        "numberOfBranches": 93,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "Bob.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 100,
+        "numberOfBranches": 98,
+        "numberOfCriticalInstructions": {
+            "CALL": 16
+        }
+    },
+    {
+        "name": "Sacrific3d.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 64,
+        "numberOfBranches": 62,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "ProvidencePresale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 33,
+        "numberOfBranches": 31,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "D2GBToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 55,
+        "numberOfBranches": 54,
+        "numberOfCriticalInstructions": {
+            "CALLCODE": 1,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "Abt.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 11,
+        "numberOfBranches": 9,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "C2.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 15,
+        "numberOfBranches": 14,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "TransferCoin.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 14,
+        "numberOfBranches": 12,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "GPSPresale.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 122,
+        "numberOfBranches": 142,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "NexxusToken.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 86,
+        "numberOfBranches": 89,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "BurnablePaymentFactory.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 90,
+        "numberOfBranches": 89,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "Saaa.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 12,
+        "numberOfBranches": 10,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "Arena.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 47,
+        "numberOfBranches": 45,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "EthMashChain.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 35,
+        "numberOfBranches": 34,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "PIGGY_BANK.sol",
+        "weaknesses": [
+            "numberdependency;reentrancy"
+        ],
+        "link": "",
+        "numberOfBlocks": 25,
+        "numberOfBranches": 23,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "AFactory.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 23,
+        "numberOfBranches": 22,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "MySuperToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 47,
+        "numberOfBranches": 51,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "payrollSystem.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 39,
+        "numberOfBranches": 37,
+        "numberOfCriticalInstructions": {
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "DIVXToken.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 156,
+        "numberOfBranches": 158,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "IndaHashToken.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 215,
+        "numberOfBranches": 213,
+        "numberOfCriticalInstructions": {
+            "CALL": 5,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "VZTPresale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 291,
+        "numberOfBranches": 287,
+        "numberOfCriticalInstructions": {
+            "CALL": 8
+        }
+    },
+    {
+        "name": "Arss.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 11,
+        "numberOfBranches": 9,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "CryptoHole.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 44,
+        "numberOfBranches": 42,
+        "numberOfCriticalInstructions": {
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "KryptoGiftsMessages.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 26,
+        "numberOfBranches": 26,
+        "numberOfCriticalInstructions": {
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "MiCon.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 50,
+        "numberOfBranches": 56,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "BlockHashRNGFallback.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "https://etherscan.io/address/0x1738b62e403090666687243e758b1c29edffc90e",
+        "numberOfBlocks": 28,
+        "numberOfBranches": 26,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "Ciphs.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/token/0xa4ff5ce0556f9ff0797ae525ec5ba9b723878a3e",
+        "numberOfBlocks": 200,
+        "numberOfBranches": 195,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "FunFairSale.sol",
+        "weaknesses": [
+            "reentrancy"
+        ],
+        "link": "",
+        "numberOfBlocks": 55,
+        "numberOfBranches": 52,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "GraphenePowerToken.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 137,
+        "numberOfBranches": 142,
+        "numberOfCriticalInstructions": {
+            "CALL": 6,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "Protocol108.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 36,
+        "numberOfBranches": 35,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "TrumpFullTermToken.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 141,
+        "numberOfBranches": 139,
+        "numberOfCriticalInstructions": {
+            "CALL": 13,
+            "CALLCODE": 1,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "MUSCToken.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 105,
+        "numberOfBranches": 110,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "CreditDepositBank.sol",
+        "weaknesses": [
+            "exception_disorder;gassless_send"
+        ],
+        "link": "",
+        "numberOfBlocks": 29,
+        "numberOfBranches": 27,
+        "numberOfCriticalInstructions": {
+            "CALL": 3,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "MyEtherTellerEntityDB.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 69,
+        "numberOfBranches": 67,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "STRIMToken.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 175,
+        "numberOfBranches": 175,
+        "numberOfCriticalInstructions": {
+            "CALL": 6,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "FNBToken.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/token/0x47b28f365bf4cb38db4b6356864bde7bc4b35129",
+        "numberOfBlocks": 71,
+        "numberOfBranches": 76,
+        "numberOfCriticalInstructions": {
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "SmartBillions.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 0,
+        "numberOfBranches": 0,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "EtherWhuffieManager.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 14,
+        "numberOfBranches": 12,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "CHEXToken.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 127,
+        "numberOfBranches": 125,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "EmojisanMarketplace.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 100,
+        "numberOfBranches": 98,
+        "numberOfCriticalInstructions": {
+            "CALL": 12
+        }
+    },
+    {
+        "name": "Forwarder.sol",
+        "weaknesses": [
+            "reentrancy"
+        ],
+        "link": "",
+        "numberOfBlocks": 23,
+        "numberOfBranches": 21,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "NYX.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 77,
+        "numberOfBranches": 75,
+        "numberOfCriticalInstructions": {
+            "CALL": 4
+        }
+    },
+    {
+        "name": "SimpleMathTest003.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 14,
+        "numberOfBranches": 12,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "EscrowMyEtherEntityDB.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 69,
+        "numberOfBranches": 67,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "Dappster.sol",
+        "weaknesses": [
+            "gassless_send"
+        ],
+        "link": "https://etherscan.io/address/0x7f2b1d5133053f9cc5b750d2245db607233a770d",
+        "numberOfBlocks": 211,
+        "numberOfBranches": 208,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "EthMashMount.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 45,
+        "numberOfBranches": 43,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "BsPresale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 209,
+        "numberOfBranches": 205,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "ECHO.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 218,
+        "numberOfBranches": 216,
+        "numberOfCriticalInstructions": {
+            "CALL": 5,
+            "CALLCODE": 2,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "EthCapsule.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 58,
+        "numberOfBranches": 54,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "LANDProxy.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/address/0x36fc2821c1dba31ed04682b2277c89f33fd885b7",
+        "numberOfBlocks": 21,
+        "numberOfBranches": 19,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "ggbank.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 68,
+        "numberOfBranches": 64,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "CryptoDuels.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 115,
+        "numberOfBranches": 112,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "MillionEther.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 224,
+        "numberOfBranches": 224,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "EDProxy.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 53,
+        "numberOfBranches": 51,
+        "numberOfCriticalInstructions": {
+            "DELEGATECALL": 2
+        }
+    },
+    {
+        "name": "HashBet.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 17,
+        "numberOfBranches": 15,
+        "numberOfCriticalInstructions": {
+            "CALL": 1
+        }
+    },
+    {
+        "name": "PrivateDeposit.sol",
+        "weaknesses": [
+            "reentrancy"
+        ],
+        "link": "",
+        "numberOfBlocks": 57,
+        "numberOfBranches": 56,
+        "numberOfCriticalInstructions": {
+            "CALL": 4,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "BBDExchange.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 92,
+        "numberOfBranches": 89,
+        "numberOfCriticalInstructions": {
+            "CALL": 12
+        }
+    },
+    {
+        "name": "BitGallery.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 270,
+        "numberOfBranches": 283,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "TransferReg.sol",
+        "weaknesses": [
+            "delegatecall_dangerous"
+        ],
+        "link": "https://etherscan.io/address/0x62d5c4a317b93085697cfb1c775be4398df0678c",
+        "numberOfBlocks": 18,
+        "numberOfBranches": 16,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "XCTCrowdSale.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 33,
+        "numberOfBranches": 32,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "IAHCToken.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 154,
+        "numberOfBranches": 152,
+        "numberOfCriticalInstructions": {
+            "CALL": 5,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "NewCratePreSale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 131,
+        "numberOfBranches": 131,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "DELEGATECALL": 1
+        }
+    },
+    {
+        "name": "Diploma_landing_page.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 36,
+        "numberOfBranches": 34,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "BJCToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 82,
+        "numberOfBranches": 85,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "epocum.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 124,
+        "numberOfBranches": 122,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "EthMashTower.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 53,
+        "numberOfBranches": 51,
+        "numberOfCriticalInstructions": {
+            "CALL": 2,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "CoinCrowdICO.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 141,
+        "numberOfBranches": 139,
+        "numberOfCriticalInstructions": {
+            "CALL": 8
+        }
+    },
+    {
+        "name": "EtherGuess.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 126,
+        "numberOfBranches": 123,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "HelpMeSave.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 21,
+        "numberOfBranches": 19,
+        "numberOfCriticalInstructions": {
+            "CALL": 1,
+            "SELFDESTRUCT": 1
+        }
+    },
+    {
+        "name": "BMPre_ICO.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 85,
+        "numberOfBranches": 83,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "EtherTool.sol",
+        "weaknesses": [
+            "numberdependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 72,
+        "numberOfBranches": 68,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "BriskCoin.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 111,
+        "numberOfBranches": 116,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "EtherConsole.sol",
+        "weaknesses": [
+            "gassless_send"
+        ],
+        "link": "https://etherscan.io/token/0xCA6bEA8e144B0A6aEbBB412e6Ad0E7FF1959235E",
+        "numberOfBlocks": 170,
+        "numberOfBranches": 166,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    },
+    {
+        "name": "CTCToken.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 230,
+        "numberOfBranches": 232,
+        "numberOfCriticalInstructions": {
+            "CALL": 2
+        }
+    },
+    {
+        "name": "BAIC.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 47,
+        "numberOfBranches": 50,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "MinerEdgeToken.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 73,
+        "numberOfBranches": 79,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "HYIP.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 44,
+        "numberOfBranches": 42,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "SnovCrowdsale.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 228,
+        "numberOfBranches": 226,
+        "numberOfCriticalInstructions": {
+            "CALL": 3
+        }
+    },
+    {
+        "name": "ERH.sol",
+        "weaknesses": [
+            "freezing_ether"
+        ],
+        "link": "",
+        "numberOfBlocks": 39,
+        "numberOfBranches": 37,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "Bagholder.sol",
+        "weaknesses": [
+            "numberdependency;timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 137,
+        "numberOfBranches": 140,
+        "numberOfCriticalInstructions": {
+            "CALL": 5,
+            "CALLCODE": 1
+        }
+    },
+    {
+        "name": "MarchMadness.sol",
+        "weaknesses": [
+            "timedependency"
+        ],
+        "link": "",
+        "numberOfBlocks": 0,
+        "numberOfBranches": 0,
+        "numberOfCriticalInstructions": {}
+    },
+    {
+        "name": "CrowdSalePreICO.sol",
+        "weaknesses": [
+            "exception_disorder"
+        ],
+        "link": "",
+        "numberOfBlocks": 136,
+        "numberOfBranches": 132,
+        "numberOfCriticalInstructions": {
+            "CALL": 5
+        }
+    }
+]

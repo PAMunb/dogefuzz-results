@@ -1,4 +1,10 @@
 import os
+import json
+import numpy as np
+
+from matplotlib import pyplot as plt
+from sklearn.cluster import KMeans
+
 from aggregator.config import Config
 
 from aggregator.services.result import ResultService
@@ -52,7 +58,7 @@ class OutputService(metaclass=SingletonMeta):
 
         for vulnerability_type in vulnerability_types:
             file_path = os.path.join(
-                results_folder, f"{vulnerability_type}.txt")
+                results_folder, f"vulnerability-{vulnerability_type}.txt")
             if os.path.exists(file_path):
                 os.remove(file_path)
             filtered_contracts = []
@@ -69,6 +75,53 @@ class OutputService(metaclass=SingletonMeta):
                     f, filtered_contracts, critical_instructions)
                 self._write_vulnerabilities(
                     f, filtered_contracts, [vulnerability_type], False)
+
+        inputs_file = os.path.join(os.path.dirname(
+            __file__), '..', '..', 'resources', 'inputs.json')
+
+        dataset_array = []
+        contracts_name = None
+        with open(inputs_file, 'r', encoding='utf-8') as f:
+            inputs = json.load(f)
+            contracts_name = [0] * len(inputs)
+            for idx, contract in enumerate(inputs):
+                contract_name = contract['name']
+                contracts_name[idx] = contract_name
+                row = [contract['numberOfBranches'], sum(
+                    contract["numberOfCriticalInstructions"].values())]
+                dataset_array.append(row)
+        kmeans = KMeans(
+            n_clusters=3,
+            init='random',
+            n_init=10,
+            max_iter=100,
+        )
+        kmeans.fit(np.array(dataset_array))
+
+        clusters = {}
+        letters = ['A', 'B', 'C']
+        for idx, cluster in enumerate(kmeans.labels_):
+            key = letters[cluster]
+            if key not in clusters:
+                clusters[key] = []
+            contract_info = [
+                contract for contract in contracts if contract['name'] == contracts_name[idx]][0]
+            clusters[key].append(contract_info)
+
+        for key, contracts in clusters.items():
+            file_path = os.path.join(
+                results_folder, f"cluster-group-{key.lower()}.txt")
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            with open(file_path, "wt", encoding="utf-8") as f:
+                self._write_line(f, f'GROUP {key.upper()} RESULTS')
+                self._write_max_coverage_result(f, contracts)
+                self._write_average_coverage_result(f, contracts)
+                # self._write_critial_instructions_hits(f, contracts)
+                self._write_critial_instructions_detailed_hits(
+                    f, contracts, critical_instructions)
+                self._write_vulnerabilities(
+                    f, contracts, vulnerability_types, False)
 
     def _write_max_coverage_result(self, file, contracts: list):
         (max_coverage_per_contract_for_blackbox, average_coverage_for_blackbox) = self._result_service.get_max_coverage_by_strategy(
