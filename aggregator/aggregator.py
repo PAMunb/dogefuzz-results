@@ -106,3 +106,99 @@ class Aggregator():
         print("Contratos por Cluster:")
         for cluster, count in clusters.items():
             print(f'Cluster {cluster:1}: {count:5}')
+
+    def show_correlation(self):
+        delegate_data = [
+            [26.67, 11.77, 10.99, 1],
+            [26.67, 11.75, 11.44, 1],
+            [33.33, 11.85, 10.91, 1],
+            [40.00, 12.03, 11.32, 5],
+            [46.67, 12.14, 11.68, 5],
+            [33.33, 12.18, 11.46, 5]
+        ]
+
+        delegate_correlation = np.corrcoef(delegate_data, rowvar=False)
+        print()
+        print("Delegate Correlation Matrix")
+        print("------------------------------")
+        print(delegate_correlation)
+
+        exception_disorder_data = [
+            [37.50, 11.77, 10.99, 1],
+            [33.33, 11.75, 11.44, 1],
+            [41.67, 11.85, 10.91, 1],
+            [58.33, 12.03, 11.32, 5],
+            [58.33, 12.14, 11.68, 5],
+            [54.17, 12.18, 11.46, 5]
+        ]
+
+        exception_disorder_correlation = np.corrcoef(
+            exception_disorder_data, rowvar=False)
+        print()
+        print("Exception Disorder Correlation Matrix")
+        print("------------------------------")
+        print(exception_disorder_correlation)
+
+        gasless_send_data = [
+            [61.54, 11.77, 10.99, 1],
+            [53.85, 11.75, 11.44, 1],
+            [69.23, 11.85, 10.91, 1],
+            [61.54, 12.03, 11.32, 5],
+            [61.54, 12.14, 11.68, 5],
+            [61.54, 12.18, 11.46, 5]
+        ]
+
+        gasless_send_correlation = np.corrcoef(
+            gasless_send_data, rowvar=False)
+        print()
+        print("Gassless Send Correlation Matrix")
+        print("------------------------------")
+        print(gasless_send_correlation)
+
+        number_dependency_data = [
+            [5.63, 11.77, 10.99, 1],
+            [8.45, 11.75, 11.44, 1],
+            [9.86, 11.85, 10.91, 1],
+            [7.04, 12.03, 11.32, 5],
+            [11.27, 12.14, 11.68, 5],
+            [11.27, 12.18, 11.46, 5]
+        ]
+
+        number_dependency_correlation = np.corrcoef(
+            number_dependency_data, rowvar=False)
+        print()
+        print("Number Dependency Correlation Matrix")
+        print("------------------------------")
+        print(number_dependency_correlation)
+
+        timestamp_dependency_data = [
+            [10.91, 11.77, 10.99, 1],
+            [17.27, 11.75, 11.44, 1],
+            [13.64, 11.85, 10.91, 1],
+            [7.04, 12.03, 11.32, 5],
+            [11.27, 12.14, 11.68, 5],
+            [11.27, 12.18, 11.46, 5]
+        ]
+
+        timestamp_dependency_correlation = np.corrcoef(
+            timestamp_dependency_data, rowvar=False)
+        print()
+        print("Timestamp Dependency Correlation Matrix")
+        print("------------------------------")
+        print(timestamp_dependency_correlation)
+
+        reentrancy_data = [
+            [0.1, 11.77, 10.99, 1],
+            [0.1, 11.75, 11.44, 1],
+            [0.1, 11.85, 10.91, 1],
+            [0.1, 12.03, 11.32, 5],
+            [0.1, 12.14, 11.68, 5],
+            [0.1, 12.18, 11.46, 5]
+        ]
+
+        reentrancy_correlation = np.corrcoef(
+            reentrancy_data, rowvar=False)
+        print()
+        print("Reentrancy Correlation Matrix")
+        print("------------------------------")
+        print(reentrancy_correlation)

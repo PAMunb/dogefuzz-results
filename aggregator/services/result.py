@@ -191,6 +191,12 @@ class ResultService(metaclass=SingletonMeta):
                     for program_counter in critical_instruction_pcs:
                         hits[critical_instruction] += heat_map[program_counter]
 
+        transactions_count = self.get_transaction_count_by_strategy(
+            strategy, contracts)
+        for critical_instruction in hits:
+            hits[critical_instruction] = hits[critical_instruction] / \
+                transactions_count
+
         if len(hits) == 0:
             return (hits, -1)
         return (hits, sum(hits.values()) / len(hits))
