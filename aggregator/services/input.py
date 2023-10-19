@@ -3,6 +3,7 @@ this module contains the logic of the inputs service
 """
 import os
 import zipfile
+import shutil
 
 from os import path
 
@@ -25,7 +26,7 @@ class InputService(metaclass=SingletonMeta):
             self._config.resources_folder, self._config.inputs_zip_filename)
 
         if path.exists(inputs_folder):
-            return
+            shutil.rmtree(inputs_folder, ignore_errors=True)
         os.makedirs(inputs_folder)
 
         with zipfile.ZipFile(inputs_zip_path, 'r') as zip_file:

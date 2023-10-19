@@ -1,6 +1,7 @@
 import os
 import zipfile
 import json
+import shutil
 
 from aggregator.config import Config
 from aggregator.shared.singleton import SingletonMeta
@@ -15,13 +16,15 @@ class ResultService(metaclass=SingletonMeta):
         """
         extracts results file from folder
         """
+        
+        clean_results_folder_name = results_folder_name.rstrip('/')
         results_folder = os.path.join(
             self._config.temp_folder, self._config.results_dir)
         results_zip_file_path = os.path.join(
-            self._config.results_folder, results_folder_name, f"{results_folder_name}.zip")
+            self._config.results_folder, clean_results_folder_name, f"{clean_results_folder_name}.zip")
 
         if os.path.exists(results_folder):
-            return
+            shutil.rmtree(results_folder, ignore_errors=True)
         os.makedirs(results_folder)
 
         with zipfile.ZipFile(results_zip_file_path, 'r') as zip_file:
@@ -122,7 +125,9 @@ class ResultService(metaclass=SingletonMeta):
         for contract in contracts:
             contract_name = contract["name"]
             contract_vulnerabilities = contract["vulnerabilities"]
-            executions = executions_by_contract_name[contract_name]
+            executions = executions_by_contract_name.get(contract_name, None)
+            if executions is None:
+                continue
             for execution in executions:
                 detected_weaknesses = execution["execution"]["detectedWeaknesses"]
                 for weakness in detected_weaknesses:
@@ -151,7 +156,9 @@ class ResultService(metaclass=SingletonMeta):
         execution_count = 0
         for contract in contracts:
             contract_name = contract["name"]
-            executions = executions_by_contract_name[contract_name]
+            executions = executions_by_contract_name.get(contract_name, None)
+            if executions is None:
+                continue
             execution_count += len(executions)
             for execution in executions:
                 transaction_count = len(
@@ -178,7 +185,9 @@ class ResultService(metaclass=SingletonMeta):
 
         for contract in contracts:
             contract_name = contract["name"]
-            executions = executions_by_contract_name[contract_name]
+            executions = executions_by_contract_name.get(contract_name, None)
+            if executions is None:
+                continue
             for execution in executions:
                 for critical_instruction in critical_instructions:
                     instructions = execution["execution"]["instructions"]
@@ -218,6 +227,8 @@ class ResultService(metaclass=SingletonMeta):
             self._config.temp_folder, self._config.results_dir)
         strategy_result_folder = os.path.join(
             results_folder, f"{strategy}_fuzzing")
+        if not os.path.exists(strategy_result_folder):
+            strategy_result_folder = results_folder
 
         executions_by_contract_name = {}
         for path in os.listdir(strategy_result_folder):
