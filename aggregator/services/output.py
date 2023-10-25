@@ -137,10 +137,10 @@ class OutputService(metaclass=SingletonMeta):
             contracts,
         )
 
-        self._write_header(file, 'MAX COVERAGE RESULTS')
+        self._write_header(file, 'MAX COVERAGE RESULTS', "contract")
 
         for contract in contracts:
-            contract_name = contract["name"]
+            contract_name = contract["file"]
             blackbox = max_coverage_per_contract_for_blackbox[
                 contract_name] if contract_name in max_coverage_per_contract_for_blackbox else -1
             greybox = max_coverage_per_contract_for_greybox[
@@ -155,7 +155,7 @@ class OutputService(metaclass=SingletonMeta):
                 directed_greybox, blackbox)
 
             self._write_line(
-                file, f"| {contract_name:35} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
+                file, f"| {contract_name:45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
 
         self._write_average_footer(
             file,
@@ -178,10 +178,10 @@ class OutputService(metaclass=SingletonMeta):
             contracts,
         )
 
-        self._write_header(file, 'AVERAGE COVERAGE RESULTS')
+        self._write_header(file, 'AVERAGE COVERAGE RESULTS', "contract")
 
         for contract in contracts:
-            contract_name = contract["name"]
+            contract_name = contract["file"]
             blackbox = average_coverage_per_contract_for_blackbox[
                 contract_name] if contract_name in average_coverage_per_contract_for_blackbox else -1
             greybox = average_coverage_per_contract_for_greybox[
@@ -196,7 +196,7 @@ class OutputService(metaclass=SingletonMeta):
                 directed_greybox, blackbox)
 
             self._write_line(
-                file, f"| {contract_name:35} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
+                file, f"| {contract_name:45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
 
         self._write_average_footer(
             file,
@@ -219,10 +219,10 @@ class OutputService(metaclass=SingletonMeta):
             contracts,
         )
 
-        self._write_header(file, 'CRITICAL INSTRUCTIONS HITS RESULTS')
+        self._write_header(file, 'CRITICAL INSTRUCTIONS HITS RESULTS', "instruction")
 
         for contract in contracts:
-            contract_name = contract["name"]
+            contract_name = contract["file"]
             blackbox = hits_per_contract_for_blackbox[
                 contract_name] if contract_name in hits_per_contract_for_blackbox else -1
             greybox = hits_per_contract_for_greybox[
@@ -236,7 +236,7 @@ class OutputService(metaclass=SingletonMeta):
                 directed_greybox, blackbox)
 
             self._write_line(
-                file, f"| {contract_name:35} | {hits_for_blackbox:20} | {hits_for_greybox:20} | {hits_for_directed_greybox:20} |")
+                file, f"| {contract_name:45} | {hits_for_blackbox:20} | {hits_for_greybox:20} | {hits_for_directed_greybox:20} |")
         self._write_average_number_footer(
             file,
             average_hits_for_blackbox,
@@ -261,7 +261,7 @@ class OutputService(metaclass=SingletonMeta):
             critical_instructions,
         )
 
-        self._write_header(file, 'DETAILED CRITICAL INSTRUCTIONS HITS RESULTS')
+        self._write_header(file, 'DETAILED CRITICAL INSTRUCTIONS HITS RESULTS', "instruction")
 
         for critical_instruction in critical_instructions:
             blackbox = hits_per_instruction_for_blackbox[
@@ -277,7 +277,7 @@ class OutputService(metaclass=SingletonMeta):
                 directed_greybox, blackbox)
 
             self._write_line(
-                file, f"| {critical_instruction:35} | {hits_for_blackbox:20} | {hits_for_greybox:20} | {hits_for_directed_greybox:20} |")
+                file, f"| {critical_instruction:45} | {hits_for_blackbox:20} | {hits_for_greybox:20} | {hits_for_directed_greybox:20} |")
 
         self._write_average_number_footer(
             file,
@@ -312,7 +312,7 @@ class OutputService(metaclass=SingletonMeta):
             include_new_detections,
         )
 
-        self._write_header(file, 'VULNERABILITIES RESULTS')
+        self._write_header(file, 'VULNERABILITIES RESULTS', "vulnerability type")
 
         average_detection_rate_for_blackbox = 0
         average_detection_rate_for_greybox = 0
@@ -333,7 +333,7 @@ class OutputService(metaclass=SingletonMeta):
             average_detection_rate_for_directed_greybox += directed_greybox
 
             self._write_line(
-                file, f"| {vulnerability:35} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
+                file, f"| {vulnerability:45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
 
         average_blackbox = average_detection_rate_for_blackbox / \
             len(vulnerability_types)
@@ -366,7 +366,7 @@ class OutputService(metaclass=SingletonMeta):
             contracts,
         )
 
-        self._write_header(file, 'TRANSACTION COUNT RESULTS')
+        self._write_header(file, 'TRANSACTION COUNT RESULTS', "count")
 
         blackbox = self._convert_to_str(transaction_count_for_blackbox)
         greybox = self._convert_to_diff_str(
@@ -375,16 +375,16 @@ class OutputService(metaclass=SingletonMeta):
             transaction_count_for_directed_greybox, transaction_count_for_blackbox)
 
         self._write_line(
-            file, f"| {'transaction_count':35} | {blackbox:20} | {greybox:20} | {directed_greybox:20} |")
+            file, f"| {'transaction_count':45} | {blackbox:20} | {greybox:20} | {directed_greybox:20} |")
 
         self._write_dashed_line(file)
 
-    def _write_header(self, file, title: str):
+    def _write_header(self, file, title: str, text: str):
         self._write_line(file, "\n")
         self._write_line(file, title)
         self._write_dashed_line(file)
         self._write_line(
-            file, f"| {'contract_name':35} | {'blackbox':20} | {'greybox':20} | {'directed_greybox':20} |")
+            file, f"| {text:45} | {'blackbox':20} | {'greybox':20} | {'directed_greybox':20} |")
         self._write_dashed_line(file)
 
     def _write_average_footer(
@@ -402,7 +402,7 @@ class OutputService(metaclass=SingletonMeta):
 
         self._write_dashed_line(file)
         self._write_line(
-            file, f"| {'AVERAGE':35} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
+            file, f"| {'AVERAGE':45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
         self._write_dashed_line(file)
 
     def _write_average_number_footer(
@@ -420,7 +420,7 @@ class OutputService(metaclass=SingletonMeta):
 
         self._write_dashed_line(file)
         self._write_line(
-            file, f"| {'AVERAGE':35} | {number_blackbox:20} | {number_greybox:20} | {number_directed_greybox:20} |")
+            file, f"| {'AVERAGE':45} | {number_blackbox:20} | {number_greybox:20} | {number_directed_greybox:20} |")
         self._write_dashed_line(file)
 
     def _convert_to_str(self, value) -> str:

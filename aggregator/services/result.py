@@ -38,7 +38,7 @@ class ResultService(metaclass=SingletonMeta):
 
         coverage_by_contract_name = self._init_result_dict(contracts)
         for contract in contracts:
-            contract_name = contract["name"]
+            contract_name = contract["file"]
             coverage_by_contract_name[contract_name] = self._get_executions_average_coverage(
                 executions_by_contract_name,
                 contract_name,
@@ -62,7 +62,7 @@ class ResultService(metaclass=SingletonMeta):
 
         coverage_by_contract_name = self._init_result_dict(contracts)
         for contract in contracts:
-            contract_name = contract["name"]
+            contract_name = contract["file"]
             coverage_by_contract_name[contract_name] = self._get_executions_average_coverage(
                 executions_by_contract_name,
                 contract_name,
@@ -86,7 +86,7 @@ class ResultService(metaclass=SingletonMeta):
 
         hits_by_contract_name = self._init_result_dict(contracts)
         for contract in contracts:
-            contract_name = contract["name"]
+            contract_name = contract["file"]
             hits_by_contract_name[contract_name] = self._get_executions_hits_average(
                 executions_by_contract_name,
                 contract_name,
@@ -112,7 +112,7 @@ class ResultService(metaclass=SingletonMeta):
         return the vulnerability detection rate by strategy name
         """
         executions_by_contract_name = self._read_results_file(strategy)
-
+        
         pre_categorized_vulnerabilities = self._init_pre_categorized_vulnerabilities(
             contracts,
             vulnerabilities,
@@ -123,7 +123,7 @@ class ResultService(metaclass=SingletonMeta):
             detection_rate[vulnerability] = 0
 
         for contract in contracts:
-            contract_name = contract["name"]
+            contract_name = contract["file"]
             contract_vulnerabilities = contract["vulnerabilities"]
             executions = executions_by_contract_name.get(contract_name, None)
             if executions is None:
@@ -155,7 +155,7 @@ class ResultService(metaclass=SingletonMeta):
         average_transaction_count = 0
         execution_count = 0
         for contract in contracts:
-            contract_name = contract["name"]
+            contract_name = contract["file"]
             executions = executions_by_contract_name.get(contract_name, None)
             if executions is None:
                 continue
@@ -184,7 +184,7 @@ class ResultService(metaclass=SingletonMeta):
             hits[critical_instruction] = 0
 
         for contract in contracts:
-            contract_name = contract["name"]
+            contract_name = contract["file"]
             executions = executions_by_contract_name.get(contract_name, None)
             if executions is None:
                 continue
@@ -252,7 +252,7 @@ class ResultService(metaclass=SingletonMeta):
     def _init_result_dict(self, contracts: list):
         value = {}
         for contract in contracts:
-            contract_name = contract["name"]
+            contract_name = contract["file"]
             if contract_name not in value:
                 value[contract_name] = 0
         return value

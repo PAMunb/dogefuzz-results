@@ -6,9 +6,10 @@ from aggregator.shared.exceptions import ContractsNotFoundException
 from aggregator.shared.singleton import SingletonMeta
 from aggregator.shared.utils import map_vulnerability_to_dogefuzz_standard
 
-NAME_COLUMN = 0
-VULNERABILITIES_COLUMN = 1
-LINK_COLUMN = 2
+FILE_COLUMN = 0
+NAME_COLUMN = 1
+VULNERABILITIES_COLUMN = 2
+LINK_COLUMN = 3
 
 
 class ContractService(metaclass=SingletonMeta):
@@ -33,9 +34,10 @@ class ContractService(metaclass=SingletonMeta):
             reader = csv.reader(file)
             for row in reader:
                 contract = {
+                    "file": row[FILE_COLUMN],
                     "name": row[NAME_COLUMN],
                     "vulnerabilities": [x for x in [map_vulnerability_to_dogefuzz_standard(x) for x in row[VULNERABILITIES_COLUMN].split(";")] if x is not None],
-                    "link": row[LINK_COLUMN],
+                    "link": row[LINK_COLUMN],                
                 }
                 contracts.append(contract)
 
