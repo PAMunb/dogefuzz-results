@@ -19,7 +19,7 @@ class OutputService(metaclass=SingletonMeta):
         self._config = Config()
         self._result_service = ResultService()
 
-    def write_report(self, results_folder_name: str, contracts: list):
+    def write_report(self, results_folder_name: str, contracts: list, for_smartian: bool):
         """
         writes the output to the output file
         """
@@ -32,14 +32,23 @@ class OutputService(metaclass=SingletonMeta):
             "CALLCODE",
             "DELEGATECALL",
         ]
-        vulnerability_types = [
-            "delegate",
-            "exception-disorder",
-            "gasless-send",
-            "number-dependency",
-            "reentrancy",
-            "timestamp-dependency",
-        ]
+
+        if not for_smartian:        
+            vulnerability_types = [
+                "delegate",
+                "exception-disorder",
+                "gasless-send",
+                "number-dependency",
+                "reentrancy",
+                "timestamp-dependency",
+            ]
+        else:
+            vulnerability_types = [
+                "ME",
+                "RE",
+                "BD",
+            ]
+            
         output_file_path = os.path.join(results_folder, "average.txt")
 
         if os.path.exists(output_file_path):
@@ -313,7 +322,9 @@ class OutputService(metaclass=SingletonMeta):
         )
 
         self._write_header(file, 'VULNERABILITIES RESULTS', "vulnerability type")
-
+        
+        vul_count = self._result_service.get_vulnerabilities_count(contracts, vulnerability_types)
+        
         average_detection_rate_for_blackbox = 0
         average_detection_rate_for_greybox = 0
         average_detection_rate_for_directed_greybox = 0
@@ -332,8 +343,9 @@ class OutputService(metaclass=SingletonMeta):
             average_detection_rate_for_greybox += greybox
             average_detection_rate_for_directed_greybox += directed_greybox
 
+            vulnerability_text = vulnerability + " (" + str(vul_count[vulnerability]) + ")"
             self._write_line(
-                file, f"| {vulnerability:45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
+                file, f"| {vulnerability_text:45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
 
         average_blackbox = average_detection_rate_for_blackbox / \
             len(vulnerability_types)
@@ -444,7 +456,7 @@ class OutputService(metaclass=SingletonMeta):
         return f"{value * 100:.2f}% ({'+' if diff > 0 else ''}{diff * 100:.2f}%)" if value != -1 else "N/A"
 
     def _write_dashed_line(self, file):
-        self._write_line(file, '-' * 108)
+        self._write_line(file, '-' * 118)
 
     def _write_line(self, file, line: str):
         file.write(line + '\n')

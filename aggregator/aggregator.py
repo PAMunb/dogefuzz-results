@@ -22,9 +22,16 @@ class Aggregator():
 
     def generate_report(self, results_folder: str):
         self._input_service.extract_inputs()
-        contracts = self._contract_service.list_contracts_from_contract_list()
+        contracts = self._contract_service.list_contracts_from_contract_list(False)
         self._result_service.extract_results(results_folder)
-        self._output_service.write_report(results_folder, contracts)
+        self._output_service.write_report(results_folder, contracts, False)
+
+    def generate_report_smartian(self, results_folder: str):
+        self._input_service.extract_inputs()
+        contracts = self._contract_service.list_contracts_from_contract_list(True)
+        self._result_service.extract_results(results_folder)
+        self._result_service.convert_results_to_smartian(results_folder)
+        self._output_service.write_report(results_folder, contracts, True)
 
     def show_kmeans(self, cluster_number: int = 3):
         inputs_file = os.path.join(os.path.dirname(
@@ -70,10 +77,18 @@ class Aggregator():
             plt.ylabel('Inercia')
             plt.show()
 
+    def inputs_stats_smartian(self):
+        self._input_service.extract_inputs()
+        contracts = self._contract_service.list_contracts_from_contract_list(True)
+        self._print_all(contracts)
+        
     def inputs_stats(self):
         self._input_service.extract_inputs()
-        contracts = self._contract_service.list_contracts_from_contract_list()
+        contracts = self._contract_service.list_contracts_from_contract_list(False)
 
+        self._print_all(contracts)
+
+    def _print_all(self, contracts):
         vulnerabilities = {}
         for contract in contracts:
             for vulnerability in contract['vulnerabilities']:
@@ -92,7 +107,6 @@ class Aggregator():
             kmeans.fit(dataset)
 
             letters = ['A', 'B', 'C']
-            print(kmeans.labels_)
             for i in kmeans.labels_:
                 clusters[letters[i]] = clusters.get(letters[i], 0) + 1
 

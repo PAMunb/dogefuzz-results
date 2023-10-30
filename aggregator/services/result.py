@@ -5,12 +5,46 @@ import shutil
 
 from aggregator.config import Config
 from aggregator.shared.singleton import SingletonMeta
+from aggregator.shared.utils import *
+from aggregator.shared.constants import *
 
 
 class ResultService(metaclass=SingletonMeta):
 
     def __init__(self) -> None:
         self._config = Config()
+
+    def convert_results_to_smartian(self, results_folder_name: str):
+        results_folder = os.path.join(
+            self._config.temp_folder, self._config.results_dir)
+        strategy_result_folder = results_folder
+
+        for path in os.listdir(strategy_result_folder):
+            with open(os.path.join(strategy_result_folder, path), 'r+', encoding='utf-8') as file:                 
+                results_content = json.load(file)
+                for contract_name in results_content.keys():                    
+                    for index in range(len(results_content[contract_name][BLACKBOX_FUZZING])):
+
+                        if results_content[contract_name][BLACKBOX_FUZZING][index]["execution"] is not None:
+                            detectedWeaknesses = results_content[contract_name][BLACKBOX_FUZZING][index]["execution"]["detectedWeaknesses"]
+                            detectedWeaknesses = [x for x in [map_weakness_to_smartian_standard(x) for x in detectedWeaknesses] if x is not None]
+                            results_content[contract_name][BLACKBOX_FUZZING][index]["execution"]["detectedWeaknesses"] = list(set(detectedWeaknesses))
+
+                        if results_content[contract_name][GREYBOX_FUZZING][index]["execution"] is not None:
+                            detectedWeaknesses = results_content[contract_name][GREYBOX_FUZZING][index]["execution"]["detectedWeaknesses"]
+                            detectedWeaknesses = [x for x in [map_weakness_to_smartian_standard(x) for x in detectedWeaknesses] if x is not None]
+                            #print(detectedWeaknesses)                            
+                            results_content[contract_name][GREYBOX_FUZZING][index]["execution"]["detectedWeaknesses"] = list(set(detectedWeaknesses))
+
+                        if results_content[contract_name][DIRECTED_GREYBOX_FUZZING][index]["execution"] is not None:
+                            detectedWeaknesses = results_content[contract_name][DIRECTED_GREYBOX_FUZZING][index]["execution"]["detectedWeaknesses"]
+                            detectedWeaknesses = [x for x in [map_weakness_to_smartian_standard(x) for x in detectedWeaknesses] if x is not None]
+                            #print(detectedWeaknesses)                            
+                            results_content[contract_name][DIRECTED_GREYBOX_FUZZING][index]["execution"]["detectedWeaknesses"] = list(set(detectedWeaknesses))
+                        
+                file.seek(0)
+                json.dump(results_content, file, indent=4)    
+                
 
     def extract_results(self, results_folder_name: str):
         """
@@ -101,6 +135,18 @@ class ResultService(metaclass=SingletonMeta):
             hits_sum / successful_executions) if successful_executions > 0 else -1
         return (hits_by_contract_name, average_hits)
 
+    def get_vulnerabilities_count(
+        self,
+        contracts: list,
+        vulnerabilities: list
+    ) -> dict:
+        
+        pre_categorized_vulnerabilities = self._init_pre_categorized_vulnerabilities(
+            contracts,
+            vulnerabilities,
+        )
+        return pre_categorized_vulnerabilities
+
     def get_detection_rate_by_strategy(
         self,
         strategy: str,
@@ -125,6 +171,7 @@ class ResultService(metaclass=SingletonMeta):
         for contract in contracts:
             contract_name = contract["file"]
             contract_vulnerabilities = contract["vulnerabilities"]
+
             executions = executions_by_contract_name.get(contract_name, None)
             if executions is None:
                 continue
