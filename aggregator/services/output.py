@@ -114,8 +114,9 @@ class OutputService(metaclass=SingletonMeta):
             if key not in clusters:
                 clusters[key] = []
             contract_info = [
-                contract for contract in contracts if contract['name'] == contracts_name[idx]][0]
-            clusters[key].append(contract_info)
+                contract for contract in contracts if contract['name'] == contracts_name[idx]]
+            if len(contract_info) > 0:
+                clusters[key].append(contract_info[0])
 
         for key, contracts in clusters.items():
             file_path = os.path.join(
@@ -324,28 +325,39 @@ class OutputService(metaclass=SingletonMeta):
         self._write_header(file, 'VULNERABILITIES RESULTS', "vulnerability type")
         
         vul_count = self._result_service.get_vulnerabilities_count(contracts, vulnerability_types)
-        
+     
         average_detection_rate_for_blackbox = 0
         average_detection_rate_for_greybox = 0
         average_detection_rate_for_directed_greybox = 0
+        
+        total_blackbox = 0
+        total_greybox = 0
+        total_directed_greybox = 0
+        
         for vulnerability in vulnerability_types:
-            blackbox = detection_rate_for_blackbox[vulnerability]
-            greybox = detection_rate_for_greybox[vulnerability]
-            directed_greybox = detection_rate_for_directed_greybox[vulnerability]
+            blackbox = detection_rate_for_blackbox[vulnerability][0]
+            greybox = detection_rate_for_greybox[vulnerability][0]
+            directed_greybox = detection_rate_for_directed_greybox[vulnerability][0]
 
             percentage_blackbox = self._convert_to_percentage_str(blackbox)
-            percentage_greybox = self._convert_to_percentage_diff_str(
-                greybox, blackbox)
-            percentage_directed_greybox = self._convert_to_percentage_diff_str(
-                directed_greybox, blackbox)
+            percentage_greybox = self._convert_to_percentage_diff_str_with_total(
+                greybox, blackbox, detection_rate_for_greybox[vulnerability][1])
+            percentage_directed_greybox = self._convert_to_percentage_diff_str_with_total(
+                directed_greybox, blackbox, detection_rate_for_directed_greybox[vulnerability][1])
 
             average_detection_rate_for_blackbox += blackbox
             average_detection_rate_for_greybox += greybox
             average_detection_rate_for_directed_greybox += directed_greybox
 
+            total_blackbox += detection_rate_for_blackbox[vulnerability][1]
+            total_greybox += detection_rate_for_greybox[vulnerability][1]
+            total_directed_greybox += detection_rate_for_directed_greybox[vulnerability][1]
+            
             vulnerability_text = vulnerability + " (" + str(vul_count[vulnerability]) + ")"
+            percentage_blackbox_text = percentage_blackbox + " (" + str(detection_rate_for_blackbox[vulnerability][1]) + ")"
+            
             self._write_line(
-                file, f"| {vulnerability_text:45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
+                file, f"| {vulnerability_text:45} | {percentage_blackbox_text:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
 
         average_blackbox = average_detection_rate_for_blackbox / \
             len(vulnerability_types)
@@ -355,11 +367,11 @@ class OutputService(metaclass=SingletonMeta):
             len(vulnerability_types)
 
         if (len(vulnerability_types) > 1):
-            self._write_average_footer(
-                file,
-                average_blackbox,
-                average_greybox,
-                average_directed_greybox,
+            self._write_average_footer_with_total(
+                file, sum(vul_count.values()),
+                average_blackbox, total_blackbox,
+                average_greybox, total_greybox,
+                average_directed_greybox, total_directed_greybox
             )
         else:
             self._write_dashed_line(file)
@@ -417,6 +429,28 @@ class OutputService(metaclass=SingletonMeta):
             file, f"| {'AVERAGE':45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
         self._write_dashed_line(file)
 
+    def _write_average_footer_with_total(
+        self,
+        file, total_vulnerabilities,
+        average_blackbox, total_blackbox,
+        average_greybox, total_greybox,
+        average_directed_greybox, total_directed_greybox
+    ):
+        percentage_blackbox = self._convert_to_percentage_str(average_blackbox)
+        percentage_greybox = self._convert_to_percentage_diff_str_with_total(
+            average_greybox, average_blackbox, total_greybox)
+        percentage_directed_greybox = self._convert_to_percentage_diff_str_with_total(
+            average_directed_greybox, average_blackbox, total_directed_greybox)
+
+
+        percentage_blackbox_text = percentage_blackbox + " (" + str(total_blackbox) + ")"
+        total_vulnerabilities_text = "AVERAGE" + " (" + str(total_vulnerabilities) + ")"
+
+        self._write_dashed_line(file)
+        self._write_line(
+            file, f"| {total_vulnerabilities_text:45} | {percentage_blackbox_text:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
+        self._write_dashed_line(file)
+
     def _write_average_number_footer(
         self,
         file,
@@ -454,6 +488,14 @@ class OutputService(metaclass=SingletonMeta):
         else:
             diff = (value - base_value) / base_value
         return f"{value * 100:.2f}% ({'+' if diff > 0 else ''}{diff * 100:.2f}%)" if value != -1 else "N/A"
+
+    def _convert_to_percentage_diff_str_with_total(self, value, base_value, total) -> str:
+        if base_value == 0:
+            diff = 1 if value != 0 else 0
+        else:
+            diff = (value - base_value) / base_value
+        return f"{value * 100:.2f}% ({total:02d},{'+' if diff > 0 else ''}{diff * 100:.2f}%)" if value != -1 else "N/A"
+
 
     def _write_dashed_line(self, file):
         self._write_line(file, '-' * 118)
