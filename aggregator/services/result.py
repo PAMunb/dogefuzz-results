@@ -45,7 +45,6 @@ class ResultService(metaclass=SingletonMeta):
                 file.seek(0)
                 json.dump(results_content, file, indent=4)    
                 
-
     def extract_results(self, results_folder_name: str):
         """
         extracts results file from folder
@@ -193,6 +192,39 @@ class ResultService(metaclass=SingletonMeta):
                         pre_categorized_vulnerabilities[vulnerability], detection_rate[vulnerability])
 
         return detection_rate
+
+    def get_detection_by_strategy(
+        self,
+        strategy: str,
+        contracts: list,
+        vulnerabilities: list
+    ) -> map:
+        """
+        return the vulnerability detection rate by strategy name
+        """
+        executions_by_contract_name = self._read_results_file(strategy)
+        
+        detection = {}
+        for vulnerability in vulnerabilities:
+            detection[vulnerability] = []
+
+        for contract in contracts:
+            contract_name = contract["file"]
+            contract_vulnerabilities = contract["vulnerabilities"]
+
+            for vulnerability in contract_vulnerabilities:
+                executions = executions_by_contract_name.get(contract_name, None)
+                if executions is None or len(executions) == 0:
+                    detection[vulnerability].append("Never found " + map_vulnerability_smartian_to_long_name(vulnerability) + " from " + contract_name)
+                    break
+                for execution in executions:
+                    detected_weaknesses = execution["execution"]["detectedWeaknesses"]
+                    if vulnerability in detected_weaknesses:
+                        detection[vulnerability].append("Fully found " + map_vulnerability_smartian_to_long_name(vulnerability) + " from " + contract_name)
+                    else:
+                        detection[vulnerability].append("Never found " + map_vulnerability_smartian_to_long_name(vulnerability) + " from " + contract_name)
+                         
+        return detection
 
     def get_transaction_count_by_strategy(self, strategy: str, contracts: list) -> float:
         """return the number of executions by strategy name

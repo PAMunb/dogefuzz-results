@@ -33,7 +33,7 @@ class OutputService(metaclass=SingletonMeta):
             "DELEGATECALL",
         ]
 
-        if not for_smartian:        
+        if not for_smartian:
             vulnerability_types = [
                 "delegate",
                 "exception-disorder",
@@ -44,9 +44,9 @@ class OutputService(metaclass=SingletonMeta):
             ]
         else:
             vulnerability_types = [
+                "BD",
                 "ME",
                 "RE",
-                "BD",
             ]
             
         output_file_path = os.path.join(results_folder, "average.txt")
@@ -64,6 +64,17 @@ class OutputService(metaclass=SingletonMeta):
                 f, contracts, critical_instructions)
             self._write_vulnerabilities(
                 f, contracts, vulnerability_types, False)
+
+        if for_smartian:
+            output_file_path = os.path.join(results_folder, "smartian.txt")
+
+            if os.path.exists(output_file_path):
+                os.remove(output_file_path)
+
+            with open(output_file_path, "wt", encoding="utf-8") as f:
+                #self._write_line(f, 'DETECTION TRUE POSITIVE')
+                self._write_vulnerabilities_table_per_contract(f, contracts, vulnerability_types)
+
 
         for vulnerability_type in vulnerability_types:
             file_path = os.path.join(
@@ -375,6 +386,20 @@ class OutputService(metaclass=SingletonMeta):
             )
         else:
             self._write_dashed_line(file)
+
+    def _write_vulnerabilities_table_per_contract(
+        self,
+        file,
+        contracts: list,
+        vulnerability_types: list, 
+    ):                    
+        detected_true_positive = self._result_service.get_detection_by_strategy(DIRECTED_GREYBOX_FUZZING, contracts, vulnerability_types)
+        
+        for vulnerability_type in vulnerability_types:
+            for line in detected_true_positive[vulnerability_type]:
+                self._write_line(file, f"{line}")
+            self._write_line(file, "===================================")
+
 
     def _write_transaction_count(self, file, contracts: list):
         transaction_count_for_blackbox = self._result_service.get_transaction_count_by_strategy(

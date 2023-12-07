@@ -47,3 +47,13 @@ def map_weakness_to_smartian_standard(vulnerability: str) -> str:
         return 'BD'
     else:
         return None
+
+def map_vulnerability_smartian_to_long_name(vulnerability: str) -> str:
+    if vulnerability == 'ME':
+        return 'MishandledException'
+    elif vulnerability == 'RE':
+        return 'Reentrancy'
+    elif vulnerability == 'BD':
+        return 'BlockstateDependency'
+    else:
+        return None
