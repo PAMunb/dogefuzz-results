@@ -57,3 +57,14 @@ def map_vulnerability_smartian_to_long_name(vulnerability: str) -> str:
         return 'BlockstateDependency'
     else:
         return None
+
+
+def is_smartian_type(smartian_type: str,vulnerability: str ) -> bool:
+    if smartian_type == 'ME':
+        return True if vulnerability in ['delegate', 'exception-disorder', 'gasless-send'] else False
+    elif smartian_type == 'RE':
+        return True if vulnerability in ['reentrancy'] else False
+    elif smartian_type == 'BD':
+        return True if vulnerability in ['number-dependency', 'timestamp-dependency'] else False
+    else:
+        return False

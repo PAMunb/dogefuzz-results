@@ -23,25 +23,11 @@ class ResultService(metaclass=SingletonMeta):
             with open(os.path.join(strategy_result_folder, path), 'r+', encoding='utf-8') as file:                 
                 results_content = json.load(file)
                 for contract_name in results_content.keys():                    
-                    for index in range(len(results_content[contract_name][BLACKBOX_FUZZING])):
-
-                        if results_content[contract_name][BLACKBOX_FUZZING][index]["execution"] is not None:
-                            detectedWeaknesses = results_content[contract_name][BLACKBOX_FUZZING][index]["execution"]["detectedWeaknesses"]
+                    for index in [BLACKBOX_FUZZING, GREYBOX_FUZZING, DIRECTED_GREYBOX_FUZZING]:
+                        if results_content[contract_name][index][0]["execution"] is not None:
+                            detectedWeaknesses = results_content[contract_name][index][0]["execution"]["detectedWeaknesses"]
                             detectedWeaknesses = [x for x in [map_weakness_to_smartian_standard(x) for x in detectedWeaknesses] if x is not None]
-                            results_content[contract_name][BLACKBOX_FUZZING][index]["execution"]["detectedWeaknesses"] = list(set(detectedWeaknesses))
-
-                        if results_content[contract_name][GREYBOX_FUZZING][index]["execution"] is not None:
-                            detectedWeaknesses = results_content[contract_name][GREYBOX_FUZZING][index]["execution"]["detectedWeaknesses"]
-                            detectedWeaknesses = [x for x in [map_weakness_to_smartian_standard(x) for x in detectedWeaknesses] if x is not None]
-                            #print(detectedWeaknesses)                            
-                            results_content[contract_name][GREYBOX_FUZZING][index]["execution"]["detectedWeaknesses"] = list(set(detectedWeaknesses))
-
-                        if results_content[contract_name][DIRECTED_GREYBOX_FUZZING][index]["execution"] is not None:
-                            detectedWeaknesses = results_content[contract_name][DIRECTED_GREYBOX_FUZZING][index]["execution"]["detectedWeaknesses"]
-                            detectedWeaknesses = [x for x in [map_weakness_to_smartian_standard(x) for x in detectedWeaknesses] if x is not None]
-                            #print(detectedWeaknesses)                            
-                            results_content[contract_name][DIRECTED_GREYBOX_FUZZING][index]["execution"]["detectedWeaknesses"] = list(set(detectedWeaknesses))
-                        
+                            results_content[contract_name][index][0]["execution"]["detectedWeaknesses"] = list(set(detectedWeaknesses))                        
                 file.seek(0)
                 json.dump(results_content, file, indent=4)    
                 
@@ -220,7 +206,10 @@ class ResultService(metaclass=SingletonMeta):
                 for execution in executions:
                     detected_weaknesses = execution["execution"]["detectedWeaknesses"]
                     if vulnerability in detected_weaknesses:
-                        detection[vulnerability].append("Fully found " + map_vulnerability_smartian_to_long_name(vulnerability) + " from " + contract_name)
+                        time_to_weaknesses = execution["execution"]["timeToWeaknesses"]
+                        filterd_times = {key: value for key, value in time_to_weaknesses.items() if is_smartian_type(vulnerability, key)}
+                        _, min_time = min(filterd_times.items(), key=lambda x: x[1])
+                        detection[vulnerability].append("Fully found " + map_vulnerability_smartian_to_long_name(vulnerability) + " from " + contract_name + " [" + str(min_time) + "] sec")
                     else:
                         detection[vulnerability].append("Never found " + map_vulnerability_smartian_to_long_name(vulnerability) + " from " + contract_name)
                          

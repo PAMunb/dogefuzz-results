@@ -72,7 +72,6 @@ class OutputService(metaclass=SingletonMeta):
                 os.remove(output_file_path)
 
             with open(output_file_path, "wt", encoding="utf-8") as f:
-                #self._write_line(f, 'DETECTION TRUE POSITIVE')
                 self._write_vulnerabilities_table_per_contract(f, contracts, vulnerability_types)
 
 
@@ -90,7 +89,6 @@ class OutputService(metaclass=SingletonMeta):
                 self._write_line(f, f'{vulnerability_type.upper()} RESULTS')
                 self._write_max_coverage_result(f, filtered_contracts)
                 self._write_average_coverage_result(f, filtered_contracts)
-                # self._write_critial_instructions_hits(f, filtered_contracts)
                 self._write_critial_instructions_detailed_hits(
                     f, filtered_contracts, critical_instructions)
                 self._write_vulnerabilities(
