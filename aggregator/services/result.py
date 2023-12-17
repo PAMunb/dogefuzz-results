@@ -194,12 +194,15 @@ class ResultService(metaclass=SingletonMeta):
         for vulnerability in vulnerabilities:
             detection[vulnerability] = []
 
+        time_map_list = []
+        time_map = {}
         for contract in contracts:
             contract_name = contract["file"]
             contract_vulnerabilities = contract["vulnerabilities"]
 
             for vulnerability in contract_vulnerabilities:
                 executions = executions_by_contract_name.get(contract_name, None)
+
                 if executions is None or len(executions) == 0:
                     detection[vulnerability].append("Never found " + map_vulnerability_smartian_to_long_name(vulnerability) + " from " + contract_name)
                     break
@@ -210,10 +213,12 @@ class ResultService(metaclass=SingletonMeta):
                         filterd_times = {key: value for key, value in time_to_weaknesses.items() if is_smartian_type(vulnerability, key)}
                         _, min_time = min(filterd_times.items(), key=lambda x: x[1])
                         detection[vulnerability].append("Fully found " + map_vulnerability_smartian_to_long_name(vulnerability) + " from " + contract_name + " [" + str(min_time) + "] sec")
+                        time_map[(contract_name, map_vulnerability_smartian_to_long_name(vulnerability))] = min_time
                     else:
                         detection[vulnerability].append("Never found " + map_vulnerability_smartian_to_long_name(vulnerability) + " from " + contract_name)
-                         
-        return detection
+        if time_map:
+            time_map_list.append(time_map)
+        return detection, time_map_list
 
     def get_transaction_count_by_strategy(self, strategy: str, contracts: list) -> float:
         """return the number of executions by strategy name

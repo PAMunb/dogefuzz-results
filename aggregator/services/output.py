@@ -10,8 +10,7 @@ from aggregator.config import Config
 from aggregator.services.result import ResultService
 from aggregator.shared.constants import BLACKBOX_FUZZING, DIRECTED_GREYBOX_FUZZING, GREYBOX_FUZZING
 from aggregator.shared.singleton import SingletonMeta
-from aggregator.shared.utils import map_vulnerability_to_dogefuzz_standard
-
+from aggregator.shared.utils import *
 
 class OutputService(metaclass=SingletonMeta):
 
@@ -66,13 +65,15 @@ class OutputService(metaclass=SingletonMeta):
                 f, contracts, vulnerability_types, False)
 
         if for_smartian:
-            output_file_path = os.path.join(results_folder, "smartian.txt")
+            for strategy in [BLACKBOX_FUZZING, DIRECTED_GREYBOX_FUZZING, GREYBOX_FUZZING]:
+                output_file_path = os.path.join(results_folder, f"smartian-{strategy}.txt")
 
-            if os.path.exists(output_file_path):
-                os.remove(output_file_path)
+                if os.path.exists(output_file_path):
+                    os.remove(output_file_path)
 
-            with open(output_file_path, "wt", encoding="utf-8") as f:
-                self._write_vulnerabilities_table_per_contract(f, contracts, vulnerability_types)
+                with open(output_file_path, "wt", encoding="utf-8") as f:
+                    self._write_vulnerabilities_table_per_contract(f, contracts, vulnerability_types, strategy)
+
 
 
         for vulnerability_type in vulnerability_types:
@@ -385,19 +386,42 @@ class OutputService(metaclass=SingletonMeta):
         else:
             self._write_dashed_line(file)
 
+    def _count_found_before(self, bug_sigs, time_map, sec):
+        n = 0
+        for (targ, found_bug) in time_map:
+            found_time = time_map[(targ, found_bug)]
+            if found_bug in bug_sigs and found_time < sec:
+                n += 1
+        return n
+    
+    def _write_count_over_time(
+        self,
+        file,
+        vulnerability_types: list,        
+        time_map_list: list
+    ):                    
+        for minute in range(0, 60 + 5, 5):
+            sec = 60 * minute
+            bug_sigs = list(map(lambda x: map_vulnerability_smartian_to_long_name(x), vulnerability_types))
+            count_list = []
+            for time_map in time_map_list:
+                count_list.append(self._count_found_before(bug_sigs, time_map, sec))
+            count_avg = float(sum(count_list)) / len(count_list)
+            self._write_line(file, f"{minute:02d}m: {count_avg:.1f}")
+
     def _write_vulnerabilities_table_per_contract(
         self,
         file,
         contracts: list,
         vulnerability_types: list, 
+        strategy: str,        
     ):                    
-        detected_true_positive = self._result_service.get_detection_by_strategy(DIRECTED_GREYBOX_FUZZING, contracts, vulnerability_types)
-        
+        detected_true_positive, time_map_list = self._result_service.get_detection_by_strategy(strategy, contracts, vulnerability_types)
         for vulnerability_type in vulnerability_types:
             for line in detected_true_positive[vulnerability_type]:
                 self._write_line(file, f"{line}")
             self._write_line(file, "===================================")
-
+        self._write_count_over_time(file, vulnerability_types, time_map_list)
 
     def _write_transaction_count(self, file, contracts: list):
         transaction_count_for_blackbox = self._result_service.get_transaction_count_by_strategy(

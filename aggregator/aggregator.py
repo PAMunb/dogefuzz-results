@@ -4,13 +4,15 @@ import numpy as np
 
 from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans
-
+from itertools import cycle
 
 from aggregator.services.contract import ContractService
 from aggregator.services.input import InputService
 from aggregator.services.output import OutputService
 from aggregator.services.result import ResultService
 
+MARKER = "==================================="
+linestyles = cycle(['-', '--', ':', '-.'])
 
 class Aggregator():
 
@@ -234,3 +236,53 @@ class Aggregator():
         print("Reentrancy Correlation Matrix")
         print("------------------------------")
         print(reentrancy_correlation)
+
+    def _read_data_after_marker(self, filename, marker):
+        data_found = False
+        data = []
+
+        try:
+            with open(filename, 'r') as file:
+                # Read the entire content of the file
+                content = file.read()
+
+                # Find the last occurrence of the delimiter
+                last_occurrence_index = content.rfind(marker)
+
+                if last_occurrence_index != -1:
+                    # Extract data after the last occurrence of the delimiter
+                    data_after_last_occurrence = content[last_occurrence_index + len(marker):]
+                    return data_after_last_occurrence
+                else:
+                    print(f"Delimiter '{marker}' not found in the file.")
+                    return None
+
+        except FileNotFoundError:
+            print(f"File '{filename}' not found.")
+            return None
+
+    def plot_smartian_b2_comparation(self, results_folder: str): 
+        if os.path.isdir(results_folder):
+            file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
+
+            for file_path in file_list:
+                loaded_data = self._read_data_after_marker(file_path, MARKER)
+                lines = [line for line in loaded_data.split('\n') if line.strip() != ""]    
+                all_minutes = []
+                all_values = []
+                for line in lines:
+                    minute, value = map(float, line.split('m:'))
+                    all_minutes.append(minute)
+                    all_values.append(value)
+                plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_path), linewidth=2.5)
+
+        else:
+            print("Invalid directory path.")
+            return
+        
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
+        plt.xlabel('Time (min.)')
+        plt.ylabel('Total # of Bugs found')
+        plt.grid(True)
+        plt.show()
+        
