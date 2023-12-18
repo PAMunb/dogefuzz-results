@@ -2,6 +2,8 @@ import os
 import zipfile
 import json
 import shutil
+from dateutil import parser
+from datetime import datetime, timedelta
 
 from aggregator.config import Config
 from aggregator.shared.singleton import SingletonMeta
@@ -241,6 +243,48 @@ class ResultService(metaclass=SingletonMeta):
         if execution_count == 0:
             return -1
         return float(average_transaction_count) / float(execution_count)
+
+
+
+    def get_instructions_coverage(
+        self,
+        strategy: str,
+        contracts: list,
+    ) -> map:
+        executions_by_contract_name = self._read_results_file(strategy)
+
+        contract_instruction_coverage = {}
+        for contract in contracts:
+            contract_name = contract["file"]
+            executions = executions_by_contract_name.get(contract_name, None)
+            if executions is None:
+                continue
+            for execution in executions:
+                heat_map = execution["execution"]["instructionHitsHeatMap"]
+                filtered_heat_map = {key: value for key, value in heat_map.items() if value > 0}
+                
+                # Load time series of coverage by edge
+                timestamps = [parser.isoparse(timestamp) for timestamp in execution["execution"]["coverageByTime"]["x"]]
+                coverage_value = execution["execution"]["coverageByTime"]["y"]
+                # Get the ratio from edge to instruction coverage
+                if filtered_heat_map and coverage_value:
+                    edge_to_instruction_ratio = len(filtered_heat_map) / int(max(coverage_value))
+                else:
+                    edge_to_instruction_ratio = 1
+                    
+                query_time = min(timestamps)
+                index = 0
+                coverage_over_time = {0: 0}
+                for minute in range(5, 60 + 5, 5):
+                    query_time = query_time + timedelta(minutes=5)
+                    try:
+                        index = next(i for i, dt in enumerate(timestamps) if dt > query_time)
+                    except StopIteration:
+                        pass
+                    coverage_over_time[minute] = round(coverage_value[index] * edge_to_instruction_ratio)
+                contract_instruction_coverage[contract_name] = len(filtered_heat_map), len(filtered_heat_map) / len(heat_map) * 100, coverage_over_time
+
+        return contract_instruction_coverage
 
     def get_hits_by_instructions_and_strategy(
         self,

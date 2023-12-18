@@ -237,7 +237,7 @@ class Aggregator():
         print("------------------------------")
         print(reentrancy_correlation)
 
-    def _read_data_after_marker(self, filename, marker):
+    def _read_data_after_marker(self, filename, marker, keep_marker):
         data_found = False
         data = []
 
@@ -251,7 +251,10 @@ class Aggregator():
 
                 if last_occurrence_index != -1:
                     # Extract data after the last occurrence of the delimiter
-                    data_after_last_occurrence = content[last_occurrence_index + len(marker):]
+                    if keep_marker:
+                        data_after_last_occurrence = content[last_occurrence_index:]
+                    else:
+                        data_after_last_occurrence = content[last_occurrence_index + len(marker):]
                     return data_after_last_occurrence
                 else:
                     print(f"Delimiter '{marker}' not found in the file.")
@@ -261,12 +264,12 @@ class Aggregator():
             print(f"File '{filename}' not found.")
             return None
 
-    def plot_smartian_b2_comparation(self, results_folder: str): 
+    def plot_smartian_b2_bugs_found(self, results_folder: str): 
         if os.path.isdir(results_folder):
             file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
 
             for file_path in file_list:
-                loaded_data = self._read_data_after_marker(file_path, MARKER)
+                loaded_data = self._read_data_after_marker(file_path, MARKER, False)
                 lines = [line for line in loaded_data.split('\n') if line.strip() != ""]    
                 all_minutes = []
                 all_values = []
@@ -283,6 +286,31 @@ class Aggregator():
         plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
         plt.xlabel('Time (min.)')
         plt.ylabel('Total # of Bugs found')
+        plt.grid(True)
+        plt.show()
+        
+    def plot_smartian_b2_instruction_coverage(self, results_folder: str): 
+        if os.path.isdir(results_folder):
+            file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
+
+            for file_path in file_list:
+                loaded_data = self._read_data_after_marker(file_path, "00m: 0.0", True)
+                lines = [line for line in loaded_data.split('\n') if line.strip() != ""]
+                all_minutes = []
+                all_values = []
+                for line in lines:
+                    minute, value = map(float, line.split('m:'))
+                    all_minutes.append(minute)
+                    all_values.append(value)
+                plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_path), linewidth=2.5)
+
+        else:
+            print("Invalid directory path.")
+            return
+        
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
+        plt.xlabel('Time (min.)')
+        plt.ylabel('Instruction Coverage')
         plt.grid(True)
         plt.show()
         

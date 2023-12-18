@@ -1,6 +1,7 @@
 import os
 import json
 import numpy as np
+from collections import Counter
 
 from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans
@@ -73,6 +74,14 @@ class OutputService(metaclass=SingletonMeta):
 
                 with open(output_file_path, "wt", encoding="utf-8") as f:
                     self._write_vulnerabilities_table_per_contract(f, contracts, vulnerability_types, strategy)
+
+                output_cov_file = os.path.join(results_folder, f"smartian-cov-{strategy}.txt")
+
+                if os.path.exists(output_cov_file):
+                    os.remove(output_cov_file)
+
+                with open(output_cov_file, "wt", encoding="utf-8") as f:
+                    self._write_coverage_table_over_time(f, contracts, strategy)
 
 
 
@@ -422,6 +431,23 @@ class OutputService(metaclass=SingletonMeta):
                 self._write_line(file, f"{line}")
             self._write_line(file, "===================================")
         self._write_count_over_time(file, vulnerability_types, time_map_list)
+
+
+    def _write_coverage_table_over_time(
+        self,
+        file,
+        contracts: list,
+        strategy: str,        
+    ):                    
+        coverage_map = self._result_service.get_instructions_coverage(strategy, contracts)
+        
+        total_coverage_over_time = Counter()
+        for _, _, coverage_over_time in coverage_map.values():
+            total_coverage_over_time += Counter(coverage_over_time)
+        final_dict_cov = dict(total_coverage_over_time)
+        self._write_line(file, f"{0:02d}m: {0:.1f}")
+        for minute, total in final_dict_cov.items():
+            self._write_line(file, f"{minute:02d}m: {total:.1f}")
 
     def _write_transaction_count(self, file, contracts: list):
         transaction_count_for_blackbox = self._result_service.get_transaction_count_by_strategy(
