@@ -9,9 +9,12 @@ from sklearn.cluster import KMeans
 from aggregator.config import Config
 
 from aggregator.services.result import ResultService
-from aggregator.shared.constants import BLACKBOX_FUZZING, DIRECTED_GREYBOX_FUZZING, GREYBOX_FUZZING
+from aggregator.shared.constants import BLACKBOX_FUZZING, DIRECTED_GREYBOX_FUZZING, GREYBOX_FUZZING, OTHER_GREYBOX_FUZZING
 from aggregator.shared.singleton import SingletonMeta
 from aggregator.shared.utils import *
+
+
+FUZZING_TYPES = [BLACKBOX_FUZZING, DIRECTED_GREYBOX_FUZZING, GREYBOX_FUZZING, OTHER_GREYBOX_FUZZING]
 
 class OutputService(metaclass=SingletonMeta):
 
@@ -66,12 +69,13 @@ class OutputService(metaclass=SingletonMeta):
                 f, contracts, vulnerability_types, False)
 
         if for_smartian:
-            for strategy in [BLACKBOX_FUZZING, DIRECTED_GREYBOX_FUZZING, GREYBOX_FUZZING]:
+            for strategy in FUZZING_TYPES:
                 output_file_path = os.path.join(results_folder, f"smartian-{strategy}.txt")
 
                 if os.path.exists(output_file_path):
                     os.remove(output_file_path)
 
+                print (strategy)
                 with open(output_file_path, "wt", encoding="utf-8") as f:
                     self._write_vulnerabilities_table_per_contract(f, contracts, vulnerability_types, strategy)
 
@@ -153,6 +157,7 @@ class OutputService(metaclass=SingletonMeta):
                     f, contracts, vulnerability_types, False)
 
     def _write_max_coverage_result(self, file, contracts: list):
+        
         (max_coverage_per_contract_for_blackbox, average_coverage_for_blackbox) = self._result_service.get_max_coverage_by_strategy(
             BLACKBOX_FUZZING,
             contracts,
@@ -166,31 +171,46 @@ class OutputService(metaclass=SingletonMeta):
             contracts,
         )
 
+        (max_coverage_per_contract_for_other_directed_greybox, average_coverage_for_other_directed_greybox) = self._result_service.get_max_coverage_by_strategy(
+            OTHER_GREYBOX_FUZZING,
+            contracts,
+        )
+
         self._write_header(file, 'MAX COVERAGE RESULTS', "contract")
 
         for contract in contracts:
             contract_name = contract["file"]
+            
             blackbox = max_coverage_per_contract_for_blackbox[
                 contract_name] if contract_name in max_coverage_per_contract_for_blackbox else -1
             greybox = max_coverage_per_contract_for_greybox[
                 contract_name] if contract_name in max_coverage_per_contract_for_greybox else -1
             directed_greybox = max_coverage_per_contract_for_directed_greybox[
                 contract_name] if contract_name in max_coverage_per_contract_for_directed_greybox else -1
+            other_directed_greybox = max_coverage_per_contract_for_other_directed_greybox[
+                contract_name] if contract_name in max_coverage_per_contract_for_other_directed_greybox else -1
+
 
             percentage_blackbox = self._convert_to_percentage_str(blackbox)
+            
             percentage_greybox = self._convert_to_percentage_diff_str(
                 greybox, blackbox)
+            
             percentage_directed_greybox = self._convert_to_percentage_diff_str(
                 directed_greybox, blackbox)
 
+            percentage_other_directed_greybox = self._convert_to_percentage_diff_str(
+                other_directed_greybox, blackbox)
+
             self._write_line(
-                file, f"| {contract_name:45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
+                file, f"| {contract_name:45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} | {percentage_other_directed_greybox:20} |")
 
         self._write_average_footer(
             file,
             average_coverage_for_blackbox,
             average_coverage_for_greybox,
             average_coverage_for_directed_greybox,
+            average_coverage_for_other_directed_greybox
         )
 
     def _write_average_coverage_result(self, file, contracts: list):
@@ -207,6 +227,11 @@ class OutputService(metaclass=SingletonMeta):
             contracts,
         )
 
+        (average_coverage_per_contract_for_other_directed_greybox, average_coverage_for_other_directed_greybox) = self._result_service.get_average_coverage_by_strategy(
+            OTHER_GREYBOX_FUZZING,
+            contracts,
+        )
+
         self._write_header(file, 'AVERAGE COVERAGE RESULTS', "contract")
 
         for contract in contracts:
@@ -218,20 +243,27 @@ class OutputService(metaclass=SingletonMeta):
             directed_greybox = average_coverage_per_contract_for_directed_greybox[
                 contract_name] if contract_name in average_coverage_per_contract_for_directed_greybox else -1
 
+            other_directed_greybox = average_coverage_per_contract_for_other_directed_greybox[
+                contract_name] if contract_name in average_coverage_per_contract_for_other_directed_greybox else -1
+
             percentage_blackbox = self._convert_to_percentage_str(blackbox)
             percentage_greybox = self._convert_to_percentage_diff_str(
                 greybox, blackbox)
             percentage_directed_greybox = self._convert_to_percentage_diff_str(
                 directed_greybox, blackbox)
 
+            percentage_other_directed_greybox = self._convert_to_percentage_diff_str(
+                other_directed_greybox, blackbox)
+
             self._write_line(
-                file, f"| {contract_name:45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
+                file, f"| {contract_name:45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} | | {percentage_other_directed_greybox:20} |")
 
         self._write_average_footer(
             file,
             average_converage_for_blackbox,
             average_coverage_for_greybox,
             average_coverage_for_directed_greybox,
+            average_coverage_for_other_directed_greybox
         )
 
     def _write_critial_instructions_hits(self, file, contracts: list):
@@ -248,6 +280,11 @@ class OutputService(metaclass=SingletonMeta):
             contracts,
         )
 
+        (hits_per_contract_for_other_directed_greybox, average_hits_for_other_directed_greybox) = self._result_service.get_hits_by_strategy(
+            OTHER_GREYBOX_FUZZING,
+            contracts,
+        )
+
         self._write_header(file, 'CRITICAL INSTRUCTIONS HITS RESULTS', "instruction")
 
         for contract in contracts:
@@ -258,19 +295,26 @@ class OutputService(metaclass=SingletonMeta):
                 contract_name] if contract_name in hits_per_contract_for_greybox else -1
             directed_greybox = hits_per_contract_for_directed_greybox[
                 contract_name] if contract_name in hits_per_contract_for_directed_greybox else -1
+            other_directed_greybox = hits_per_contract_for_other_directed_greybox[
+                contract_name] if contract_name in hits_per_contract_for_other_directed_greybox else -1
+
 
             hits_for_blackbox = self._convert_to_str(blackbox)
             hits_for_greybox = self._convert_to_diff_str(greybox, blackbox)
             hits_for_directed_greybox = self._convert_to_diff_str(
                 directed_greybox, blackbox)
 
+            hits_for_other_directed_greybox = self._convert_to_diff_str(
+                other_directed_greybox, blackbox)
+
             self._write_line(
-                file, f"| {contract_name:45} | {hits_for_blackbox:20} | {hits_for_greybox:20} | {hits_for_directed_greybox:20} |")
+                file, f"| {contract_name:45} | {hits_for_blackbox:20} | {hits_for_greybox:20} | {hits_for_directed_greybox:20} | | {hits_for_other_directed_greybox:20} |")
         self._write_average_number_footer(
             file,
             average_hits_for_blackbox,
             average_hits_for_greybox,
             average_hits_for_directed_greybox,
+            average_hits_for_other_directed_greybox
         )
 
     def _write_critial_instructions_detailed_hits(self, file, contracts: list, critical_instructions: list):
@@ -290,6 +334,12 @@ class OutputService(metaclass=SingletonMeta):
             critical_instructions,
         )
 
+        (hits_per_instruction_for_other_directed_greybox, average_hits_for_other_directed_greybox) = self._result_service.get_hits_by_instructions_and_strategy(
+            OTHER_GREYBOX_FUZZING,
+            contracts,
+            critical_instructions,
+        )
+
         self._write_header(file, 'DETAILED CRITICAL INSTRUCTIONS HITS RESULTS', "instruction")
 
         for critical_instruction in critical_instructions:
@@ -300,19 +350,27 @@ class OutputService(metaclass=SingletonMeta):
             directed_greybox = hits_per_instruction_for_directed_greybox[
                 critical_instruction] if critical_instruction in hits_per_instruction_for_directed_greybox else -1
 
+            other_directed_greybox = hits_per_instruction_for_other_directed_greybox[
+                critical_instruction] if critical_instruction in hits_per_instruction_for_other_directed_greybox else -1
+
+
             hits_for_blackbox = self._convert_to_str(blackbox)
             hits_for_greybox = self._convert_to_diff_str(greybox, blackbox)
             hits_for_directed_greybox = self._convert_to_diff_str(
                 directed_greybox, blackbox)
 
+            hits_for_other_directed_greybox = self._convert_to_diff_str(
+                other_directed_greybox, blackbox)
+
             self._write_line(
-                file, f"| {critical_instruction:45} | {hits_for_blackbox:20} | {hits_for_greybox:20} | {hits_for_directed_greybox:20} |")
+                file, f"| {critical_instruction:45} | {hits_for_blackbox:20} | {hits_for_greybox:20} | {hits_for_directed_greybox:20} | {hits_for_other_directed_greybox:20} |")
 
         self._write_average_number_footer(
             file,
             average_hits_for_blackbox,
             average_hits_for_greybox,
             average_hits_for_directed_greybox,
+            average_hits_for_other_directed_greybox
         )
 
     def _write_vulnerabilities(
@@ -341,6 +399,13 @@ class OutputService(metaclass=SingletonMeta):
             include_new_detections,
         )
 
+        detection_rate_for_other_directed_greybox = self._result_service.get_detection_rate_by_strategy(
+            OTHER_GREYBOX_FUZZING,
+            contracts,
+            vulnerability_types,
+            include_new_detections,
+        )
+
         self._write_header(file, 'VULNERABILITIES RESULTS', "vulnerability type")
         
         vul_count = self._result_service.get_vulnerabilities_count(contracts, vulnerability_types)
@@ -348,15 +413,19 @@ class OutputService(metaclass=SingletonMeta):
         average_detection_rate_for_blackbox = 0
         average_detection_rate_for_greybox = 0
         average_detection_rate_for_directed_greybox = 0
+        average_detection_rate_for_other_directed_greybox = 0        
         
         total_blackbox = 0
         total_greybox = 0
         total_directed_greybox = 0
+        total_other_directed_greybox = 0
+
         
         for vulnerability in vulnerability_types:
             blackbox = detection_rate_for_blackbox[vulnerability][0]
             greybox = detection_rate_for_greybox[vulnerability][0]
             directed_greybox = detection_rate_for_directed_greybox[vulnerability][0]
+            other_directed_greybox = detection_rate_for_other_directed_greybox[vulnerability][0]            
 
             percentage_blackbox = self._convert_to_percentage_str(blackbox)
             percentage_greybox = self._convert_to_percentage_diff_str_with_total(
@@ -364,19 +433,24 @@ class OutputService(metaclass=SingletonMeta):
             percentage_directed_greybox = self._convert_to_percentage_diff_str_with_total(
                 directed_greybox, blackbox, detection_rate_for_directed_greybox[vulnerability][1])
 
+            percentage_other_directed_greybox = self._convert_to_percentage_diff_str_with_total(
+                other_directed_greybox, blackbox, detection_rate_for_other_directed_greybox[vulnerability][1])
+
             average_detection_rate_for_blackbox += blackbox
             average_detection_rate_for_greybox += greybox
             average_detection_rate_for_directed_greybox += directed_greybox
+            average_detection_rate_for_other_directed_greybox += other_directed_greybox            
 
             total_blackbox += detection_rate_for_blackbox[vulnerability][1]
             total_greybox += detection_rate_for_greybox[vulnerability][1]
             total_directed_greybox += detection_rate_for_directed_greybox[vulnerability][1]
+            total_other_directed_greybox += detection_rate_for_other_directed_greybox[vulnerability][1]            
             
             vulnerability_text = vulnerability + " (" + str(vul_count[vulnerability]) + ")"
             percentage_blackbox_text = percentage_blackbox + " (" + str(detection_rate_for_blackbox[vulnerability][1]) + ")"
             
             self._write_line(
-                file, f"| {vulnerability_text:45} | {percentage_blackbox_text:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
+                file, f"| {vulnerability_text:45} | {percentage_blackbox_text:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} | {percentage_other_directed_greybox:20} |")
 
         average_blackbox = average_detection_rate_for_blackbox / \
             len(vulnerability_types)
@@ -384,13 +458,17 @@ class OutputService(metaclass=SingletonMeta):
             len(vulnerability_types)
         average_directed_greybox = average_detection_rate_for_directed_greybox / \
             len(vulnerability_types)
+        average_other_directed_greybox = average_detection_rate_for_other_directed_greybox / \
+            len(vulnerability_types)
+
 
         if (len(vulnerability_types) > 1):
             self._write_average_footer_with_total(
                 file, sum(vul_count.values()),
                 average_blackbox, total_blackbox,
                 average_greybox, total_greybox,
-                average_directed_greybox, total_directed_greybox
+                average_directed_greybox, total_directed_greybox,
+                average_other_directed_greybox, total_directed_greybox
             )
         else:
             self._write_dashed_line(file)
@@ -481,7 +559,7 @@ class OutputService(metaclass=SingletonMeta):
         self._write_line(file, title)
         self._write_dashed_line(file)
         self._write_line(
-            file, f"| {text:45} | {'blackbox':20} | {'greybox':20} | {'directed_greybox':20} |")
+            file, f"| {text:45} | {'blackbox':20} | {'greybox':20} | {'directed_greybox':20} | {'other_directed_greybox':20} |")
         self._write_dashed_line(file)
 
     def _write_average_footer(
@@ -490,6 +568,7 @@ class OutputService(metaclass=SingletonMeta):
         average_blackbox,
         average_greybox,
         average_directed_greybox,
+        average_other_directed_greybox,        
     ):
         percentage_blackbox = self._convert_to_percentage_str(average_blackbox)
         percentage_greybox = self._convert_to_percentage_diff_str(
@@ -497,9 +576,12 @@ class OutputService(metaclass=SingletonMeta):
         percentage_directed_greybox = self._convert_to_percentage_diff_str(
             average_directed_greybox, average_blackbox)
 
+        percentage_other_directed_greybox = self._convert_to_percentage_diff_str(
+            average_other_directed_greybox, average_blackbox)
+
         self._write_dashed_line(file)
         self._write_line(
-            file, f"| {'AVERAGE':45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
+            file, f"| {'AVERAGE':45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} | {percentage_other_directed_greybox:20} |")
         self._write_dashed_line(file)
 
     def _write_average_footer_with_total(
@@ -507,7 +589,8 @@ class OutputService(metaclass=SingletonMeta):
         file, total_vulnerabilities,
         average_blackbox, total_blackbox,
         average_greybox, total_greybox,
-        average_directed_greybox, total_directed_greybox
+        average_directed_greybox, total_directed_greybox,
+        average_other_directed_greybox, total_other_directed_greybox        
     ):
         percentage_blackbox = self._convert_to_percentage_str(average_blackbox)
         percentage_greybox = self._convert_to_percentage_diff_str_with_total(
@@ -515,13 +598,15 @@ class OutputService(metaclass=SingletonMeta):
         percentage_directed_greybox = self._convert_to_percentage_diff_str_with_total(
             average_directed_greybox, average_blackbox, total_directed_greybox)
 
+        percentage_other_directed_greybox = self._convert_to_percentage_diff_str_with_total(
+            average_other_directed_greybox, average_blackbox, total_directed_greybox)
 
         percentage_blackbox_text = percentage_blackbox + " (" + str(total_blackbox) + ")"
         total_vulnerabilities_text = "AVERAGE" + " (" + str(total_vulnerabilities) + ")"
 
         self._write_dashed_line(file)
         self._write_line(
-            file, f"| {total_vulnerabilities_text:45} | {percentage_blackbox_text:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} |")
+            file, f"| {total_vulnerabilities_text:45} | {percentage_blackbox_text:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} | {percentage_other_directed_greybox:20} |")
         self._write_dashed_line(file)
 
     def _write_average_number_footer(
@@ -530,6 +615,7 @@ class OutputService(metaclass=SingletonMeta):
         average_blackbox,
         average_greybox,
         average_directed_greybox,
+        average_other_directed_greybox,
     ):
         number_blackbox = self._convert_to_str(average_blackbox)
         number_greybox = self._convert_to_diff_str(
@@ -537,9 +623,12 @@ class OutputService(metaclass=SingletonMeta):
         number_directed_greybox = self._convert_to_diff_str(
             average_directed_greybox, average_blackbox)
 
+        number_other_directed_greybox = self._convert_to_diff_str(
+            average_other_directed_greybox, average_blackbox)
+
         self._write_dashed_line(file)
         self._write_line(
-            file, f"| {'AVERAGE':45} | {number_blackbox:20} | {number_greybox:20} | {number_directed_greybox:20} |")
+            file, f"| {'AVERAGE':45} | {number_blackbox:20} | {number_greybox:20} | {number_directed_greybox:20} | {number_other_directed_greybox:20} |")
         self._write_dashed_line(file)
 
     def _convert_to_str(self, value) -> str:

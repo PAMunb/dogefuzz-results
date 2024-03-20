@@ -25,7 +25,7 @@ class ResultService(metaclass=SingletonMeta):
             with open(os.path.join(strategy_result_folder, path), 'r+', encoding='utf-8') as file:                 
                 results_content = json.load(file)
                 for contract_name in results_content.keys():                    
-                    for index in [BLACKBOX_FUZZING, GREYBOX_FUZZING, DIRECTED_GREYBOX_FUZZING]:
+                    for index in [BLACKBOX_FUZZING, GREYBOX_FUZZING, DIRECTED_GREYBOX_FUZZING, OTHER_GREYBOX_FUZZING]:
                         if results_content[contract_name][index][0]["execution"] is not None:
                             detectedWeaknesses = results_content[contract_name][index][0]["execution"]["detectedWeaknesses"]
                             detectedWeaknesses = [x for x in [map_weakness_to_smartian_standard(x) for x in detectedWeaknesses] if x is not None]
@@ -191,7 +191,6 @@ class ResultService(metaclass=SingletonMeta):
         return the vulnerability detection rate by strategy name
         """
         executions_by_contract_name = self._read_results_file(strategy)
-        
         detection = {}
         for vulnerability in vulnerabilities:
             detection[vulnerability] = []
