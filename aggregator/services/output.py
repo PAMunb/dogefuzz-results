@@ -75,7 +75,6 @@ class OutputService(metaclass=SingletonMeta):
                 if os.path.exists(output_file_path):
                     os.remove(output_file_path)
 
-                print (strategy)
                 with open(output_file_path, "wt", encoding="utf-8") as f:
                     self._write_vulnerabilities_table_per_contract(f, contracts, vulnerability_types, strategy)
 
@@ -256,7 +255,7 @@ class OutputService(metaclass=SingletonMeta):
                 other_directed_greybox, blackbox)
 
             self._write_line(
-                file, f"| {contract_name:45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} | | {percentage_other_directed_greybox:20} |")
+                file, f"| {contract_name:45} | {percentage_blackbox:20} | {percentage_greybox:20} | {percentage_directed_greybox:20} | {percentage_other_directed_greybox:20} |")
 
         self._write_average_footer(
             file,
@@ -308,7 +307,7 @@ class OutputService(metaclass=SingletonMeta):
                 other_directed_greybox, blackbox)
 
             self._write_line(
-                file, f"| {contract_name:45} | {hits_for_blackbox:20} | {hits_for_greybox:20} | {hits_for_directed_greybox:20} | | {hits_for_other_directed_greybox:20} |")
+                file, f"| {contract_name:45} | {hits_for_blackbox:20} | {hits_for_greybox:20} | {hits_for_directed_greybox:20} | {hits_for_other_directed_greybox:20} |")
         self._write_average_number_footer(
             file,
             average_hits_for_blackbox,
@@ -541,6 +540,11 @@ class OutputService(metaclass=SingletonMeta):
             contracts,
         )
 
+        transaction_count_for_other_directed_greybox = self._result_service.get_transaction_count_by_strategy(
+            OTHER_GREYBOX_FUZZING,
+            contracts,
+        )
+
         self._write_header(file, 'TRANSACTION COUNT RESULTS', "count")
 
         blackbox = self._convert_to_str(transaction_count_for_blackbox)
@@ -549,8 +553,11 @@ class OutputService(metaclass=SingletonMeta):
         directed_greybox = self._convert_to_diff_str(
             transaction_count_for_directed_greybox, transaction_count_for_blackbox)
 
+        other_directed_greybox = self._convert_to_diff_str(
+            transaction_count_for_other_directed_greybox, transaction_count_for_blackbox)
+
         self._write_line(
-            file, f"| {'transaction_count':45} | {blackbox:20} | {greybox:20} | {directed_greybox:20} |")
+            file, f"| {'transaction_count':45} | {blackbox:20} | {greybox:20} | {directed_greybox:20} | {other_directed_greybox:20} |")
 
         self._write_dashed_line(file)
 
@@ -660,7 +667,7 @@ class OutputService(metaclass=SingletonMeta):
 
 
     def _write_dashed_line(self, file):
-        self._write_line(file, '-' * 118)
+        self._write_line(file, '-' * 142)
 
     def _write_line(self, file, line: str):
         file.write(line + '\n')

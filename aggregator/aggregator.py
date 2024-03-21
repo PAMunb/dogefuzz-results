@@ -22,14 +22,14 @@ class Aggregator():
         self._result_service = ResultService()
         self._output_service = OutputService()
 
-    def generate_report(self, results_folder: str):
-        self._input_service.extract_inputs()
+    def generate_report(self, results_folder: str, inputs_file: str):
+        self._input_service.extract_inputs(inputs_file)
         contracts = self._contract_service.list_contracts_from_contract_list(False)
         self._result_service.extract_results(results_folder)
         self._output_service.write_report(results_folder, contracts, False)
 
-    def generate_report_smartian(self, results_folder: str):
-        self._input_service.extract_inputs()
+    def generate_report_smartian(self, results_folder: str, inputs_file: str):
+        self._input_service.extract_inputs(inputs_file)
         contracts = self._contract_service.list_contracts_from_contract_list(True)
         self._result_service.extract_results(results_folder)
         self._result_service.convert_results_to_smartian(results_folder)
@@ -79,13 +79,13 @@ class Aggregator():
             plt.ylabel('Inercia')
             plt.show()
 
-    def inputs_stats_smartian(self):
-        self._input_service.extract_inputs()
+    def inputs_stats_smartian(self, inputs_file: str):
+        self._input_service.extract_inputs(inputs_file)
         contracts = self._contract_service.list_contracts_from_contract_list(True)
         self._print_all(contracts)
         
-    def inputs_stats(self):
-        self._input_service.extract_inputs()
+    def inputs_stats(self, inputs_file: str):
+        self._input_service.extract_inputs(inputs_file)
         contracts = self._contract_service.list_contracts_from_contract_list(False)
 
         self._print_all(contracts)
@@ -96,9 +96,12 @@ class Aggregator():
             for vulnerability in contract['vulnerabilities']:
                 vulnerabilities[vulnerability] = vulnerabilities.get(
                     vulnerability, 0) + 1
-        inputs_file = os.path.join(os.path.dirname(
-            __file__), '..', 'resources', 'inputs.json')
-
+                
+                
+        inputs_file_folder = os.path.join(
+            self._config.temp_folder, self._config.inputs_folder)
+        inputs_file = os.path.join(inputs_file_folder, "inputs.json")
+                
         clusters = {}
         with open(inputs_file, 'r', encoding='utf-8') as f:
             inputs = json.load(f)
