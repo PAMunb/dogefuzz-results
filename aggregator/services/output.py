@@ -107,8 +107,9 @@ class OutputService(metaclass=SingletonMeta):
                 self._write_vulnerabilities(
                     f, filtered_contracts, [vulnerability_type], False)
 
-        inputs_file = os.path.join(os.path.dirname(
-            __file__), '..', '..', 'resources', 'inputs.json')
+        inputs_file_folder = os.path.join(
+            self._config.temp_folder, self._config.inputs_folder)
+        inputs_file = os.path.join(inputs_file_folder, "inputs.json")
 
         dataset_array = []
         contracts_name = None
@@ -427,8 +428,10 @@ class OutputService(metaclass=SingletonMeta):
             other_directed_greybox = detection_rate_for_other_directed_greybox[vulnerability][0]            
 
             percentage_blackbox = self._convert_to_percentage_str(blackbox)
+            
             percentage_greybox = self._convert_to_percentage_diff_str_with_total(
                 greybox, blackbox, detection_rate_for_greybox[vulnerability][1])
+            
             percentage_directed_greybox = self._convert_to_percentage_diff_str_with_total(
                 directed_greybox, blackbox, detection_rate_for_directed_greybox[vulnerability][1])
 
@@ -467,7 +470,7 @@ class OutputService(metaclass=SingletonMeta):
                 average_blackbox, total_blackbox,
                 average_greybox, total_greybox,
                 average_directed_greybox, total_directed_greybox,
-                average_other_directed_greybox, total_directed_greybox
+                average_other_directed_greybox, total_other_directed_greybox
             )
         else:
             self._write_dashed_line(file)
@@ -606,7 +609,7 @@ class OutputService(metaclass=SingletonMeta):
             average_directed_greybox, average_blackbox, total_directed_greybox)
 
         percentage_other_directed_greybox = self._convert_to_percentage_diff_str_with_total(
-            average_other_directed_greybox, average_blackbox, total_directed_greybox)
+            average_other_directed_greybox, average_blackbox, total_other_directed_greybox)
 
         percentage_blackbox_text = percentage_blackbox + " (" + str(total_blackbox) + ")"
         total_vulnerabilities_text = "AVERAGE" + " (" + str(total_vulnerabilities) + ")"

@@ -36,8 +36,9 @@ class Aggregator():
         self._output_service.write_report(results_folder, contracts, True)
 
     def show_kmeans(self, cluster_number: int = 3):
-        inputs_file = os.path.join(os.path.dirname(
-            __file__), '..', 'resources', 'inputs.json')
+        inputs_file_folder = os.path.join(
+            self._config.temp_folder, self._config.inputs_folder)
+        inputs_file = os.path.join(inputs_file_folder, "inputs.json")
 
         with open(inputs_file, 'r', encoding='utf-8') as f:
             inputs = json.load(f)
@@ -58,8 +59,9 @@ class Aggregator():
             plt.show()
 
     def show_elbow_method(self):
-        inputs_file = os.path.join(os.path.dirname(
-            __file__), '..', 'resources', 'inputs.json')
+        inputs_file_folder = os.path.join(
+            self._config.temp_folder, self._config.inputs_folder)
+        inputs_file = os.path.join(inputs_file_folder, "inputs.json")
 
         with open(inputs_file, 'r', encoding='utf-8') as f:
             inputs = json.load(f)
