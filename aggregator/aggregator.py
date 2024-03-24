@@ -3,6 +3,7 @@ import json
 import numpy as np
 
 from matplotlib import pyplot as plt
+import mplcursors
 from sklearn.cluster import KMeans
 from itertools import cycle
 
@@ -243,9 +244,6 @@ class Aggregator():
         print(reentrancy_correlation)
 
     def _read_data_after_marker(self, filename, marker, keep_marker):
-        data_found = False
-        data = []
-
         try:
             with open(filename, 'r') as file:
                 # Read the entire content of the file
@@ -269,6 +267,39 @@ class Aggregator():
             print(f"File '{filename}' not found.")
             return None
 
+
+    def plot_smartian_b2_bugs_found_avg(self, results_folder: str): 
+        if os.path.isdir(results_folder):
+            file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
+
+            sum_values = []
+            for file_path in file_list:
+                loaded_data = self._read_data_after_marker(file_path, MARKER, False)
+                lines = [line for line in loaded_data.split('\n') if line.strip() != ""]    
+                all_minutes = []
+                all_values = []
+                for line in lines:
+                    minute, value = map(float, line.split('m:'))
+                    all_minutes.append(minute)
+                    all_values.append(value)
+                sum_values.append(all_values)
+                
+            averages = [sum(row) / len(row) for row in zip(*sum_values)]
+            plt.plot(all_minutes, averages, linestyle=next(linestyles), label="Avg of " + results_folder, linewidth=2.5)
+            print("===================================")
+            for i, avg in enumerate(averages, start=0):
+                print(f"{all_minutes[i]}m: {avg}")
+        else:
+            print("Invalid directory path.")
+            return
+        
+        mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Bugs={sel.target[1]:.2f}"))
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
+        plt.xlabel('Time (min.)')
+        plt.ylabel('Total # of Bugs found')
+        plt.grid(True)
+        plt.show()
+
     def plot_smartian_b2_bugs_found(self, results_folder: str): 
         if os.path.isdir(results_folder):
             file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
@@ -288,6 +319,7 @@ class Aggregator():
             print("Invalid directory path.")
             return
         
+        mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Bugs={sel.target[1]:.2f}"))
         plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
         plt.xlabel('Time (min.)')
         plt.ylabel('Total # of Bugs found')
