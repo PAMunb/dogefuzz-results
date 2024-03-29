@@ -313,16 +313,17 @@ class Aggregator():
                     minute, value = map(float, line.split('m:'))
                     all_minutes.append(minute)
                     all_values.append(value)
-                plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_path), linewidth=2.5)
+                plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_path), linewidth=2.9)
 
         else:
             print("Invalid directory path.")
             return
         
         mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Bugs={sel.target[1]:.2f}"))
-        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
+        plt.legend(loc='lower right',  bbox_to_anchor=(0.9, 0.2), ncol=2) 
         plt.xlabel('Time (min.)')
         plt.ylabel('Total # of Bugs found')
+        #plt.ylim(0, 82)  # Adjust the upper bound as needed
         plt.grid(True)
         plt.show()
         
@@ -344,10 +345,43 @@ class Aggregator():
         else:
             print("Invalid directory path.")
             return
-        
-        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
+
+        mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Cov={sel.target[1]:.2f}"))                
+        #plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
+        plt.legend(loc='lower right',  bbox_to_anchor=(0.9, 0.2), ncol=2)         
         plt.xlabel('Time (min.)')
         plt.ylabel('Instruction Coverage')
         plt.grid(True)
         plt.show()
         
+    def plot_smartian_b2_instruction_coverage_avg(self, results_folder: str): 
+        if os.path.isdir(results_folder):
+            file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
+
+            sum_values = []
+            for file_path in file_list:
+                loaded_data = self._read_data_after_marker(file_path, "00m: 0.0", True)
+                lines = [line for line in loaded_data.split('\n') if line.strip() != ""]
+                all_minutes = []
+                all_values = []
+                for line in lines:
+                    minute, value = map(float, line.split('m:'))
+                    all_minutes.append(minute)
+                    all_values.append(value)
+                sum_values.append(all_values)
+                
+            averages = [sum(row) / len(row) for row in zip(*sum_values)]
+            means = [np.median(row) for row in zip(*sum_values)]
+            plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_path), linewidth=2.5)
+            for i, avg in enumerate(averages, start=0):
+                print(f"{int(all_minutes[i]):02}m: {avg}")
+        else:
+            print("Invalid directory path.")
+            return
+        
+        mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Cov={sel.target[1]:.2f}"))        
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
+        plt.xlabel('Time (min.)')
+        plt.ylabel('Instruction Coverage')
+        plt.grid(True)
+        plt.show()        

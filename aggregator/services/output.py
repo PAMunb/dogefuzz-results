@@ -86,6 +86,15 @@ class OutputService(metaclass=SingletonMeta):
                 with open(output_cov_file, "wt", encoding="utf-8") as f:
                     self._write_coverage_table_over_time(f, contracts, strategy)
 
+                # Alarms file
+                output_alarms_file = os.path.join(results_folder, f"smartian-alarms-{strategy}.txt")
+
+                if os.path.exists(output_alarms_file):
+                    os.remove(output_alarms_file)
+
+                with open(output_alarms_file, "wt", encoding="utf-8") as f:
+                    self._write_alarms_table(f, contracts, strategy, vulnerability_types)
+
 
 
         for vulnerability_type in vulnerability_types:
@@ -512,6 +521,22 @@ class OutputService(metaclass=SingletonMeta):
             self._write_line(file, "===================================")
         self._write_count_over_time(file, vulnerability_types, time_map_list)
 
+    def _write_alarms_table(
+        self,
+        file,
+        contracts: list,
+        strategy: str,        
+        vulnerability_types: list        
+    ):
+        
+        alarms = self._result_service.get_detection_alarms(strategy, contracts, vulnerability_types, False)
+        for vulnerability_type in vulnerability_types:
+            tp = (alarms[vulnerability_type]["TP"])
+            fp = (alarms[vulnerability_type]["FP"])
+            fn = (alarms[vulnerability_type]["FN"])
+            self._write_line(
+                file, f"{map_vulnerability_smartian_to_long_name(vulnerability_type)}: TP = {tp}, FP = {fp}, FN = {fn}")
+                
 
     def _write_coverage_table_over_time(
         self,
@@ -563,6 +588,8 @@ class OutputService(metaclass=SingletonMeta):
             file, f"| {'transaction_count':45} | {blackbox:20} | {greybox:20} | {directed_greybox:20} | {other_directed_greybox:20} |")
 
         self._write_dashed_line(file)
+
+
 
     def _write_header(self, file, title: str, text: str):
         self._write_line(file, "\n")

@@ -134,6 +134,45 @@ class ResultService(metaclass=SingletonMeta):
         )
         return pre_categorized_vulnerabilities
 
+
+    def get_detection_alarms(
+        self,
+        strategy: str,
+        contracts: list,
+        vulnerabilities: list,
+        include_new_detections: bool = True,
+    ) -> map:
+        executions_by_contract_name = self._read_results_file(strategy)
+        
+        pre_categorized_vulnerabilities = self._init_pre_categorized_vulnerabilities(
+            contracts,
+            vulnerabilities,
+        )
+
+        alarms_map = {}
+        for vulnerability in vulnerabilities:
+            alarms_map[vulnerability] = { "TP": 0, "FP": 0, "FN": 0 }
+    
+        for contract in contracts:
+            contract_name = contract["file"]
+            contract_vulnerabilities = contract["vulnerabilities"]
+
+            executions = executions_by_contract_name.get(contract_name, None)
+            if executions is None:
+                continue
+            for execution in executions:
+                detected_weaknesses = execution["execution"]["detectedWeaknesses"]
+                for vulnerability in vulnerabilities:
+                    if vulnerability in detected_weaknesses and vulnerability in contract_vulnerabilities:
+                        alarms_map[vulnerability]["TP"] += 1
+                    elif vulnerability in detected_weaknesses and vulnerability not in contract_vulnerabilities:
+                        alarms_map[vulnerability]["FP"] += 1
+                    elif vulnerability not in detected_weaknesses and vulnerability in contract_vulnerabilities:
+                        alarms_map[vulnerability]["FN"] += 1
+
+        return alarms_map
+
+
     def get_detection_rate_by_strategy(
         self,
         strategy: str,
@@ -230,6 +269,7 @@ class ResultService(metaclass=SingletonMeta):
         execution_count = 0
         for contract in contracts:
             contract_name = contract["file"]
+            #print(contract_name)
             executions = executions_by_contract_name.get(contract_name, None)
             if executions is None:
                 continue
@@ -241,6 +281,8 @@ class ResultService(metaclass=SingletonMeta):
 
         if execution_count == 0:
             return -1
+        # print("===================================================")
+        # print("average_transaction_count " + str(average_transaction_count) + " execution_count" , str(execution_count))        
         return float(average_transaction_count) / float(execution_count)
 
 
@@ -259,17 +301,27 @@ class ResultService(metaclass=SingletonMeta):
             if executions is None:
                 continue
             for execution in executions:
+                instructions = execution["execution"]["instructions"]
+
+                # print("===========")
+                # print(len(instructions))
+
                 heat_map = execution["execution"]["instructionHitsHeatMap"]
                 filtered_heat_map = {key: value for key, value in heat_map.items() if value > 0}
+
+                # print(len(filtered_heat_map))                
+                # print("===========")                
                 
                 # Load time series of coverage by edge
                 timestamps = [parser.isoparse(timestamp) for timestamp in execution["execution"]["coverageByTime"]["x"]]
                 coverage_value = execution["execution"]["coverageByTime"]["y"]
+                total_blocks = execution["execution"]["totalInstructions"]
                 # Get the ratio from edge to instruction coverage
+                edge_to_instruction_ratio = 1
                 if filtered_heat_map and coverage_value:
+                    #edge_to_instruction_ratio = len(instructions) / int(total_blocks)
                     edge_to_instruction_ratio = len(filtered_heat_map) / int(max(coverage_value))
-                else:
-                    edge_to_instruction_ratio = 1
+                    #print(edge_to_instruction_ratio)
                     
                 query_time = min(timestamps)
                 index = 0
@@ -280,9 +332,13 @@ class ResultService(metaclass=SingletonMeta):
                         index = next(i for i, dt in enumerate(timestamps) if dt > query_time)
                     except StopIteration:
                         pass
-                    coverage_over_time[minute] = round(coverage_value[index] * edge_to_instruction_ratio)
+                    coverage_over_time[minute] = coverage_value[index] * edge_to_instruction_ratio
+                    #coverage_over_time[minute] = len(filtered_heat_map)
                 contract_instruction_coverage[contract_name] = len(filtered_heat_map), len(filtered_heat_map) / len(heat_map) * 100, coverage_over_time
-
+                # print("===========")                
+                # print(contract_name)
+                # print(contract_instruction_coverage[contract_name])
+                # print("===========")
         return contract_instruction_coverage
 
     def get_hits_by_instructions_and_strategy(
