@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt
 import mplcursors
 from sklearn.cluster import KMeans
 from itertools import cycle
+import matplotlib.ticker as mtick
 
 from aggregator.services.contract import ContractService
 from aggregator.services.input import InputService
@@ -49,7 +50,7 @@ class Aggregator():
             dataset = np.array([[input['numberOfBranches'], sum(
                 input['numberOfCriticalInstructions'].values())] for input in inputs])
 
-            kmeans = KMeans(n_clusters=cluster_number, init='random',
+            kmeans = KMeans(n_clusters=cluster_number, random_state=42, 
                             n_init=10, max_iter=100)
             kmeans.fit(dataset)
 
@@ -351,9 +352,7 @@ class Aggregator():
                 if os.path.basename(file_name).startswith("Dogefuzz"):
                     plt.plot(all_minutes, all_values, linestyle=next(mainlinestyles), label=os.path.basename(file_name),color=color[1:], linewidth=2.9)
                 else:
-                    plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_name),color=color[1:], linewidth=2.9)
-                    
-                #plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_path), linewidth=2.5)
+                    plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_name),color=color[1:], linewidth=2.9)                
 
         else:
             print("Invalid directory path.")
@@ -397,3 +396,62 @@ class Aggregator():
         plt.ylabel('Instruction Coverage')
         plt.grid(True)
         plt.show()        
+
+
+    def plot_max_coverage_boxplot(self,results_folder: str, inputs_file: str):
+
+        self._input_service.extract_inputs(inputs_file)
+        contracts = self._contract_service.list_contracts_from_contract_list(True)
+        self._result_service.extract_results(results_folder)
+        (average_blackbox, average_greybox, average_directed_greybox), _ = self._output_service.get_max_coverage_result(contracts)
+
+        data = [average_blackbox, average_greybox, average_directed_greybox]
+
+        labels = ['Dogefuzz-B', 'Dogefuzz-G', 'Dogefuzz-DG']
+        
+        plt.figure(figsize=(8, 6))
+        boxplot = plt.boxplot(data, patch_artist=True)
+
+        colors = ['firebrick', 'slateblue', 'seagreen']
+        for patch, color, label in zip(boxplot['boxes'], colors, labels):
+            patch.set_facecolor(color)
+            patch.set_label(label)
+        
+        plt.xlabel('Fuzzing type')
+        plt.ylabel('Block Coverage (%)')
+        plt.ylim(0, 100)  # Adjust the upper bound as needed
+        plt.title('Block Coverage by fuzzing type')
+
+        # Add legend
+        plt.legend(loc='upper right')
+
+        plt.grid(True)
+        plt.show()
+
+
+    def plot_max_coverage_bar(self,results_folder: str, inputs_file: str):
+
+        self._input_service.extract_inputs(inputs_file)
+        contracts = self._contract_service.list_contracts_from_contract_list(True)
+        self._result_service.extract_results(results_folder)
+        _, (average_blackbox, average_greybox, average_directed_greybox) = self._output_service.get_max_coverage_result(contracts)
+
+        methods = ['']
+        bar_width = 0.25
+        index = range(len(methods))
+
+        plt.bar(index, average_blackbox, bar_width, label='Dogefuzz-B', color='firebrick')
+        plt.bar([i + bar_width for i in index], average_greybox, bar_width, label='Dogefuzz-G', color='slateblue')
+        plt.bar([i + bar_width * 2 for i in index], average_directed_greybox, bar_width, label='Dogefuzz-DG', color='seagreen')
+
+        plt.xlabel('Fuzzing Types')
+        plt.ylabel('Block Coverage (%)')
+        plt.title('Block Coverage by fuzzing type')
+        plt.xticks([])
+        plt.yticks(range(0, 101, 10))
+        plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter(100))
+
+        plt.legend()
+        plt.tight_layout()
+
+        plt.show()

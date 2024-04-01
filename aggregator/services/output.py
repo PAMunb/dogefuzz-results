@@ -5,6 +5,7 @@ from collections import Counter
 
 from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans
+import matplotlib.ticker as mtick
 
 from aggregator.config import Config
 
@@ -164,6 +165,64 @@ class OutputService(metaclass=SingletonMeta):
                     f, contracts, critical_instructions)
                 self._write_vulnerabilities(
                     f, contracts, vulnerability_types, False)
+
+
+    def get_max_coverage_result(self, contracts: list):
+        
+        (max_coverage_per_contract_for_blackbox, average_coverage_for_blackbox) = self._result_service.get_max_coverage_by_strategy(
+            BLACKBOX_FUZZING,
+            contracts,
+        )
+        (max_coverage_per_contract_for_greybox, average_coverage_for_greybox) = self._result_service.get_max_coverage_by_strategy(
+            GREYBOX_FUZZING,
+            contracts,
+        )
+        (max_coverage_per_contract_for_directed_greybox, average_coverage_for_directed_greybox) = self._result_service.get_max_coverage_by_strategy(
+            DIRECTED_GREYBOX_FUZZING,
+            contracts,
+        )
+
+        (max_coverage_per_contract_for_other_directed_greybox, average_coverage_for_other_directed_greybox) = self._result_service.get_max_coverage_by_strategy(
+            OTHER_GREYBOX_FUZZING,
+            contracts,
+        )
+
+        blackbox_per_list = []
+        greybox_per_list = []
+        directed_greybox_per_list = []
+        
+        for contract in contracts:
+            contract_name = contract["file"]
+            
+            blackbox = max_coverage_per_contract_for_blackbox[
+                contract_name] if contract_name in max_coverage_per_contract_for_blackbox else -1
+            greybox = max_coverage_per_contract_for_greybox[
+                contract_name] if contract_name in max_coverage_per_contract_for_greybox else -1
+            directed_greybox = max_coverage_per_contract_for_directed_greybox[
+                contract_name] if contract_name in max_coverage_per_contract_for_directed_greybox else -1
+            other_directed_greybox = max_coverage_per_contract_for_other_directed_greybox[
+                contract_name] if contract_name in max_coverage_per_contract_for_other_directed_greybox else -1
+
+            blackbox_per_list.append(100*blackbox)
+            greybox_per_list.append(100*greybox)
+            directed_greybox_per_list.append(100*directed_greybox)
+
+            percentage_blackbox = self._convert_to_percentage_str(blackbox)
+            
+            percentage_greybox = self._convert_to_percentage_diff_str(
+                greybox, blackbox)
+            
+            percentage_directed_greybox = self._convert_to_percentage_diff_str(
+                directed_greybox, blackbox)
+
+            percentage_other_directed_greybox = self._convert_to_percentage_diff_str(
+                other_directed_greybox, blackbox)
+
+        return (blackbox_per_list, greybox_per_list, directed_greybox_per_list), (average_coverage_for_blackbox*100,
+            average_coverage_for_greybox*100,
+            average_coverage_for_directed_greybox*100)
+        
+
 
     def _write_max_coverage_result(self, file, contracts: list):
         
@@ -605,7 +664,7 @@ class OutputService(metaclass=SingletonMeta):
         average_blackbox,
         average_greybox,
         average_directed_greybox,
-        average_other_directed_greybox,        
+        average_other_directed_greybox,
     ):
         percentage_blackbox = self._convert_to_percentage_str(average_blackbox)
         percentage_greybox = self._convert_to_percentage_diff_str(
