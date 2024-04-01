@@ -11,9 +11,11 @@ from aggregator.services.contract import ContractService
 from aggregator.services.input import InputService
 from aggregator.services.output import OutputService
 from aggregator.services.result import ResultService
+from aggregator.config import Config
 
 MARKER = "==================================="
-linestyles = cycle(['-', '--', ':', '-.'])
+linestyles = cycle([ '--'])
+mainlinestyles = cycle(['-'])
 
 class Aggregator():
 
@@ -22,6 +24,7 @@ class Aggregator():
         self._contract_service = ContractService()
         self._result_service = ResultService()
         self._output_service = OutputService()
+        self._config = Config()
 
     def generate_report(self, results_folder: str, inputs_file: str):
         self._input_service.extract_inputs(inputs_file)
@@ -313,8 +316,11 @@ class Aggregator():
                     minute, value = map(float, line.split('m:'))
                     all_minutes.append(minute)
                     all_values.append(value)
-                plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_path), linewidth=2.9)
-
+                file_name, color = os.path.splitext(file_path) 
+                if os.path.basename(file_name).startswith("Dogefuzz"):
+                    plt.plot(all_minutes, all_values, linestyle=next(mainlinestyles), label=os.path.basename(file_name),color=color[1:], linewidth=2.9)
+                else:
+                    plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_name),color=color[1:], linewidth=2.9)
         else:
             print("Invalid directory path.")
             return
@@ -323,7 +329,7 @@ class Aggregator():
         plt.legend(loc='lower right',  bbox_to_anchor=(0.9, 0.2), ncol=2) 
         plt.xlabel('Time (min.)')
         plt.ylabel('Total # of Bugs found')
-        #plt.ylim(0, 82)  # Adjust the upper bound as needed
+        plt.ylim(0, 82)  # Adjust the upper bound as needed
         plt.grid(True)
         plt.show()
         
@@ -340,15 +346,21 @@ class Aggregator():
                     minute, value = map(float, line.split('m:'))
                     all_minutes.append(minute)
                     all_values.append(value)
-                plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_path), linewidth=2.5)
+                    
+                file_name, color = os.path.splitext(file_path) 
+                if os.path.basename(file_name).startswith("Dogefuzz"):
+                    plt.plot(all_minutes, all_values, linestyle=next(mainlinestyles), label=os.path.basename(file_name),color=color[1:], linewidth=2.9)
+                else:
+                    plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_name),color=color[1:], linewidth=2.9)
+                    
+                #plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_path), linewidth=2.5)
 
         else:
             print("Invalid directory path.")
             return
 
         mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Cov={sel.target[1]:.2f}"))                
-        #plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
-        plt.legend(loc='lower right',  bbox_to_anchor=(0.9, 0.2), ncol=2)         
+        plt.legend(loc='lower right',  bbox_to_anchor=(0.9, 0.1), ncol=2)         
         plt.xlabel('Time (min.)')
         plt.ylabel('Instruction Coverage')
         plt.grid(True)
