@@ -1,6 +1,7 @@
 import os
 import json
 import numpy as np
+import math
 
 from matplotlib import pyplot as plt
 import mplcursors
@@ -271,6 +272,36 @@ class Aggregator():
             print(f"File '{filename}' not found.")
             return None
 
+    def smartian_b2_alarms_avg(self, results_folder: str): 
+        if os.path.isdir(results_folder):
+            file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
+
+            alarms_avg_map = {}
+            vulnerabilities = ['BlockstateDependency', 'MishandledException', 'Reentrancy']
+            for vulnerability in vulnerabilities:
+                alarms_avg_map[vulnerability] = { "TP": [], "FP": [], "FN": [] }
+                        
+            for file_path in file_list:
+                loaded_data = self._read_data_after_marker(file_path, MARKER, False)
+                lines = [line for line in loaded_data.split('\n') if line.strip() != ""]
+                for line in lines:
+                    vul, values = map(str, line.split(':'))
+                    parts = values.split(',')
+                    parts[0].strip().split('=')[1].strip()
+                    alarms_avg_map[vul.strip()]["TP"].append(int(float(parts[0].strip().split('=')[1].strip())))
+                    alarms_avg_map[vul.strip()]["FP"].append(int(float(parts[1].strip().split('=')[1].strip())))
+                    alarms_avg_map[vul.strip()]["FN"].append(int(float(parts[2].strip().split('=')[1].strip())))
+
+            print("===================================")
+            for category in vulnerabilities:
+                tp = math.ceil((sum(alarms_avg_map[category]["TP"])) / len(alarms_avg_map[category]["TP"]))
+                fp = math.ceil((sum(alarms_avg_map[category]["FP"])) / len(alarms_avg_map[category]["FP"]))
+                fn = math.ceil((sum(alarms_avg_map[category]["FN"])) / len(alarms_avg_map[category]["FN"]))
+                precision = tp/(tp+fp)
+                recall = tp/(tp+fn)
+                f1score = 2 * (precision * recall) / (precision + recall)
+                
+                print(f"{category:25}: TP = {tp:2}, FP = {fp:2}, FN = {fn:2} percision = {precision:.2f} recall = {recall:.2f} f1score = {f1score:.2f}")
 
     def plot_smartian_b2_bugs_found_avg(self, results_folder: str): 
         if os.path.isdir(results_folder):
@@ -406,6 +437,13 @@ class Aggregator():
         (average_blackbox, average_greybox, average_directed_greybox), _ = self._output_service.get_max_coverage_result(contracts)
 
         data = [average_blackbox, average_greybox, average_directed_greybox]
+
+
+        print("Dogefuzz-B " + str(sum(average_blackbox) / len(average_blackbox)))
+        print("Dogefuzz-G " + str(sum(average_greybox) / len(average_greybox)))
+        print("Dogefuzz-DG " + str(sum(average_directed_greybox) / len(average_directed_greybox)))                
+        #means = [np.median(row) for row in zip(*sum_values)]
+
 
         labels = ['Dogefuzz-B', 'Dogefuzz-G', 'Dogefuzz-DG']
         

@@ -144,11 +144,6 @@ class ResultService(metaclass=SingletonMeta):
     ) -> map:
         executions_by_contract_name = self._read_results_file(strategy)
         
-        pre_categorized_vulnerabilities = self._init_pre_categorized_vulnerabilities(
-            contracts,
-            vulnerabilities,
-        )
-
         alarms_map = {}
         for vulnerability in vulnerabilities:
             alarms_map[vulnerability] = { "TP": 0, "FP": 0, "FN": 0 }

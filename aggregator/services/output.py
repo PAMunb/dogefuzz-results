@@ -550,6 +550,26 @@ class OutputService(metaclass=SingletonMeta):
             if found_bug in bug_sigs and found_time < sec:
                 n += 1
         return n
+
+
+    def _write_count_over_time_frame(
+        self,
+        file,
+        vulnerability_types: list,        
+        time_map_list: list,
+        time_frame_in_seconds: int,
+        upper_limit_in_seconds: int
+    ):                    
+        for time in range(0, upper_limit_in_seconds + time_frame_in_seconds, time_frame_in_seconds):
+            sec = time
+            #print(time)
+            bug_sigs = list(map(lambda x: map_vulnerability_smartian_to_long_name(x), vulnerability_types))
+            count_list = []
+            for time_map in time_map_list:
+                count_list.append(self._count_found_before(bug_sigs, time_map, sec))
+            count_avg = float(sum(count_list)) / len(count_list)
+            self._write_line(file, f"{time:02d}s: {count_avg:.1f}")
+
     
     def _write_count_over_time(
         self,
@@ -579,6 +599,8 @@ class OutputService(metaclass=SingletonMeta):
                 self._write_line(file, f"{line}")
             self._write_line(file, "===================================")
         self._write_count_over_time(file, vulnerability_types, time_map_list)
+        self._write_line(file, "===================================")
+        self._write_count_over_time_frame(file, vulnerability_types, time_map_list, 15, 300)
 
     def _write_alarms_table(
         self,
@@ -588,13 +610,14 @@ class OutputService(metaclass=SingletonMeta):
         vulnerability_types: list        
     ):
         
+        self._write_line(file, "===================================")        
         alarms = self._result_service.get_detection_alarms(strategy, contracts, vulnerability_types, False)
         for vulnerability_type in vulnerability_types:
             tp = (alarms[vulnerability_type]["TP"])
             fp = (alarms[vulnerability_type]["FP"])
             fn = (alarms[vulnerability_type]["FN"])
             self._write_line(
-                file, f"{map_vulnerability_smartian_to_long_name(vulnerability_type)}: TP = {tp}, FP = {fp}, FN = {fn}")
+                file, f"{map_vulnerability_smartian_to_long_name(vulnerability_type):30}: TP = {tp:2}, FP = {fp:2}, FN = {fn:2}")
                 
 
     def _write_coverage_table_over_time(
