@@ -295,10 +295,10 @@ class Aggregator():
             print(f"File '{filename}' not found.")
             return None
 
-    def smartian_b2_alarms_avg(self, results_folder: str): 
-        if os.path.isdir(results_folder):
-            file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
+    def smartian_b2_alarms_avg(self, results_folder: str, fuzz_type: str): 
+        file_list = [file for file in glob.glob(os.path.join(results_folder, '')+"smartian-alarms-" + fuzz_type + '*.txt' )]
 
+        if len(file_list) != 0:
             alarms_avg_map = {}
             vulnerabilities = ['BlockstateDependency', 'MishandledException', 'Reentrancy']
             for vulnerability in vulnerabilities:
@@ -329,8 +329,7 @@ class Aggregator():
     def count_smartian_b2_bugs_found_avg(self, results_folder: str, fuzz_type: str): 
         file_list = [file for file in glob.glob(os.path.join(results_folder, '')+"smartian-" + fuzz_type + '*.txt' )]
         
-        if file_list != None:
-
+        if len(file_list) != 0:
             sum_values = []
             for file_path in file_list:
                 loaded_data = self._read_data_between_markers(file_path, MARKER_HOUR, MARKER_TIME_FRAME, False)
@@ -354,8 +353,7 @@ class Aggregator():
     def count_smartian_b2_instruction_coverage_avg(self, results_folder: str, fuzz_type: str): 
         file_list = [file for file in glob.glob(os.path.join(results_folder, '')+"smartian-cov-" + fuzz_type + '*.txt' )]
         
-        if file_list != None:
-
+        if len(file_list) != 0:
             sum_values = []
             for file_path in file_list:
                 loaded_data = self._read_data_after_marker(file_path, "00m: 0.0", True)
@@ -494,7 +492,7 @@ class Aggregator():
             print("Invalid directory path.")
             return
         
-        mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Cov={sel.target[1]:.2f}"))        
+        mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Cov={sel.target[1]:.2f}"))
         plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
         plt.xlabel('Time (min.)')
         plt.ylabel('Instruction Coverage')
@@ -527,11 +525,12 @@ class Aggregator():
             patch.set_facecolor(color)
             patch.set_label(label)
         
-        plt.xlabel('Fuzzing type')
-        plt.ylabel('Block Coverage (%)')
+        plt.xlabel('Fuzzing strategy')
+        plt.ylabel('Code Coverage (%)')
         plt.ylim(0, 100)  # Adjust the upper bound as needed
-        plt.title('Block Coverage by fuzzing type')
-
+        plt.title('Code Coverage by fuzzing strategy')
+        mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Cov={sel.target[1]:.2f}"))
+        
         # Add legend
         plt.legend(loc='upper right')
 
@@ -553,12 +552,13 @@ class Aggregator():
         plt.bar([i + bar_width for i in index], average_greybox, bar_width, label='Dogefuzz-G', color='slateblue')
         plt.bar([i + bar_width * 2 for i in index], average_directed_greybox, bar_width, label='Dogefuzz-DG', color='seagreen')
 
-        plt.xlabel('Fuzzing Types')
-        plt.ylabel('Block Coverage (%)')
-        plt.title('Block Coverage by fuzzing type')
+        plt.xlabel('Fuzzing strategy')
+        plt.ylabel('Code Coverage (%)')
+        plt.title('Code Coverage by fuzzing strategy')
         plt.xticks([])
         plt.yticks(range(0, 101, 10))
         plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter(100))
+        mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Cov={sel.target[1]:.2f}"))
 
         plt.legend()
         plt.tight_layout()
