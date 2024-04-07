@@ -25,7 +25,7 @@ class ResultService(metaclass=SingletonMeta):
             with open(os.path.join(strategy_result_folder, path), 'r+', encoding='utf-8') as file:                 
                 results_content = json.load(file)
                 for contract_name in results_content.keys():                    
-                    for index in [BLACKBOX_FUZZING, GREYBOX_FUZZING, DIRECTED_GREYBOX_FUZZING]:
+                    for index in [BLACKBOX_FUZZING, GREYBOX_FUZZING, DIRECTED_GREYBOX_FUZZING, OTHER_GREYBOX_FUZZING]:
                         if results_content[contract_name][index][0]["execution"] is not None:
                             detectedWeaknesses = results_content[contract_name][index][0]["execution"]["detectedWeaknesses"]
                             detectedWeaknesses = [x for x in [map_weakness_to_smartian_standard(x) for x in detectedWeaknesses] if x is not None]
@@ -134,6 +134,40 @@ class ResultService(metaclass=SingletonMeta):
         )
         return pre_categorized_vulnerabilities
 
+
+    def get_detection_alarms(
+        self,
+        strategy: str,
+        contracts: list,
+        vulnerabilities: list,
+        include_new_detections: bool = True,
+    ) -> map:
+        executions_by_contract_name = self._read_results_file(strategy)
+        
+        alarms_map = {}
+        for vulnerability in vulnerabilities:
+            alarms_map[vulnerability] = { "TP": 0, "FP": 0, "FN": 0 }
+    
+        for contract in contracts:
+            contract_name = contract["file"]
+            contract_vulnerabilities = contract["vulnerabilities"]
+
+            executions = executions_by_contract_name.get(contract_name, None)
+            if executions is None:
+                continue
+            for execution in executions:
+                detected_weaknesses = execution["execution"]["detectedWeaknesses"]
+                for vulnerability in vulnerabilities:
+                    if vulnerability in detected_weaknesses and vulnerability in contract_vulnerabilities:
+                        alarms_map[vulnerability]["TP"] += 1
+                    elif vulnerability in detected_weaknesses and vulnerability not in contract_vulnerabilities:
+                        alarms_map[vulnerability]["FP"] += 1
+                    elif vulnerability not in detected_weaknesses and vulnerability in contract_vulnerabilities:
+                        alarms_map[vulnerability]["FN"] += 1
+
+        return alarms_map
+
+
     def get_detection_rate_by_strategy(
         self,
         strategy: str,
@@ -191,7 +225,6 @@ class ResultService(metaclass=SingletonMeta):
         return the vulnerability detection rate by strategy name
         """
         executions_by_contract_name = self._read_results_file(strategy)
-        
         detection = {}
         for vulnerability in vulnerabilities:
             detection[vulnerability] = []
@@ -266,11 +299,11 @@ class ResultService(metaclass=SingletonMeta):
                 # Load time series of coverage by edge
                 timestamps = [parser.isoparse(timestamp) for timestamp in execution["execution"]["coverageByTime"]["x"]]
                 coverage_value = execution["execution"]["coverageByTime"]["y"]
+                total_blocks = execution["execution"]["totalInstructions"]
                 # Get the ratio from edge to instruction coverage
+                edge_to_instruction_ratio = 1
                 if filtered_heat_map and coverage_value:
                     edge_to_instruction_ratio = len(filtered_heat_map) / int(max(coverage_value))
-                else:
-                    edge_to_instruction_ratio = 1
                     
                 query_time = min(timestamps)
                 index = 0
@@ -281,9 +314,8 @@ class ResultService(metaclass=SingletonMeta):
                         index = next(i for i, dt in enumerate(timestamps) if dt > query_time)
                     except StopIteration:
                         pass
-                    coverage_over_time[minute] = round(coverage_value[index] * edge_to_instruction_ratio)
+                    coverage_over_time[minute] = coverage_value[index] * edge_to_instruction_ratio
                 contract_instruction_coverage[contract_name] = len(filtered_heat_map), len(filtered_heat_map) / len(heat_map) * 100, coverage_over_time
-
         return contract_instruction_coverage
 
     def get_hits_by_instructions_and_strategy(

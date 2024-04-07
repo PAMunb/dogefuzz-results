@@ -1,18 +1,28 @@
 import os
 import json
 import numpy as np
+import math
+import glob
+import re
+
 
 from matplotlib import pyplot as plt
+import mplcursors
 from sklearn.cluster import KMeans
 from itertools import cycle
+import matplotlib.ticker as mtick
 
 from aggregator.services.contract import ContractService
 from aggregator.services.input import InputService
 from aggregator.services.output import OutputService
 from aggregator.services.result import ResultService
+from aggregator.config import Config
 
-MARKER = "==================================="
-linestyles = cycle(['-', '--', ':', '-.'])
+MARKER_HOUR = "==================================="
+MARKER_TIME_FRAME = "===================================TIME_FRAME"
+
+linestyles = cycle([ '--'])
+mainlinestyles = cycle(['-'])
 
 class Aggregator():
 
@@ -21,30 +31,32 @@ class Aggregator():
         self._contract_service = ContractService()
         self._result_service = ResultService()
         self._output_service = OutputService()
+        self._config = Config()
 
-    def generate_report(self, results_folder: str):
-        self._input_service.extract_inputs()
+    def generate_report(self, results_folder: str, inputs_file: str):
+        self._input_service.extract_inputs(inputs_file)
         contracts = self._contract_service.list_contracts_from_contract_list(False)
         self._result_service.extract_results(results_folder)
         self._output_service.write_report(results_folder, contracts, False)
 
-    def generate_report_smartian(self, results_folder: str):
-        self._input_service.extract_inputs()
+    def generate_report_smartian(self, results_folder: str, inputs_file: str):
+        self._input_service.extract_inputs(inputs_file)
         contracts = self._contract_service.list_contracts_from_contract_list(True)
         self._result_service.extract_results(results_folder)
         self._result_service.convert_results_to_smartian(results_folder)
         self._output_service.write_report(results_folder, contracts, True)
 
     def show_kmeans(self, cluster_number: int = 3):
-        inputs_file = os.path.join(os.path.dirname(
-            __file__), '..', 'resources', 'inputs.json')
+        inputs_file_folder = os.path.join(
+            self._config.temp_folder, self._config.inputs_folder)
+        inputs_file = os.path.join(inputs_file_folder, "inputs.json")
 
         with open(inputs_file, 'r', encoding='utf-8') as f:
             inputs = json.load(f)
             dataset = np.array([[input['numberOfBranches'], sum(
                 input['numberOfCriticalInstructions'].values())] for input in inputs])
 
-            kmeans = KMeans(n_clusters=cluster_number, init='random',
+            kmeans = KMeans(n_clusters=cluster_number, random_state=42, 
                             n_init=10, max_iter=100)
             kmeans.fit(dataset)
 
@@ -58,8 +70,9 @@ class Aggregator():
             plt.show()
 
     def show_elbow_method(self):
-        inputs_file = os.path.join(os.path.dirname(
-            __file__), '..', 'resources', 'inputs.json')
+        inputs_file_folder = os.path.join(
+            self._config.temp_folder, self._config.inputs_folder)
+        inputs_file = os.path.join(inputs_file_folder, "inputs.json")
 
         with open(inputs_file, 'r', encoding='utf-8') as f:
             inputs = json.load(f)
@@ -79,13 +92,13 @@ class Aggregator():
             plt.ylabel('Inercia')
             plt.show()
 
-    def inputs_stats_smartian(self):
-        self._input_service.extract_inputs()
+    def inputs_stats_smartian(self, inputs_file: str):
+        self._input_service.extract_inputs(inputs_file)
         contracts = self._contract_service.list_contracts_from_contract_list(True)
         self._print_all(contracts)
         
-    def inputs_stats(self):
-        self._input_service.extract_inputs()
+    def inputs_stats(self, inputs_file: str):
+        self._input_service.extract_inputs(inputs_file)
         contracts = self._contract_service.list_contracts_from_contract_list(False)
 
         self._print_all(contracts)
@@ -96,9 +109,12 @@ class Aggregator():
             for vulnerability in contract['vulnerabilities']:
                 vulnerabilities[vulnerability] = vulnerabilities.get(
                     vulnerability, 0) + 1
-        inputs_file = os.path.join(os.path.dirname(
-            __file__), '..', 'resources', 'inputs.json')
-
+                
+                
+        inputs_file_folder = os.path.join(
+            self._config.temp_folder, self._config.inputs_folder)
+        inputs_file = os.path.join(inputs_file_folder, "inputs.json")
+                
         clusters = {}
         with open(inputs_file, 'r', encoding='utf-8') as f:
             inputs = json.load(f)
@@ -237,16 +253,31 @@ class Aggregator():
         print("------------------------------")
         print(reentrancy_correlation)
 
-    def _read_data_after_marker(self, filename, marker, keep_marker):
-        data_found = False
-        data = []
 
+    def _read_data_between_markers(self, filename, start_marker, end_marker, keep_markers):
         try:
             with open(filename, 'r') as file:
-                # Read the entire content of the file
                 content = file.read()
 
-                # Find the last occurrence of the delimiter
+                pattern = re.compile(re.escape(start_marker) + '(.*?)' + re.escape(end_marker), re.DOTALL)
+                match = pattern.search(content)
+
+                if match:
+                    data_between_markers = match.group(1)
+                    last_occurrence_index = data_between_markers.rfind(start_marker)
+                    return data_between_markers[last_occurrence_index + len(start_marker):]
+                else:
+                    print(f"Start marker '{start_marker}' or end marker '{end_marker}' not found in the file.")
+                    return None
+        except FileNotFoundError:
+            print(f"File '{filename}' not found.")
+            return None
+
+    def _read_data_after_marker(self, filename, marker, keep_marker):
+        try:
+            with open(filename, 'r') as file:
+                content = file.read()
+
                 last_occurrence_index = content.rfind(marker)
 
                 if last_occurrence_index != -1:
@@ -264,12 +295,45 @@ class Aggregator():
             print(f"File '{filename}' not found.")
             return None
 
-    def plot_smartian_b2_bugs_found(self, results_folder: str): 
+    def smartian_b2_alarms_avg(self, results_folder: str): 
         if os.path.isdir(results_folder):
             file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
 
+            alarms_avg_map = {}
+            vulnerabilities = ['BlockstateDependency', 'MishandledException', 'Reentrancy']
+            for vulnerability in vulnerabilities:
+                alarms_avg_map[vulnerability] = { "TP": [], "FP": [], "FN": [] }
+                        
             for file_path in file_list:
-                loaded_data = self._read_data_after_marker(file_path, MARKER, False)
+                loaded_data = self._read_data_after_marker(file_path, MARKER_HOUR, False)
+                lines = [line for line in loaded_data.split('\n') if line.strip() != ""]
+                for line in lines:
+                    vul, values = map(str, line.split(':'))
+                    parts = values.split(',')
+                    parts[0].strip().split('=')[1].strip()
+                    alarms_avg_map[vul.strip()]["TP"].append(int(float(parts[0].strip().split('=')[1].strip())))
+                    alarms_avg_map[vul.strip()]["FP"].append(int(float(parts[1].strip().split('=')[1].strip())))
+                    alarms_avg_map[vul.strip()]["FN"].append(int(float(parts[2].strip().split('=')[1].strip())))
+
+            print("===================================")
+            for category in vulnerabilities:
+                tp = math.ceil((sum(alarms_avg_map[category]["TP"])) / len(alarms_avg_map[category]["TP"]))
+                fp = math.ceil((sum(alarms_avg_map[category]["FP"])) / len(alarms_avg_map[category]["FP"]))
+                fn = math.ceil((sum(alarms_avg_map[category]["FN"])) / len(alarms_avg_map[category]["FN"]))
+                precision = tp/(tp+fp)
+                recall = tp/(tp+fn)
+                f1score = 2 * (precision * recall) / (precision + recall)
+                
+                print(f"{category:25}: TP = {tp:2}, FP = {fp:2}, FN = {fn:2} percision = {precision:.2f} recall = {recall:.2f} f1score = {f1score:.2f}")
+
+    def count_smartian_b2_bugs_found_avg(self, results_folder: str, fuzz_type: str): 
+        file_list = [file for file in glob.glob(os.path.join(results_folder, '')+"smartian-" + fuzz_type + '*.txt' )]
+        
+        if file_list != None:
+
+            sum_values = []
+            for file_path in file_list:
+                loaded_data = self._read_data_between_markers(file_path, MARKER_HOUR, MARKER_TIME_FRAME, False)
                 lines = [line for line in loaded_data.split('\n') if line.strip() != ""]    
                 all_minutes = []
                 all_values = []
@@ -277,15 +341,100 @@ class Aggregator():
                     minute, value = map(float, line.split('m:'))
                     all_minutes.append(minute)
                     all_values.append(value)
-                plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_path), linewidth=2.5)
-
+                sum_values.append(all_values)
+                
+            averages = [sum(row) / len(row) for row in zip(*sum_values)]
+            print("===================================")
+            for i, avg in enumerate(averages, start=0):
+                print(f"{all_minutes[i]}m: {avg}")
         else:
             print("Invalid directory path.")
             return
         
+    def count_smartian_b2_instruction_coverage_avg(self, results_folder: str, fuzz_type: str): 
+        file_list = [file for file in glob.glob(os.path.join(results_folder, '')+"smartian-cov-" + fuzz_type + '*.txt' )]
+        
+        if file_list != None:
+
+            sum_values = []
+            for file_path in file_list:
+                loaded_data = self._read_data_after_marker(file_path, "00m: 0.0", True)
+                lines = [line for line in loaded_data.split('\n') if line.strip() != ""]    
+                all_minutes = []
+                all_values = []
+                for line in lines:
+                    minute, value = map(float, line.split('m:'))
+                    all_minutes.append(minute)
+                    all_values.append(value)
+                sum_values.append(all_values)
+                
+            averages = [sum(row) / len(row) for row in zip(*sum_values)]
+            print("===================================")
+            for i, avg in enumerate(averages, start=0):
+                print(f"{all_minutes[i]}m: {avg}")
+        else:
+            print("Invalid directory path.")
+            return
+
+    def plot_smartian_b2_bugs_found_avg(self, results_folder: str): 
+        if os.path.isdir(results_folder):
+            file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
+
+            sum_values = []
+            for file_path in file_list:
+                loaded_data = self._read_data_after_marker(file_path, MARKER_HOUR, False)
+                lines = [line for line in loaded_data.split('\n') if line.strip() != ""]    
+                all_minutes = []
+                all_values = []
+                for line in lines:
+                    minute, value = map(float, line.split('m:'))
+                    all_minutes.append(minute)
+                    all_values.append(value)
+                sum_values.append(all_values)
+                
+            averages = [sum(row) / len(row) for row in zip(*sum_values)]
+            plt.plot(all_minutes, averages, linestyle=next(linestyles), label="Avg of " + results_folder, linewidth=2.5)
+            print("===================================")
+            for i, avg in enumerate(averages, start=0):
+                print(f"{all_minutes[i]}m: {avg}")
+        else:
+            print("Invalid directory path.")
+            return
+        
+        mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Bugs={sel.target[1]:.2f}"))
         plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
         plt.xlabel('Time (min.)')
         plt.ylabel('Total # of Bugs found')
+        plt.grid(True)
+        plt.show()
+
+    def plot_smartian_b2_bugs_found(self, results_folder: str): 
+        if os.path.isdir(results_folder):
+            file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
+
+            for file_path in file_list:
+                loaded_data = self._read_data_after_marker(file_path, MARKER_HOUR, False)
+                lines = [line for line in loaded_data.split('\n') if line.strip() != ""]    
+                all_minutes = []
+                all_values = []
+                for line in lines:
+                    minute, value = map(float, line.split('m:'))
+                    all_minutes.append(minute)
+                    all_values.append(value)
+                file_name, color = os.path.splitext(file_path) 
+                if os.path.basename(file_name).startswith("Dogefuzz"):
+                    plt.plot(all_minutes, all_values, linestyle=next(mainlinestyles), label=os.path.basename(file_name),color=color[1:], linewidth=2.9)
+                else:
+                    plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_name),color=color[1:], linewidth=2.9)
+        else:
+            print("Invalid directory path.")
+            return
+        
+        mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Bugs={sel.target[1]:.2f}"))
+        plt.legend(loc='lower right',  bbox_to_anchor=(0.9, 0.2), ncol=2) 
+        plt.xlabel('Time (min.)')
+        plt.ylabel('Total # of Bugs found')
+        plt.ylim(0, 82)  # Adjust the upper bound as needed
         plt.grid(True)
         plt.show()
         
@@ -302,15 +451,116 @@ class Aggregator():
                     minute, value = map(float, line.split('m:'))
                     all_minutes.append(minute)
                     all_values.append(value)
-                plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_path), linewidth=2.5)
+                    
+                file_name, color = os.path.splitext(file_path) 
+                if os.path.basename(file_name).startswith("Dogefuzz"):
+                    plt.plot(all_minutes, all_values, linestyle=next(mainlinestyles), label=os.path.basename(file_name),color=color[1:], linewidth=2.9)
+                else:
+                    plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_name),color=color[1:], linewidth=2.9)                
 
         else:
             print("Invalid directory path.")
             return
-        
-        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
+
+        mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Cov={sel.target[1]:.2f}"))                
+        plt.legend(loc='lower right',  bbox_to_anchor=(0.9, 0.1), ncol=2)         
         plt.xlabel('Time (min.)')
         plt.ylabel('Instruction Coverage')
         plt.grid(True)
         plt.show()
         
+    def plot_smartian_b2_instruction_coverage_avg(self, results_folder: str): 
+        if os.path.isdir(results_folder):
+            file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
+
+            sum_values = []
+            for file_path in file_list:
+                loaded_data = self._read_data_after_marker(file_path, "00m: 0.0", True)
+                lines = [line for line in loaded_data.split('\n') if line.strip() != ""]
+                all_minutes = []
+                all_values = []
+                for line in lines:
+                    minute, value = map(float, line.split('m:'))
+                    all_minutes.append(minute)
+                    all_values.append(value)
+                sum_values.append(all_values)
+                
+            averages = [sum(row) / len(row) for row in zip(*sum_values)]
+            means = [np.median(row) for row in zip(*sum_values)]
+            plt.plot(all_minutes, all_values, linestyle=next(linestyles), label=os.path.basename(file_path), linewidth=2.5)
+            for i, avg in enumerate(averages, start=0):
+                print(f"{int(all_minutes[i]):02}m: {avg}")
+        else:
+            print("Invalid directory path.")
+            return
+        
+        mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Cov={sel.target[1]:.2f}"))        
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=2) 
+        plt.xlabel('Time (min.)')
+        plt.ylabel('Instruction Coverage')
+        plt.grid(True)
+        plt.show()        
+
+    def plot_max_coverage_boxplot(self,results_folder: str, inputs_file: str):
+
+        self._input_service.extract_inputs(inputs_file)
+        contracts = self._contract_service.list_contracts_from_contract_list(True)
+        self._result_service.extract_results(results_folder)
+        (average_blackbox, average_greybox, average_directed_greybox), _ = self._output_service.get_max_coverage_result(contracts)
+
+        data = [average_blackbox, average_greybox, average_directed_greybox]
+
+
+        print("Dogefuzz-B " + str(sum(average_blackbox) / len(average_blackbox)))
+        print("Dogefuzz-G " + str(sum(average_greybox) / len(average_greybox)))
+        print("Dogefuzz-DG " + str(sum(average_directed_greybox) / len(average_directed_greybox)))                
+        #means = [np.median(row) for row in zip(*sum_values)]
+
+
+        labels = ['Dogefuzz-B', 'Dogefuzz-G', 'Dogefuzz-DG']
+        
+        plt.figure(figsize=(8, 6))
+        boxplot = plt.boxplot(data, patch_artist=True)
+
+        colors = ['firebrick', 'slateblue', 'seagreen']
+        for patch, color, label in zip(boxplot['boxes'], colors, labels):
+            patch.set_facecolor(color)
+            patch.set_label(label)
+        
+        plt.xlabel('Fuzzing type')
+        plt.ylabel('Block Coverage (%)')
+        plt.ylim(0, 100)  # Adjust the upper bound as needed
+        plt.title('Block Coverage by fuzzing type')
+
+        # Add legend
+        plt.legend(loc='upper right')
+
+        plt.grid(True)
+        plt.show()
+
+    def plot_max_coverage_bar(self,results_folder: str, inputs_file: str):
+
+        self._input_service.extract_inputs(inputs_file)
+        contracts = self._contract_service.list_contracts_from_contract_list(True)
+        self._result_service.extract_results(results_folder)
+        _, (average_blackbox, average_greybox, average_directed_greybox) = self._output_service.get_max_coverage_result(contracts)
+
+        methods = ['']
+        bar_width = 0.25
+        index = range(len(methods))
+
+        plt.bar(index, average_blackbox, bar_width, label='Dogefuzz-B', color='firebrick')
+        plt.bar([i + bar_width for i in index], average_greybox, bar_width, label='Dogefuzz-G', color='slateblue')
+        plt.bar([i + bar_width * 2 for i in index], average_directed_greybox, bar_width, label='Dogefuzz-DG', color='seagreen')
+
+        plt.xlabel('Fuzzing Types')
+        plt.ylabel('Block Coverage (%)')
+        plt.title('Block Coverage by fuzzing type')
+        plt.xticks([])
+        plt.yticks(range(0, 101, 10))
+        plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter(100))
+
+        plt.legend()
+        plt.tight_layout()
+
+        plt.show()
