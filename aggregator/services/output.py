@@ -562,7 +562,6 @@ class OutputService(metaclass=SingletonMeta):
     ):                    
         for time in range(0, upper_limit_in_seconds + time_frame_in_seconds, time_frame_in_seconds):
             sec = time
-            #print(time)
             bug_sigs = list(map(lambda x: map_vulnerability_smartian_to_long_name(x), vulnerability_types))
             count_list = []
             for time_map in time_map_list:
@@ -599,7 +598,7 @@ class OutputService(metaclass=SingletonMeta):
                 self._write_line(file, f"{line}")
             self._write_line(file, "===================================")
         self._write_count_over_time(file, vulnerability_types, time_map_list)
-        self._write_line(file, "===================================")
+        self._write_line(file, "===================================TIME_FRAME")
         self._write_count_over_time_frame(file, vulnerability_types, time_map_list, 15, 300)
 
     def _write_alarms_table(

@@ -2,6 +2,9 @@ import os
 import json
 import numpy as np
 import math
+import glob
+import re
+
 
 from matplotlib import pyplot as plt
 import mplcursors
@@ -15,7 +18,9 @@ from aggregator.services.output import OutputService
 from aggregator.services.result import ResultService
 from aggregator.config import Config
 
-MARKER = "==================================="
+MARKER_HOUR = "==================================="
+MARKER_TIME_FRAME = "===================================TIME_FRAME"
+
 linestyles = cycle([ '--'])
 mainlinestyles = cycle(['-'])
 
@@ -248,13 +253,31 @@ class Aggregator():
         print("------------------------------")
         print(reentrancy_correlation)
 
+
+    def _read_data_between_markers(self, filename, start_marker, end_marker, keep_markers):
+        try:
+            with open(filename, 'r') as file:
+                content = file.read()
+
+                pattern = re.compile(re.escape(start_marker) + '(.*?)' + re.escape(end_marker), re.DOTALL)
+                match = pattern.search(content)
+
+                if match:
+                    data_between_markers = match.group(1)
+                    last_occurrence_index = data_between_markers.rfind(start_marker)
+                    return data_between_markers[last_occurrence_index + len(start_marker):]
+                else:
+                    print(f"Start marker '{start_marker}' or end marker '{end_marker}' not found in the file.")
+                    return None
+        except FileNotFoundError:
+            print(f"File '{filename}' not found.")
+            return None
+
     def _read_data_after_marker(self, filename, marker, keep_marker):
         try:
             with open(filename, 'r') as file:
-                # Read the entire content of the file
                 content = file.read()
 
-                # Find the last occurrence of the delimiter
                 last_occurrence_index = content.rfind(marker)
 
                 if last_occurrence_index != -1:
@@ -282,7 +305,7 @@ class Aggregator():
                 alarms_avg_map[vulnerability] = { "TP": [], "FP": [], "FN": [] }
                         
             for file_path in file_list:
-                loaded_data = self._read_data_after_marker(file_path, MARKER, False)
+                loaded_data = self._read_data_after_marker(file_path, MARKER_HOUR, False)
                 lines = [line for line in loaded_data.split('\n') if line.strip() != ""]
                 for line in lines:
                     vul, values = map(str, line.split(':'))
@@ -303,13 +326,63 @@ class Aggregator():
                 
                 print(f"{category:25}: TP = {tp:2}, FP = {fp:2}, FN = {fn:2} percision = {precision:.2f} recall = {recall:.2f} f1score = {f1score:.2f}")
 
+    def count_smartian_b2_bugs_found_avg(self, results_folder: str, fuzz_type: str): 
+        file_list = [file for file in glob.glob(os.path.join(results_folder, '')+"smartian-" + fuzz_type + '*.txt' )]
+        
+        if file_list != None:
+
+            sum_values = []
+            for file_path in file_list:
+                loaded_data = self._read_data_between_markers(file_path, MARKER_HOUR, MARKER_TIME_FRAME, False)
+                lines = [line for line in loaded_data.split('\n') if line.strip() != ""]    
+                all_minutes = []
+                all_values = []
+                for line in lines:
+                    minute, value = map(float, line.split('m:'))
+                    all_minutes.append(minute)
+                    all_values.append(value)
+                sum_values.append(all_values)
+                
+            averages = [sum(row) / len(row) for row in zip(*sum_values)]
+            print("===================================")
+            for i, avg in enumerate(averages, start=0):
+                print(f"{all_minutes[i]}m: {avg}")
+        else:
+            print("Invalid directory path.")
+            return
+        
+    def count_smartian_b2_instruction_coverage_avg(self, results_folder: str, fuzz_type: str): 
+        file_list = [file for file in glob.glob(os.path.join(results_folder, '')+"smartian-cov-" + fuzz_type + '*.txt' )]
+        
+        if file_list != None:
+
+            sum_values = []
+            for file_path in file_list:
+                loaded_data = self._read_data_after_marker(file_path, "00m: 0.0", True)
+                lines = [line for line in loaded_data.split('\n') if line.strip() != ""]    
+                all_minutes = []
+                all_values = []
+                for line in lines:
+                    minute, value = map(float, line.split('m:'))
+                    all_minutes.append(minute)
+                    all_values.append(value)
+                sum_values.append(all_values)
+                
+            averages = [sum(row) / len(row) for row in zip(*sum_values)]
+            print("===================================")
+            for i, avg in enumerate(averages, start=0):
+                print(f"{all_minutes[i]}m: {avg}")
+        else:
+            print("Invalid directory path.")
+            return
+
     def plot_smartian_b2_bugs_found_avg(self, results_folder: str): 
         if os.path.isdir(results_folder):
             file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
 
             sum_values = []
             for file_path in file_list:
-                loaded_data = self._read_data_after_marker(file_path, MARKER, False)
+                loaded_data = self._read_data_after_marker(file_path, MARKER_HOUR, False)
                 lines = [line for line in loaded_data.split('\n') if line.strip() != ""]    
                 all_minutes = []
                 all_values = []
@@ -340,7 +413,7 @@ class Aggregator():
             file_list = [os.path.join(results_folder, file) for file in os.listdir(results_folder) if os.path.isfile(os.path.join(results_folder, file))]
 
             for file_path in file_list:
-                loaded_data = self._read_data_after_marker(file_path, MARKER, False)
+                loaded_data = self._read_data_after_marker(file_path, MARKER_HOUR, False)
                 lines = [line for line in loaded_data.split('\n') if line.strip() != ""]    
                 all_minutes = []
                 all_values = []
@@ -428,7 +501,6 @@ class Aggregator():
         plt.grid(True)
         plt.show()        
 
-
     def plot_max_coverage_boxplot(self,results_folder: str, inputs_file: str):
 
         self._input_service.extract_inputs(inputs_file)
@@ -465,7 +537,6 @@ class Aggregator():
 
         plt.grid(True)
         plt.show()
-
 
     def plot_max_coverage_bar(self,results_folder: str, inputs_file: str):
 
