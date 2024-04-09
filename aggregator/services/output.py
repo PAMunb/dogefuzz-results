@@ -23,7 +23,7 @@ class OutputService(metaclass=SingletonMeta):
         self._config = Config()
         self._result_service = ResultService()
 
-    def write_report(self, results_folder_name: str, contracts: list, for_smartian: bool):
+    def write_report(self, results_folder_name: str, contracts: list, for_smartian: bool, not_labeled: bool):
         """
         writes the output to the output file
         """
@@ -64,10 +64,15 @@ class OutputService(metaclass=SingletonMeta):
             self._write_max_coverage_result(f, contracts)
             self._write_average_coverage_result(f, contracts)
             # self._write_critial_instructions_hits(f, contracts)executions_by_contract_name[contract_name]
+            if not_labeled:
+                self._write_vulnerabilities_not_labeled(
+                    f, contracts, vulnerability_types)
+            else:
+                self._write_vulnerabilities(
+                    f, contracts, vulnerability_types, False)
+                
             self._write_critial_instructions_detailed_hits(
                 f, contracts, critical_instructions)
-            self._write_vulnerabilities(
-                f, contracts, vulnerability_types, False)
 
         if for_smartian:
             for strategy in FUZZING_TYPES:
@@ -114,8 +119,12 @@ class OutputService(metaclass=SingletonMeta):
                 self._write_average_coverage_result(f, filtered_contracts)
                 self._write_critial_instructions_detailed_hits(
                     f, filtered_contracts, critical_instructions)
-                self._write_vulnerabilities(
-                    f, filtered_contracts, [vulnerability_type], False)
+                if not_labeled:
+                    self._write_vulnerabilities_not_labeled(
+                        f, contracts, vulnerability_types)
+                else:
+                    self._write_vulnerabilities(
+                        f, contracts, vulnerability_types, False)
 
         inputs_file_folder = os.path.join(
             self._config.temp_folder, self._config.inputs_folder)
@@ -163,9 +172,13 @@ class OutputService(metaclass=SingletonMeta):
                 # self._write_critial_instructions_hits(f, contracts)
                 self._write_critial_instructions_detailed_hits(
                     f, contracts, critical_instructions)
-                self._write_vulnerabilities(
-                    f, contracts, vulnerability_types, False)
-
+                if not_labeled:
+                    self._write_vulnerabilities_not_labeled(
+                        f, contracts, vulnerability_types)
+                else:
+                    self._write_vulnerabilities(
+                        f, contracts, vulnerability_types, False)
+                
 
     def get_max_coverage_result(self, contracts: list):
         
@@ -440,6 +453,75 @@ class OutputService(metaclass=SingletonMeta):
             average_hits_for_directed_greybox,
             average_hits_for_other_directed_greybox
         )
+
+    def _write_vulnerabilities_not_labeled(
+        self,
+        file,
+        contracts: list,
+        vulnerability_types: list
+    ):
+        detection_rate_for_blackbox = self._result_service.get_detection_rate_by_strategy(
+            BLACKBOX_FUZZING,
+            contracts,
+            vulnerability_types,
+            True,
+        )
+        detection_rate_for_greybox = self._result_service.get_detection_rate_by_strategy(
+            GREYBOX_FUZZING,
+            contracts,
+            vulnerability_types,
+            True,
+        )
+        detection_rate_for_directed_greybox = self._result_service.get_detection_rate_by_strategy(
+            DIRECTED_GREYBOX_FUZZING,
+            contracts,
+            vulnerability_types,
+            True,
+        )
+
+        detection_rate_for_other_directed_greybox = self._result_service.get_detection_rate_by_strategy(
+            OTHER_GREYBOX_FUZZING,
+            contracts,
+            vulnerability_types,
+            True,
+        )
+
+        self._write_header(file, 'VULNERABILITIES RESULTS', "vulnerability type")
+                 
+        total_blackbox = 0
+        total_greybox = 0
+        total_directed_greybox = 0
+        total_other_directed_greybox = 0
+
+        
+        for vulnerability in vulnerability_types:
+            blackbox = detection_rate_for_blackbox[vulnerability][1]
+            greybox = detection_rate_for_greybox[vulnerability][1]
+            directed_greybox = detection_rate_for_directed_greybox[vulnerability][1]
+            other_directed_greybox = detection_rate_for_other_directed_greybox[vulnerability][1]
+
+            total_blackbox += detection_rate_for_blackbox[vulnerability][1]
+            total_greybox += detection_rate_for_greybox[vulnerability][1]
+            total_directed_greybox += detection_rate_for_directed_greybox[vulnerability][1]
+            total_other_directed_greybox += detection_rate_for_other_directed_greybox[vulnerability][1]            
+                        
+            detection_rate_for_greybox[vulnerability][1]
+            self._write_line(
+                file, f"| {vulnerability:45} | {blackbox:20} | {greybox:20} | {directed_greybox:20} | {other_directed_greybox:20} |")
+
+
+        if (len(vulnerability_types) > 1):
+            self._write_average_number_footer(
+                file,
+                total_blackbox,
+                total_greybox,
+                total_directed_greybox,
+                total_other_directed_greybox
+            )
+        else:
+            self._write_dashed_line(file)
+
+
 
     def _write_vulnerabilities(
         self,

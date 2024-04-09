@@ -37,14 +37,21 @@ class Aggregator():
         self._input_service.extract_inputs(inputs_file)
         contracts = self._contract_service.list_contracts_from_contract_list(False)
         self._result_service.extract_results(results_folder)
-        self._output_service.write_report(results_folder, contracts, False)
+        self._output_service.write_report(results_folder, contracts, False, False)
+
+    def generate_report_not_labeled(self, results_folder: str, inputs_file: str):
+        self._input_service.extract_inputs(inputs_file)
+        contracts = self._contract_service.list_contracts_from_contract_list(False)
+        self._result_service.extract_results(results_folder)
+        self._output_service.write_report(results_folder, contracts, False, True)
+
 
     def generate_report_smartian(self, results_folder: str, inputs_file: str):
         self._input_service.extract_inputs(inputs_file)
         contracts = self._contract_service.list_contracts_from_contract_list(True)
         self._result_service.extract_results(results_folder)
         self._result_service.convert_results_to_smartian(results_folder)
-        self._output_service.write_report(results_folder, contracts, True)
+        self._output_service.write_report(results_folder, contracts, True, False)
 
     def show_kmeans(self, cluster_number: int = 3):
         inputs_file_folder = os.path.join(

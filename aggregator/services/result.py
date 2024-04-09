@@ -206,7 +206,7 @@ class ResultService(metaclass=SingletonMeta):
         for vulnerability in detection_rate:
             if vulnerability in vulnerabilities:
                 if include_new_detections and pre_categorized_vulnerabilities[vulnerability] == 0:
-                    detection_rate[vulnerability] = detection_rate[vulnerability]
+                    detection_rate[vulnerability] = (0, detection_rate[vulnerability])
                 elif pre_categorized_vulnerabilities[vulnerability] == 0:
                     detection_rate[vulnerability] = (0, 0)
                 else:
