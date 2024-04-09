@@ -436,7 +436,7 @@ class Aggregator():
             return
         
         mplcursors.cursor(hover=True).connect("add", lambda sel: sel.annotation.set_text(f"Bugs={sel.target[1]:.2f}"))
-        plt.legend(loc='lower right',  bbox_to_anchor=(0.9, 0.2), ncol=2) 
+        plt.legend(loc='lower right',  bbox_to_anchor=(0.95, 0.1), ncol=2) 
         plt.xlabel('Time (min.)')
         plt.ylabel('Total # of Bugs found')
         plt.ylim(0, 82)  # Adjust the upper bound as needed

@@ -64,6 +64,9 @@ class OutputService(metaclass=SingletonMeta):
             self._write_max_coverage_result(f, contracts)
             self._write_average_coverage_result(f, contracts)
             # self._write_critial_instructions_hits(f, contracts)executions_by_contract_name[contract_name]
+            self._write_critial_instructions_detailed_hits(
+                f, contracts, critical_instructions)
+            
             if not_labeled:
                 self._write_vulnerabilities_not_labeled(
                     f, contracts, vulnerability_types)
@@ -71,8 +74,6 @@ class OutputService(metaclass=SingletonMeta):
                 self._write_vulnerabilities(
                     f, contracts, vulnerability_types, False)
                 
-            self._write_critial_instructions_detailed_hits(
-                f, contracts, critical_instructions)
 
         if for_smartian:
             for strategy in FUZZING_TYPES:
