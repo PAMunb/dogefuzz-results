@@ -259,7 +259,6 @@ class Aggregator():
         print("------------------------------")
         print(reentrancy_correlation)
 
-
     def _read_data_between_markers(self, filename, start_marker, end_marker, keep_markers):
         try:
             with open(filename, 'r') as file:
