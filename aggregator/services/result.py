@@ -215,6 +215,29 @@ class ResultService(metaclass=SingletonMeta):
 
         return detection_rate
 
+
+    def get_detection_by_strategy_csv(
+        self,
+        strategy: str,
+        contracts: list,
+    ) -> map:
+        """
+        return the vulnerability detection rate by strategy name
+        """
+        executions_by_contract_name = self._read_results_file(strategy)
+        detection = []
+
+        for contract in contracts:
+            contract_name = contract["file"]
+            executions = executions_by_contract_name.get(contract_name, None)
+            for execution in executions:
+                time_to_weaknesses_dict = execution["execution"]["timeToWeaknesses"]   
+                for weakness,time in time_to_weaknesses_dict.items():
+                    detection.append((contract_name, weakness,str(time)))
+        return detection
+
+
+
     def get_detection_by_strategy(
         self,
         strategy: str,

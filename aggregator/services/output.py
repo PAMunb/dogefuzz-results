@@ -2,6 +2,8 @@ import os
 import json
 import numpy as np
 from collections import Counter
+import csv
+
 
 from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans
@@ -52,7 +54,18 @@ class OutputService(metaclass=SingletonMeta):
                 "ME",
                 "RE",
             ]
-            
+
+        if not_labeled:
+            for strategy in FUZZING_TYPES:
+                output_file_path = os.path.join(results_folder, f"bugs_over_time-{strategy}.txt")                
+
+                if os.path.exists(output_file_path):
+                    os.remove(output_file_path)
+
+                with open(output_file_path, 'w', newline='') as csv_file:
+                    writer = csv.writer(csv_file)
+                    self._write_vulnerabilities_csv_not_labeled_time(writer, contracts, vulnerability_types, strategy)
+                
         output_file_path = os.path.join(results_folder, "average.txt")
 
         if os.path.exists(output_file_path):
@@ -180,7 +193,6 @@ class OutputService(metaclass=SingletonMeta):
                     self._write_vulnerabilities(
                         f, contracts, vulnerability_types, False)
                 
-
     def get_max_coverage_result(self, contracts: list):
         
         (max_coverage_per_contract_for_blackbox, average_coverage_for_blackbox) = self._result_service.get_max_coverage_by_strategy(
@@ -236,8 +248,6 @@ class OutputService(metaclass=SingletonMeta):
             average_coverage_for_greybox*100,
             average_coverage_for_directed_greybox*100)
         
-
-
     def _write_max_coverage_result(self, file, contracts: list):
         
         (max_coverage_per_contract_for_blackbox, average_coverage_for_blackbox) = self._result_service.get_max_coverage_by_strategy(
@@ -522,8 +532,6 @@ class OutputService(metaclass=SingletonMeta):
         else:
             self._write_dashed_line(file)
 
-
-
     def _write_vulnerabilities(
         self,
         file,
@@ -634,7 +642,6 @@ class OutputService(metaclass=SingletonMeta):
                 n += 1
         return n
 
-
     def _write_count_over_time_frame(
         self,
         file,
@@ -652,7 +659,6 @@ class OutputService(metaclass=SingletonMeta):
             count_avg = float(sum(count_list)) / len(count_list)
             self._write_line(file, f"{time:02d}s: {count_avg:.1f}")
 
-    
     def _write_count_over_time(
         self,
         file,
@@ -684,6 +690,19 @@ class OutputService(metaclass=SingletonMeta):
         self._write_line(file, "===================================TIME_FRAME")
         self._write_count_over_time_frame(file, vulnerability_types, time_map_list, 15, 300)
 
+    def _write_vulnerabilities_csv_not_labeled_time(
+        self,
+        file,
+        contracts: list,
+        vulnerability_types: list,
+        strategy: str
+    ):                    
+        detected = self._result_service.get_detection_by_strategy_csv(strategy, contracts)
+        for row in detected:
+            file.writerow(row)
+
+
+
     def _write_alarms_table(
         self,
         file,
@@ -701,7 +720,6 @@ class OutputService(metaclass=SingletonMeta):
             self._write_line(
                 file, f"{map_vulnerability_smartian_to_long_name(vulnerability_type):30}: TP = {tp:2}, FP = {fp:2}, FN = {fn:2}")
                 
-
     def _write_coverage_table_over_time(
         self,
         file,
@@ -752,8 +770,6 @@ class OutputService(metaclass=SingletonMeta):
             file, f"| {'transaction_count':45} | {blackbox:20} | {greybox:20} | {directed_greybox:20} | {other_directed_greybox:20} |")
 
         self._write_dashed_line(file)
-
-
 
     def _write_header(self, file, title: str, text: str):
         self._write_line(file, "\n")
@@ -858,7 +874,6 @@ class OutputService(metaclass=SingletonMeta):
         else:
             diff = (value - base_value) / base_value
         return f"{value * 100:.2f}% ({total:02d},{'+' if diff > 0 else ''}{diff * 100:.2f}%)" if value != -1 else "N/A"
-
 
     def _write_dashed_line(self, file):
         self._write_line(file, '-' * 142)

@@ -45,7 +45,6 @@ class Aggregator():
         self._result_service.extract_results(results_folder)
         self._output_service.write_report(results_folder, contracts, False, True)
 
-
     def generate_report_smartian(self, results_folder: str, inputs_file: str):
         self._input_service.extract_inputs(inputs_file)
         contracts = self._contract_service.list_contracts_from_contract_list(True)
