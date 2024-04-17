@@ -25,11 +25,12 @@ class ResultService(metaclass=SingletonMeta):
             with open(os.path.join(strategy_result_folder, path), 'r+', encoding='utf-8') as file:                 
                 results_content = json.load(file)
                 for contract_name in results_content.keys():                    
-                    for index in [BLACKBOX_FUZZING, GREYBOX_FUZZING, DIRECTED_GREYBOX_FUZZING, OTHER_GREYBOX_FUZZING]:
+                    #for index in [BLACKBOX_FUZZING, GREYBOX_FUZZING, DIRECTED_GREYBOX_FUZZING, OTHER_GREYBOX_FUZZING]:
+                    for index in results_content[contract_name].keys():
                         if results_content[contract_name][index][0]["execution"] is not None:
                             detectedWeaknesses = results_content[contract_name][index][0]["execution"]["detectedWeaknesses"]
                             detectedWeaknesses = [x for x in [map_weakness_to_smartian_standard(x) for x in detectedWeaknesses] if x is not None]
-                            results_content[contract_name][index][0]["execution"]["detectedWeaknesses"] = list(set(detectedWeaknesses))                        
+                            results_content[contract_name][index][0]["execution"]["detectedWeaknesses"] = list(set(detectedWeaknesses))
                 file.seek(0)
                 json.dump(results_content, file, indent=4)    
                 
@@ -148,6 +149,9 @@ class ResultService(metaclass=SingletonMeta):
         for vulnerability in vulnerabilities:
             alarms_map[vulnerability] = { "TP": 0, "FP": 0, "FN": 0 }
     
+        vul_count = self.get_vulnerabilities_count(contracts, vulnerabilities)
+    
+    
         for contract in contracts:
             contract_name = contract["file"]
             contract_vulnerabilities = contract["vulnerabilities"]
@@ -162,8 +166,9 @@ class ResultService(metaclass=SingletonMeta):
                         alarms_map[vulnerability]["TP"] += 1
                     elif vulnerability in detected_weaknesses and vulnerability not in contract_vulnerabilities:
                         alarms_map[vulnerability]["FP"] += 1
-                    elif vulnerability not in detected_weaknesses and vulnerability in contract_vulnerabilities:
-                        alarms_map[vulnerability]["FN"] += 1
+
+        for vulnerability in vulnerabilities:
+            alarms_map[vulnerability]["FN"] = vul_count[vulnerability] - alarms_map[vulnerability]["TP"]
 
         return alarms_map
 
@@ -408,7 +413,10 @@ class ResultService(metaclass=SingletonMeta):
                 content = file.read()
                 results_content = json.loads(content)
                 for contract_name in results_content.keys():
-                    executions = results_content[contract_name][strategy]
+                    try:
+                        executions = results_content[contract_name][strategy]
+                    except KeyError:
+                        break
                     successful_executions = self._filter_successful_executions(
                         executions)
                     executions_by_contract_name[contract_name] = successful_executions

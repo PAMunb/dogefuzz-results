@@ -322,14 +322,18 @@ class Aggregator():
 
             print("===================================")
             for category in vulnerabilities:
-                tp = math.ceil((sum(alarms_avg_map[category]["TP"])) / len(alarms_avg_map[category]["TP"]))
-                fp = math.ceil((sum(alarms_avg_map[category]["FP"])) / len(alarms_avg_map[category]["FP"]))
-                fn = math.ceil((sum(alarms_avg_map[category]["FN"])) / len(alarms_avg_map[category]["FN"]))
+                tp = np.median(alarms_avg_map[category]["TP"][:5])
+                fp = np.median(alarms_avg_map[category]["FP"][:5])
+                fn = np.median(alarms_avg_map[category]["FN"][:5])                                
+                
+                # tp = ((sum(alarms_avg_map[category]["TP"])) / len(alarms_avg_map[category]["TP"]))
+                # fp = ((sum(alarms_avg_map[category]["FP"])) / len(alarms_avg_map[category]["FP"]))
+                # fn = ((sum(alarms_avg_map[category]["FN"])) / len(alarms_avg_map[category]["FN"]))
                 precision = tp/(tp+fp)
                 recall = tp/(tp+fn)
                 f1score = 2 * (precision * recall) / (precision + recall)
                 
-                print(f"{category:25}: TP = {tp:2}, FP = {fp:2}, FN = {fn:2} percision = {precision:.2f} recall = {recall:.2f} f1score = {f1score:.2f}")
+                print(f"{category:25}: TP = {tp:.2f}, FP = {fp:.2f}, FN = {fn:.2f} percision = {precision:.2f} recall = {recall:.2f} f1score = {f1score:.2f}")
 
     def count_smartian_b2_bugs_found_avg(self, results_folder: str, fuzz_type: str): 
         file_list = [file for file in glob.glob(os.path.join(results_folder, '')+"smartian-" + fuzz_type + '*.txt' )]
@@ -367,14 +371,14 @@ class Aggregator():
                 all_values = []
                 for line in lines:
                     minute, value = map(float, line.split('m:'))
-                    all_minutes.append(minute)
+                    all_minutes.append(int(minute))
                     all_values.append(value)
                 sum_values.append(all_values)
                 
             averages = [sum(row) / len(row) for row in zip(*sum_values)]
             print("===================================")
             for i, avg in enumerate(averages, start=0):
-                print(f"{all_minutes[i]}m: {avg}")
+                print(f"{all_minutes[i]:02d}m: {avg}")
         else:
             print("Invalid directory path.")
             return
@@ -516,9 +520,7 @@ class Aggregator():
 
         print("Dogefuzz-B " + str(sum(average_blackbox) / len(average_blackbox)))
         print("Dogefuzz-G " + str(sum(average_greybox) / len(average_greybox)))
-        print("Dogefuzz-DG " + str(sum(average_directed_greybox) / len(average_directed_greybox)))                
-        #means = [np.median(row) for row in zip(*sum_values)]
-
+        print("Dogefuzz-DG " + str(sum(average_directed_greybox) / len(average_directed_greybox)))
 
         labels = ['Dogefuzz-B', 'Dogefuzz-G', 'Dogefuzz-DG']
         

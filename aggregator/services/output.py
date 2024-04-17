@@ -686,9 +686,10 @@ class OutputService(metaclass=SingletonMeta):
             for line in detected_true_positive[vulnerability_type]:
                 self._write_line(file, f"{line}")
             self._write_line(file, "===================================")
-        self._write_count_over_time(file, vulnerability_types, time_map_list)
-        self._write_line(file, "===================================TIME_FRAME")
-        self._write_count_over_time_frame(file, vulnerability_types, time_map_list, 15, 300)
+        if len(time_map_list) != 0:
+            self._write_count_over_time(file, vulnerability_types, time_map_list)
+            self._write_line(file, "===================================TIME_FRAME")
+            self._write_count_over_time_frame(file, vulnerability_types, time_map_list, 15, 300)
 
     def _write_vulnerabilities_csv_not_labeled_time(
         self,
