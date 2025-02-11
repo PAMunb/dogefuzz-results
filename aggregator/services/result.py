@@ -16,7 +16,39 @@ class ResultService(metaclass=SingletonMeta):
     def __init__(self) -> None:
         self._config = Config()
 
+
+
+
     def convert_results_to_smartian(self, results_folder_name: str):
+        results_folder = os.path.join(
+        self._config.temp_folder, self._config.results_dir)
+        strategy_result_folder = results_folder
+    
+        for path in os.listdir(strategy_result_folder):
+            with open(os.path.join(strategy_result_folder, path), 'r+', encoding='utf-8') as file:
+                results_content = json.load(file)
+            
+                def process_data(data):
+                    if isinstance(data, dict):
+                        for key, value in data.items():
+                            if key == "execution" and isinstance(value, dict) and "detectedWeaknesses" in value:
+                                value["detectedWeaknesses"] = list(set(
+                                    x for x in [map_weakness_to_smartian_standard(x) for x in value["detectedWeaknesses"]] 
+                                    if x is not None
+                                ))
+                            elif isinstance(value, (dict, list)):
+                                process_data(value)
+                    elif isinstance(data, list):
+                        for item in data:
+                            process_data(item)
+                        
+                process_data(results_content)
+                file.seek(0)
+                file.truncate()
+                json.dump(results_content, file, indent=4)
+
+            
+    def convert_results_to_smartian_2(self, results_folder_name: str):
         results_folder = os.path.join(
             self._config.temp_folder, self._config.results_dir)
         strategy_result_folder = results_folder
